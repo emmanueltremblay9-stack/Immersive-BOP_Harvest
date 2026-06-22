@@ -1,0 +1,615 @@
+{
+  "target": {
+    "minecraft": "1.21.1",
+    "loader": "NeoForge",
+    "required_mods": [
+      "Biomes O' Plenty",
+      "Farmer's Delight",
+      "Immersive Engineering"
+    ],
+    "technical_dependencies_to_verify": [
+      "GlitchCore",
+      "TerraBlender"
+    ]
+  },
+  "root_policy": {
+    "baseline": "No standalone Biomes O' Plenty root block is registered in the audited 1.21.1 baseline.",
+    "instruction": "Do not invent root IDs. If the installed BOP version contains root blocks, list them in the compatibility matrix and add no recipe until a direct, non-magical vanilla/FD/IE analogue is verified."
+  },
+  "flowers": [
+    {
+      "id": "biomesoplenty:rose",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:violet",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:lavender",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:tall_lavender",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:white_lavender",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:tall_white_lavender",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:blue_hydrangea",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:goldenrod",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:orange_cosmos",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:pink_daffodil",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:pink_hibiscus",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:wildflower",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:white_petals",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:icy_iris",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:glowflower",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:wilted_lily",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:burning_blossom",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    },
+    {
+      "id": "biomesoplenty:endbloom",
+      "decision": "CUTTING_DYE_PARITY_OR_EXISTING_BOP_UTILITY",
+      "reason": "Keep native self-drop and existing BOP dye/compost behavior; add only a same-yield Cutting Board alternative."
+    }
+  ],
+  "plants": [
+    {
+      "id": "biomesoplenty:sprout",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Already has a native wheat-seed chance and compost behavior."
+    },
+    {
+      "id": "biomesoplenty:bush",
+      "decision": "CUTTING_AND_KNIFE_LOW_YIELD",
+      "reason": "One stick on the board; 50% stick with a knife."
+    },
+    {
+      "id": "biomesoplenty:high_grass",
+      "decision": "CUTTING_AND_KNIFE_LOW_YIELD",
+      "reason": "One straw on the board; 50% straw per destroyed segment with a knife."
+    },
+    {
+      "id": "biomesoplenty:high_grass_plant",
+      "decision": "ALIAS_DIRECT_HARVEST_ONLY",
+      "reason": "Body segment; no inventory cutting recipe."
+    },
+    {
+      "id": "biomesoplenty:clover",
+      "decision": "NO_CHANGE_COMPOST_ONLY",
+      "reason": "No emeralds, seeds, or speculative green dye."
+    },
+    {
+      "id": "biomesoplenty:huge_clover_petal",
+      "decision": "NO_CHANGE_COMPOST_ONLY",
+      "reason": "Decorative and compostable; no resource conversion."
+    },
+    {
+      "id": "biomesoplenty:huge_lily_pad",
+      "decision": "NO_CHANGE",
+      "reason": "No credible conservative conversion."
+    },
+    {
+      "id": "biomesoplenty:waterlily",
+      "decision": "CUTTING_DYE_PARITY",
+      "reason": "Same red-dye yield as BOP crafting."
+    },
+    {
+      "id": "biomesoplenty:dune_grass",
+      "decision": "CUTTING_AND_KNIFE_LOW_YIELD",
+      "reason": "One straw on the board; 50% knife harvest."
+    },
+    {
+      "id": "biomesoplenty:desert_grass",
+      "decision": "CUTTING_AND_KNIFE_LOW_YIELD",
+      "reason": "One straw on the board; 50% knife harvest."
+    },
+    {
+      "id": "biomesoplenty:dead_grass",
+      "decision": "CUTTING_AND_KNIFE_LOW_YIELD",
+      "reason": "One straw on the board; 50% knife harvest."
+    },
+    {
+      "id": "biomesoplenty:tundra_shrub",
+      "decision": "CUTTING_AND_KNIFE_LOW_YIELD",
+      "reason": "One stick on the board; 50% knife harvest."
+    },
+    {
+      "id": "biomesoplenty:enderphyte",
+      "decision": "NO_CHANGE_ALREADY_USEFUL",
+      "reason": "BOP already uses it for algal end stone; no chorus fruit or pearl."
+    },
+    {
+      "id": "biomesoplenty:lumaloop",
+      "decision": "NO_CHANGE_COMPOST_ONLY",
+      "reason": "No direct glowstone or glow berries."
+    },
+    {
+      "id": "biomesoplenty:lumaloop_plant",
+      "decision": "NO_CHANGE_ALIAS",
+      "reason": "Body segment; no independent conversion."
+    },
+    {
+      "id": "biomesoplenty:barley",
+      "decision": "TAG_AND_STRAW_INTEGRATION",
+      "reason": "Add to c:crops/grain and allow straw recovery; never convert it to wheat."
+    },
+    {
+      "id": "biomesoplenty:sea_oats",
+      "decision": "CUTTING_AND_KNIFE_LOW_YIELD",
+      "reason": "One straw on the board; 50% knife harvest."
+    },
+    {
+      "id": "biomesoplenty:cattail",
+      "decision": "CUTTING_DYE_PARITY",
+      "reason": "Same two brown dyes as BOP crafting."
+    },
+    {
+      "id": "biomesoplenty:reed",
+      "decision": "CUTTING_AND_KNIFE_LOW_YIELD",
+      "reason": "One straw on the board; never convert to sugar cane."
+    },
+    {
+      "id": "biomesoplenty:watergrass",
+      "decision": "NO_CHANGE_COMPOST_ONLY",
+      "reason": "No realistic conversion to kelp or seagrass."
+    },
+    {
+      "id": "biomesoplenty:tiny_cactus",
+      "decision": "NO_CHANGE_ALREADY_USEFUL",
+      "reason": "BOP already smelts it into green dye."
+    },
+    {
+      "id": "biomesoplenty:bramble",
+      "decision": "CUTTING_ONLY",
+      "reason": "One stick on the Cutting Board."
+    },
+    {
+      "id": "biomesoplenty:bramble_leaves",
+      "decision": "KNIFE_LOW_YIELD_ONLY",
+      "reason": "25% stick with a knife; no berries or string."
+    }
+  ],
+  "woodless_trees": [
+    {
+      "id": "biomesoplenty:origin_sapling",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Native self-drop and compost behavior."
+    },
+    {
+      "id": "biomesoplenty:flowering_oak_sapling",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Native self-drop and compost behavior."
+    },
+    {
+      "id": "biomesoplenty:cypress_sapling",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Native self-drop and compost behavior."
+    },
+    {
+      "id": "biomesoplenty:snowblossom_sapling",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Native self-drop and compost behavior."
+    },
+    {
+      "id": "biomesoplenty:rainbow_birch_sapling",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Native self-drop and compost behavior."
+    },
+    {
+      "id": "biomesoplenty:origin_leaves",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Native sapling/stick drops and compost behavior."
+    },
+    {
+      "id": "biomesoplenty:flowering_oak_leaves",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Native sapling/stick drops and compost behavior."
+    },
+    {
+      "id": "biomesoplenty:cypress_leaves",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Native sapling/stick drops and compost behavior."
+    },
+    {
+      "id": "biomesoplenty:snowblossom_leaves",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Native sapling/stick drops and compost behavior."
+    },
+    {
+      "id": "biomesoplenty:rainbow_birch_leaves",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Native sapling/stick drops and compost behavior."
+    }
+  ],
+  "potted_plants": [
+    {
+      "id": "biomesoplenty:potted_origin_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_flowering_oak_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_cypress_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_snowblossom_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_rainbow_birch_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_fir_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_pine_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_red_maple_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_orange_maple_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_yellow_maple_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_redwood_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_mahogany_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_jacaranda_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_palm_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_willow_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_dead_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_magic_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_umbran_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_hellbark_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_empyreal_sapling",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_rose",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_violet",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_lavender",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_white_lavender",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_orange_cosmos",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_pink_daffodil",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_pink_hibiscus",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_glowflower",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_wilted_lily",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_burning_blossom",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_endbloom",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_sprout",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_tiny_cactus",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_toadstool",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    },
+    {
+      "id": "biomesoplenty:potted_glowshroom",
+      "decision": "NO_CHANGE_UNDERLYING_PLANT_COVERAGE",
+      "reason": "BOP already drops the pot contents. No bonus, replacement, or conversion on the potted block."
+    }
+  ],
+  "mushrooms_moss": [
+    {
+      "id": "biomesoplenty:toadstool",
+      "decision": "TAG_COMPAT_ONLY",
+      "reason": "Add to c:mushrooms; native drop, rabbit stew use, and compost remain authoritative."
+    },
+    {
+      "id": "biomesoplenty:toadstool_block",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Native huge-mushroom drop and compost behavior."
+    },
+    {
+      "id": "biomesoplenty:glowshroom",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Native self-drop and compost; no free glowstone."
+    },
+    {
+      "id": "biomesoplenty:glowshroom_block",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Native huge-mushroom drop and compost; no free glowstone."
+    },
+    {
+      "id": "biomesoplenty:glowing_moss_block",
+      "decision": "NO_CHANGE",
+      "reason": "Self-dropping decorative block; no glowstone conversion."
+    },
+    {
+      "id": "biomesoplenty:glowing_moss_carpet",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Self-drop and compost behavior."
+    },
+    {
+      "id": "biomesoplenty:mossy_black_sand",
+      "decision": "NO_CHANGE_TERRAIN",
+      "reason": "Terrain block, not a renewable plant resource."
+    },
+    {
+      "id": "biomesoplenty:spanish_moss",
+      "decision": "NO_CHANGE_ALREADY_COVERED",
+      "reason": "Shears collection and compost behavior."
+    },
+    {
+      "id": "biomesoplenty:spanish_moss_plant",
+      "decision": "NO_CHANGE_ALIAS",
+      "reason": "Body segment; no independent conversion."
+    }
+  ],
+  "web_fiber": [
+    {
+      "id": "biomesoplenty:glowworm_silk",
+      "decision": "CUTTING_AND_DIRECT_STRING",
+      "reason": "One string on the board; one string with knife/sword."
+    },
+    {
+      "id": "biomesoplenty:glowworm_silk_strand",
+      "decision": "DIRECT_STRING_ALIAS",
+      "reason": "Body segment only."
+    },
+    {
+      "id": "biomesoplenty:spider_egg",
+      "decision": "NO_CHANGE_RARE_ORGANIC",
+      "reason": "Do not turn a special encounter block into string or spider eyes."
+    },
+    {
+      "id": "biomesoplenty:hanging_cobweb",
+      "decision": "CUTTING_AND_DIRECT_STRING",
+      "reason": "One string on the board; one string with knife/sword."
+    },
+    {
+      "id": "biomesoplenty:hanging_cobweb_strand",
+      "decision": "DIRECT_STRING_ALIAS",
+      "reason": "Body segment only."
+    },
+    {
+      "id": "biomesoplenty:stringy_cobweb",
+      "decision": "AUDIT_ONLY_NO_EVENT_HACK",
+      "reason": "No native loot table. Do not add an event or mixin solely for this block in v1."
+    },
+    {
+      "id": "biomesoplenty:webbing",
+      "decision": "CUTTING_AND_DIRECT_STRING",
+      "reason": "One string maximum, independent of face count."
+    }
+  ],
+  "flesh_organic": [
+    {
+      "id": "biomesoplenty:flesh",
+      "decision": "CUTTING_SALVAGE",
+      "reason": "One block yields two rotten flesh; blood is not recovered."
+    },
+    {
+      "id": "biomesoplenty:porous_flesh",
+      "decision": "CUTTING_SALVAGE",
+      "reason": "One block yields one rotten flesh."
+    },
+    {
+      "id": "biomesoplenty:flesh_tendons",
+      "decision": "CUTTING_AND_LOW_YIELD_STRING",
+      "reason": "Sinew conversion."
+    },
+    {
+      "id": "biomesoplenty:flesh_tendons_strand",
+      "decision": "DIRECT_STRING_ALIAS",
+      "reason": "Body segment only."
+    },
+    {
+      "id": "biomesoplenty:eyebulb",
+      "decision": "NO_CHANGE",
+      "reason": "Do not convert it into spider eyes or other unrelated organs."
+    },
+    {
+      "id": "biomesoplenty:hair",
+      "decision": "CUTTING_AND_LOW_YIELD_STRING",
+      "reason": "Fibrous salvage only."
+    },
+    {
+      "id": "biomesoplenty:pus_bubble",
+      "decision": "NO_CHANGE_SILK_SPECIAL",
+      "reason": "No slime-ball or chemical resource shortcut."
+    }
+  ],
+  "end_organic": [
+    {
+      "id": "biomesoplenty:barnacles",
+      "decision": "NO_CHANGE",
+      "reason": "No prismarine or bone-meal conversion."
+    },
+    {
+      "id": "biomesoplenty:wispjelly",
+      "decision": "NO_CHANGE",
+      "reason": "No slime-ball or glow-ink conversion."
+    },
+    {
+      "id": "biomesoplenty:algal_end_stone",
+      "decision": "NO_CHANGE_ALREADY_USEFUL",
+      "reason": "BOP crafting already links it to enderphyte."
+    },
+    {
+      "id": "biomesoplenty:null_leaves",
+      "decision": "NO_CHANGE_ALREADY_USEFUL",
+      "reason": "BOP crafting already uses it for null end stone."
+    },
+    {
+      "id": "biomesoplenty:null_plant",
+      "decision": "NO_CHANGE",
+      "reason": "No chorus fruit or dye conversion."
+    },
+    {
+      "id": "biomesoplenty:null_block",
+      "decision": "NO_CHANGE_RARE_SPECIAL",
+      "reason": "No generic material salvage."
+    },
+    {
+      "id": "biomesoplenty:anomaly",
+      "decision": "NO_CHANGE_RARE_SPECIAL",
+      "reason": "No recipe or drop added."
+    }
+  ]
+}

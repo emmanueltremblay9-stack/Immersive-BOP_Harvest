@@ -1,0 +1,22 @@
+{
+  "forbidden": [
+    "minecraft:emerald",
+    "minecraft:ender_pearl",
+    "minecraft:blaze_powder",
+    "minecraft:diamond",
+    "minecraft:iron_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:netherite_scrap",
+    "minecraft:glowstone_dust",
+    "immersiveengineering:hemp_fiber",
+    "immersiveengineering:seed",
+    "immersiveengineering:hemp_fabric",
+    "immersiveengineering:fertilizer",
+    "immersiveengineering:dust_sulfur"
+  ],
+  "rules": [
+    "Do not generate Immersive Engineering hemp fiber or hemp seeds from unrelated BOP plants.",
+    "Do not generate rare mob, Nether, End, gem or metal resources from decorative vegetation.",
+    "Do not convert barley to wheat, reeds to sugar cane, or watergrass to kelp."
+  ]
+}

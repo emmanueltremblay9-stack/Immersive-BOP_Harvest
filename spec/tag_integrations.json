@@ -1,0 +1,21 @@
+{
+  "policy": "Use common tags only where the biological/material equivalence is direct.",
+  "integrations": [
+    {
+      "tag": "c:crops/grain",
+      "values": [
+        "biomesoplenty:barley"
+      ],
+      "required": true,
+      "reason": "Barley is a cereal grain; this avoids the unrealistic barley-to-wheat conversion."
+    },
+    {
+      "tag": "c:mushrooms",
+      "values": [
+        "biomesoplenty:toadstool"
+      ],
+      "required": true,
+      "reason": "BOP already treats the toadstool as a mushroom substitute in rabbit stew."
+    }
+  ]
+}

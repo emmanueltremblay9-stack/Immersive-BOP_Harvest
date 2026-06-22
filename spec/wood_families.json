@@ -1,0 +1,432 @@
+{
+  "policy": {
+    "cutting_board": {
+      "unstripped_log_or_wood": "1 stripped counterpart + 1 farmersdelight:tree_bark",
+      "tool": "axe_strip / #minecraft:axes",
+      "sound": "minecraft:item.axe.strip"
+    },
+    "immersive_engineering_sawmill": {
+      "unstripped_log_or_wood": {
+        "energy": 1600,
+        "result_count": 6,
+        "result": "family planks",
+        "secondary": "#c:dusts/wood",
+        "stripped_output": "matching stripped block",
+        "stripping_secondary": "#c:dusts/wood"
+      },
+      "stripped_log_or_wood": {
+        "energy": 800,
+        "result_count": 6,
+        "result": "family planks",
+        "secondary": "#c:dusts/wood"
+      }
+    },
+    "excluded_v1": [
+      "No sawmill recipes for planks, slabs, stairs, doors, trapdoors, fences, signs or boats.",
+      "No additional leaf, sapling, vine or leaf-pile drops.",
+      "No custom root recipes because no standalone BOP root block exists in the audited baseline."
+    ]
+  },
+  "families": [
+    {
+      "family": "fir",
+      "saplings": [
+        "biomesoplenty:fir_sapling"
+      ],
+      "leaves": [
+        "biomesoplenty:fir_leaves"
+      ],
+      "leaf_piles": [],
+      "log": "biomesoplenty:fir_log",
+      "stripped_log": "biomesoplenty:stripped_fir_log",
+      "wood": "biomesoplenty:fir_wood",
+      "stripped_wood": "biomesoplenty:stripped_fir_wood",
+      "planks": "biomesoplenty:fir_planks",
+      "stairs": "biomesoplenty:fir_stairs",
+      "slab": "biomesoplenty:fir_slab",
+      "fence": "biomesoplenty:fir_fence",
+      "fence_gate": "biomesoplenty:fir_fence_gate",
+      "door": "biomesoplenty:fir_door",
+      "trapdoor": "biomesoplenty:fir_trapdoor",
+      "pressure_plate": "biomesoplenty:fir_pressure_plate",
+      "button": "biomesoplenty:fir_button",
+      "sign": "biomesoplenty:fir_sign",
+      "wall_sign": "biomesoplenty:fir_wall_sign",
+      "hanging_sign": "biomesoplenty:fir_hanging_sign",
+      "wall_hanging_sign": "biomesoplenty:fir_wall_hanging_sign",
+      "special_natural_blocks": []
+    },
+    {
+      "family": "pine",
+      "saplings": [
+        "biomesoplenty:pine_sapling"
+      ],
+      "leaves": [
+        "biomesoplenty:pine_leaves"
+      ],
+      "leaf_piles": [],
+      "log": "biomesoplenty:pine_log",
+      "stripped_log": "biomesoplenty:stripped_pine_log",
+      "wood": "biomesoplenty:pine_wood",
+      "stripped_wood": "biomesoplenty:stripped_pine_wood",
+      "planks": "biomesoplenty:pine_planks",
+      "stairs": "biomesoplenty:pine_stairs",
+      "slab": "biomesoplenty:pine_slab",
+      "fence": "biomesoplenty:pine_fence",
+      "fence_gate": "biomesoplenty:pine_fence_gate",
+      "door": "biomesoplenty:pine_door",
+      "trapdoor": "biomesoplenty:pine_trapdoor",
+      "pressure_plate": "biomesoplenty:pine_pressure_plate",
+      "button": "biomesoplenty:pine_button",
+      "sign": "biomesoplenty:pine_sign",
+      "wall_sign": "biomesoplenty:pine_wall_sign",
+      "hanging_sign": "biomesoplenty:pine_hanging_sign",
+      "wall_hanging_sign": "biomesoplenty:pine_wall_hanging_sign",
+      "special_natural_blocks": []
+    },
+    {
+      "family": "maple",
+      "saplings": [
+        "biomesoplenty:red_maple_sapling",
+        "biomesoplenty:orange_maple_sapling",
+        "biomesoplenty:yellow_maple_sapling"
+      ],
+      "leaves": [
+        "biomesoplenty:red_maple_leaves",
+        "biomesoplenty:orange_maple_leaves",
+        "biomesoplenty:yellow_maple_leaves"
+      ],
+      "leaf_piles": [
+        "biomesoplenty:red_maple_leaf_pile",
+        "biomesoplenty:orange_maple_leaf_pile",
+        "biomesoplenty:yellow_maple_leaf_pile"
+      ],
+      "log": "biomesoplenty:maple_log",
+      "stripped_log": "biomesoplenty:stripped_maple_log",
+      "wood": "biomesoplenty:maple_wood",
+      "stripped_wood": "biomesoplenty:stripped_maple_wood",
+      "planks": "biomesoplenty:maple_planks",
+      "stairs": "biomesoplenty:maple_stairs",
+      "slab": "biomesoplenty:maple_slab",
+      "fence": "biomesoplenty:maple_fence",
+      "fence_gate": "biomesoplenty:maple_fence_gate",
+      "door": "biomesoplenty:maple_door",
+      "trapdoor": "biomesoplenty:maple_trapdoor",
+      "pressure_plate": "biomesoplenty:maple_pressure_plate",
+      "button": "biomesoplenty:maple_button",
+      "sign": "biomesoplenty:maple_sign",
+      "wall_sign": "biomesoplenty:maple_wall_sign",
+      "hanging_sign": "biomesoplenty:maple_hanging_sign",
+      "wall_hanging_sign": "biomesoplenty:maple_wall_hanging_sign",
+      "special_natural_blocks": []
+    },
+    {
+      "family": "redwood",
+      "saplings": [
+        "biomesoplenty:redwood_sapling"
+      ],
+      "leaves": [
+        "biomesoplenty:redwood_leaves"
+      ],
+      "leaf_piles": [],
+      "log": "biomesoplenty:redwood_log",
+      "stripped_log": "biomesoplenty:stripped_redwood_log",
+      "wood": "biomesoplenty:redwood_wood",
+      "stripped_wood": "biomesoplenty:stripped_redwood_wood",
+      "planks": "biomesoplenty:redwood_planks",
+      "stairs": "biomesoplenty:redwood_stairs",
+      "slab": "biomesoplenty:redwood_slab",
+      "fence": "biomesoplenty:redwood_fence",
+      "fence_gate": "biomesoplenty:redwood_fence_gate",
+      "door": "biomesoplenty:redwood_door",
+      "trapdoor": "biomesoplenty:redwood_trapdoor",
+      "pressure_plate": "biomesoplenty:redwood_pressure_plate",
+      "button": "biomesoplenty:redwood_button",
+      "sign": "biomesoplenty:redwood_sign",
+      "wall_sign": "biomesoplenty:redwood_wall_sign",
+      "hanging_sign": "biomesoplenty:redwood_hanging_sign",
+      "wall_hanging_sign": "biomesoplenty:redwood_wall_hanging_sign",
+      "special_natural_blocks": []
+    },
+    {
+      "family": "mahogany",
+      "saplings": [
+        "biomesoplenty:mahogany_sapling"
+      ],
+      "leaves": [
+        "biomesoplenty:mahogany_leaves"
+      ],
+      "leaf_piles": [],
+      "log": "biomesoplenty:mahogany_log",
+      "stripped_log": "biomesoplenty:stripped_mahogany_log",
+      "wood": "biomesoplenty:mahogany_wood",
+      "stripped_wood": "biomesoplenty:stripped_mahogany_wood",
+      "planks": "biomesoplenty:mahogany_planks",
+      "stairs": "biomesoplenty:mahogany_stairs",
+      "slab": "biomesoplenty:mahogany_slab",
+      "fence": "biomesoplenty:mahogany_fence",
+      "fence_gate": "biomesoplenty:mahogany_fence_gate",
+      "door": "biomesoplenty:mahogany_door",
+      "trapdoor": "biomesoplenty:mahogany_trapdoor",
+      "pressure_plate": "biomesoplenty:mahogany_pressure_plate",
+      "button": "biomesoplenty:mahogany_button",
+      "sign": "biomesoplenty:mahogany_sign",
+      "wall_sign": "biomesoplenty:mahogany_wall_sign",
+      "hanging_sign": "biomesoplenty:mahogany_hanging_sign",
+      "wall_hanging_sign": "biomesoplenty:mahogany_wall_hanging_sign",
+      "special_natural_blocks": []
+    },
+    {
+      "family": "jacaranda",
+      "saplings": [
+        "biomesoplenty:jacaranda_sapling"
+      ],
+      "leaves": [
+        "biomesoplenty:jacaranda_leaves"
+      ],
+      "leaf_piles": [],
+      "log": "biomesoplenty:jacaranda_log",
+      "stripped_log": "biomesoplenty:stripped_jacaranda_log",
+      "wood": "biomesoplenty:jacaranda_wood",
+      "stripped_wood": "biomesoplenty:stripped_jacaranda_wood",
+      "planks": "biomesoplenty:jacaranda_planks",
+      "stairs": "biomesoplenty:jacaranda_stairs",
+      "slab": "biomesoplenty:jacaranda_slab",
+      "fence": "biomesoplenty:jacaranda_fence",
+      "fence_gate": "biomesoplenty:jacaranda_fence_gate",
+      "door": "biomesoplenty:jacaranda_door",
+      "trapdoor": "biomesoplenty:jacaranda_trapdoor",
+      "pressure_plate": "biomesoplenty:jacaranda_pressure_plate",
+      "button": "biomesoplenty:jacaranda_button",
+      "sign": "biomesoplenty:jacaranda_sign",
+      "wall_sign": "biomesoplenty:jacaranda_wall_sign",
+      "hanging_sign": "biomesoplenty:jacaranda_hanging_sign",
+      "wall_hanging_sign": "biomesoplenty:jacaranda_wall_hanging_sign",
+      "special_natural_blocks": []
+    },
+    {
+      "family": "palm",
+      "saplings": [
+        "biomesoplenty:palm_sapling"
+      ],
+      "leaves": [
+        "biomesoplenty:palm_leaves"
+      ],
+      "leaf_piles": [],
+      "log": "biomesoplenty:palm_log",
+      "stripped_log": "biomesoplenty:stripped_palm_log",
+      "wood": "biomesoplenty:palm_wood",
+      "stripped_wood": "biomesoplenty:stripped_palm_wood",
+      "planks": "biomesoplenty:palm_planks",
+      "stairs": "biomesoplenty:palm_stairs",
+      "slab": "biomesoplenty:palm_slab",
+      "fence": "biomesoplenty:palm_fence",
+      "fence_gate": "biomesoplenty:palm_fence_gate",
+      "door": "biomesoplenty:palm_door",
+      "trapdoor": "biomesoplenty:palm_trapdoor",
+      "pressure_plate": "biomesoplenty:palm_pressure_plate",
+      "button": "biomesoplenty:palm_button",
+      "sign": "biomesoplenty:palm_sign",
+      "wall_sign": "biomesoplenty:palm_wall_sign",
+      "hanging_sign": "biomesoplenty:palm_hanging_sign",
+      "wall_hanging_sign": "biomesoplenty:palm_wall_hanging_sign",
+      "special_natural_blocks": []
+    },
+    {
+      "family": "willow",
+      "saplings": [
+        "biomesoplenty:willow_sapling"
+      ],
+      "leaves": [
+        "biomesoplenty:willow_leaves"
+      ],
+      "leaf_piles": [],
+      "log": "biomesoplenty:willow_log",
+      "stripped_log": "biomesoplenty:stripped_willow_log",
+      "wood": "biomesoplenty:willow_wood",
+      "stripped_wood": "biomesoplenty:stripped_willow_wood",
+      "planks": "biomesoplenty:willow_planks",
+      "stairs": "biomesoplenty:willow_stairs",
+      "slab": "biomesoplenty:willow_slab",
+      "fence": "biomesoplenty:willow_fence",
+      "fence_gate": "biomesoplenty:willow_fence_gate",
+      "door": "biomesoplenty:willow_door",
+      "trapdoor": "biomesoplenty:willow_trapdoor",
+      "pressure_plate": "biomesoplenty:willow_pressure_plate",
+      "button": "biomesoplenty:willow_button",
+      "sign": "biomesoplenty:willow_sign",
+      "wall_sign": "biomesoplenty:willow_wall_sign",
+      "hanging_sign": "biomesoplenty:willow_hanging_sign",
+      "wall_hanging_sign": "biomesoplenty:willow_wall_hanging_sign",
+      "special_natural_blocks": [
+        "biomesoplenty:willow_vine",
+        "biomesoplenty:spanish_moss",
+        "biomesoplenty:spanish_moss_plant"
+      ]
+    },
+    {
+      "family": "dead",
+      "saplings": [
+        "biomesoplenty:dead_sapling"
+      ],
+      "leaves": [
+        "biomesoplenty:dead_leaves"
+      ],
+      "leaf_piles": [],
+      "log": "biomesoplenty:dead_log",
+      "stripped_log": "biomesoplenty:stripped_dead_log",
+      "wood": "biomesoplenty:dead_wood",
+      "stripped_wood": "biomesoplenty:stripped_dead_wood",
+      "planks": "biomesoplenty:dead_planks",
+      "stairs": "biomesoplenty:dead_stairs",
+      "slab": "biomesoplenty:dead_slab",
+      "fence": "biomesoplenty:dead_fence",
+      "fence_gate": "biomesoplenty:dead_fence_gate",
+      "door": "biomesoplenty:dead_door",
+      "trapdoor": "biomesoplenty:dead_trapdoor",
+      "pressure_plate": "biomesoplenty:dead_pressure_plate",
+      "button": "biomesoplenty:dead_button",
+      "sign": "biomesoplenty:dead_sign",
+      "wall_sign": "biomesoplenty:dead_wall_sign",
+      "hanging_sign": "biomesoplenty:dead_hanging_sign",
+      "wall_hanging_sign": "biomesoplenty:dead_wall_hanging_sign",
+      "special_natural_blocks": [
+        "biomesoplenty:dead_branch"
+      ]
+    },
+    {
+      "family": "magic",
+      "saplings": [
+        "biomesoplenty:magic_sapling"
+      ],
+      "leaves": [
+        "biomesoplenty:magic_leaves"
+      ],
+      "leaf_piles": [],
+      "log": "biomesoplenty:magic_log",
+      "stripped_log": "biomesoplenty:stripped_magic_log",
+      "wood": "biomesoplenty:magic_wood",
+      "stripped_wood": "biomesoplenty:stripped_magic_wood",
+      "planks": "biomesoplenty:magic_planks",
+      "stairs": "biomesoplenty:magic_stairs",
+      "slab": "biomesoplenty:magic_slab",
+      "fence": "biomesoplenty:magic_fence",
+      "fence_gate": "biomesoplenty:magic_fence_gate",
+      "door": "biomesoplenty:magic_door",
+      "trapdoor": "biomesoplenty:magic_trapdoor",
+      "pressure_plate": "biomesoplenty:magic_pressure_plate",
+      "button": "biomesoplenty:magic_button",
+      "sign": "biomesoplenty:magic_sign",
+      "wall_sign": "biomesoplenty:magic_wall_sign",
+      "hanging_sign": "biomesoplenty:magic_hanging_sign",
+      "wall_hanging_sign": "biomesoplenty:magic_wall_hanging_sign",
+      "special_natural_blocks": []
+    },
+    {
+      "family": "umbran",
+      "saplings": [
+        "biomesoplenty:umbran_sapling"
+      ],
+      "leaves": [
+        "biomesoplenty:umbran_leaves"
+      ],
+      "leaf_piles": [],
+      "log": "biomesoplenty:umbran_log",
+      "stripped_log": "biomesoplenty:stripped_umbran_log",
+      "wood": "biomesoplenty:umbran_wood",
+      "stripped_wood": "biomesoplenty:stripped_umbran_wood",
+      "planks": "biomesoplenty:umbran_planks",
+      "stairs": "biomesoplenty:umbran_stairs",
+      "slab": "biomesoplenty:umbran_slab",
+      "fence": "biomesoplenty:umbran_fence",
+      "fence_gate": "biomesoplenty:umbran_fence_gate",
+      "door": "biomesoplenty:umbran_door",
+      "trapdoor": "biomesoplenty:umbran_trapdoor",
+      "pressure_plate": "biomesoplenty:umbran_pressure_plate",
+      "button": "biomesoplenty:umbran_button",
+      "sign": "biomesoplenty:umbran_sign",
+      "wall_sign": "biomesoplenty:umbran_wall_sign",
+      "hanging_sign": "biomesoplenty:umbran_hanging_sign",
+      "wall_hanging_sign": "biomesoplenty:umbran_wall_hanging_sign",
+      "special_natural_blocks": []
+    },
+    {
+      "family": "hellbark",
+      "saplings": [
+        "biomesoplenty:hellbark_sapling"
+      ],
+      "leaves": [
+        "biomesoplenty:hellbark_leaves"
+      ],
+      "leaf_piles": [],
+      "log": "biomesoplenty:hellbark_log",
+      "stripped_log": "biomesoplenty:stripped_hellbark_log",
+      "wood": "biomesoplenty:hellbark_wood",
+      "stripped_wood": "biomesoplenty:stripped_hellbark_wood",
+      "planks": "biomesoplenty:hellbark_planks",
+      "stairs": "biomesoplenty:hellbark_stairs",
+      "slab": "biomesoplenty:hellbark_slab",
+      "fence": "biomesoplenty:hellbark_fence",
+      "fence_gate": "biomesoplenty:hellbark_fence_gate",
+      "door": "biomesoplenty:hellbark_door",
+      "trapdoor": "biomesoplenty:hellbark_trapdoor",
+      "pressure_plate": "biomesoplenty:hellbark_pressure_plate",
+      "button": "biomesoplenty:hellbark_button",
+      "sign": "biomesoplenty:hellbark_sign",
+      "wall_sign": "biomesoplenty:hellbark_wall_sign",
+      "hanging_sign": "biomesoplenty:hellbark_hanging_sign",
+      "wall_hanging_sign": "biomesoplenty:hellbark_wall_hanging_sign",
+      "special_natural_blocks": []
+    },
+    {
+      "family": "empyreal",
+      "saplings": [
+        "biomesoplenty:empyreal_sapling"
+      ],
+      "leaves": [
+        "biomesoplenty:empyreal_leaves"
+      ],
+      "leaf_piles": [],
+      "log": "biomesoplenty:empyreal_log",
+      "stripped_log": "biomesoplenty:stripped_empyreal_log",
+      "wood": "biomesoplenty:empyreal_wood",
+      "stripped_wood": "biomesoplenty:stripped_empyreal_wood",
+      "planks": "biomesoplenty:empyreal_planks",
+      "stairs": "biomesoplenty:empyreal_stairs",
+      "slab": "biomesoplenty:empyreal_slab",
+      "fence": "biomesoplenty:empyreal_fence",
+      "fence_gate": "biomesoplenty:empyreal_fence_gate",
+      "door": "biomesoplenty:empyreal_door",
+      "trapdoor": "biomesoplenty:empyreal_trapdoor",
+      "pressure_plate": "biomesoplenty:empyreal_pressure_plate",
+      "button": "biomesoplenty:empyreal_button",
+      "sign": "biomesoplenty:empyreal_sign",
+      "wall_sign": "biomesoplenty:empyreal_wall_sign",
+      "hanging_sign": "biomesoplenty:empyreal_hanging_sign",
+      "wall_hanging_sign": "biomesoplenty:empyreal_wall_hanging_sign",
+      "special_natural_blocks": []
+    }
+  ],
+  "woodless_trees": [
+    {
+      "sapling": "biomesoplenty:origin_sapling",
+      "leaves": "biomesoplenty:origin_leaves"
+    },
+    {
+      "sapling": "biomesoplenty:flowering_oak_sapling",
+      "leaves": "biomesoplenty:flowering_oak_leaves"
+    },
+    {
+      "sapling": "biomesoplenty:cypress_sapling",
+      "leaves": "biomesoplenty:cypress_leaves"
+    },
+    {
+      "sapling": "biomesoplenty:snowblossom_sapling",
+      "leaves": "biomesoplenty:snowblossom_leaves"
+    },
+    {
+      "sapling": "biomesoplenty:rainbow_birch_sapling",
+      "leaves": "biomesoplenty:rainbow_birch_leaves"
+    }
+  ]
+}

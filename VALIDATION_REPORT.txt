@@ -1,0 +1,7 @@
+SPEC VALIDATION: PASSED
+Wood families: 13
+Flower/dye Cutting Board recipes: 20
+Plant/material Cutting Board recipes: 18
+Direct-harvest rules: 10
+Direct-harvest block IDs: 19
+Coverage IDs: 116

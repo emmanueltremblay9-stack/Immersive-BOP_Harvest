@@ -1,0 +1,177 @@
+{
+  "project": "Immersive BOP_Harvest",
+  "mod_id": "immersive_bop_harvest",
+  "package_type": "Codex professional implementation handoff",
+  "design_profile": "conservative_realistic_with_original_vector_branding",
+  "version": "0.1.1-spec",
+  "validation": "passed-current-run",
+  "asset_summary": {
+    "vector_logos": 1,
+    "raster_png_assets": 0,
+    "preview_html": 1,
+    "branding_guide": true,
+    "png_assets_omitted_per_current_scope": true
+  },
+  "files": [
+    {
+      "path": ".gitignore",
+      "size_bytes": 140,
+      "sha256": "1f57f4371625c46e9e0bf5c5e08e208d238756143760d2e4b147ecc82421a28f"
+    },
+    {
+      "path": "00_START_HERE.txt",
+      "size_bytes": 729,
+      "sha256": "502d28d81f06e772437d44d3ea7a2f717bd49204b37f4d98f3f835c1ed15823d"
+    },
+    {
+      "path": "01_CODEX_MASTER_PROMPT.txt",
+      "size_bytes": 12306,
+      "sha256": "e6e9759db8883f5fa3df502dd8167a8636f95638643b3b4e1a7df5c3ab4350b5"
+    },
+    {
+      "path": "assets/branding/ASSETS_MANIFEST.json",
+      "size_bytes": 601,
+      "sha256": "88f71d3b8e1fb95cb709897673a3a268ef56c29ead9437b2d93216e914545288"
+    },
+    {
+      "path": "assets/branding/branding_preview.html",
+      "size_bytes": 815,
+      "sha256": "9db506c4e601748d51320f2a5ea972cf7bdda17dfff16fd8e0b3e28ad8558d24"
+    },
+    {
+      "path": "assets/branding/transparent/immersive_bop_harvest_logo_vector.svg",
+      "size_bytes": 1829,
+      "sha256": "e9ce83098aada14d212464a52003a4a7cbf17b5963d755ad449a1750b3e5ae27"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "size_bytes": 761,
+      "sha256": "2f11b4d964c2a064e2b1ca59c0d77297002255b50da86f8c24289b15a3ad0dec"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "size_bytes": 1248,
+      "sha256": "f135a08391f67762d8bd6db5821269e80a2aead065468c205ae68c4363456d90"
+    },
+    {
+      "path": "docs/BRANDING_GUIDE.md",
+      "size_bytes": 1475,
+      "sha256": "4bbede7ff6a4470675988173d8efd6a830065e69278983ae4affd22f89a4dce3"
+    },
+    {
+      "path": "docs/COMPATIBILITY_MATRIX.md",
+      "size_bytes": 17505,
+      "sha256": "e1f4427d11829d74e56722f7eb44aedfdcd359d8ec5b48548f8fd6002ee96c05"
+    },
+    {
+      "path": "docs/MASTER_PLAN.md",
+      "size_bytes": 1582,
+      "sha256": "76aecc04b1f984ce98c58c2915bb4ff04b37050802cc8309d327b99c53818945"
+    },
+    {
+      "path": "docs/QA_ACCEPTANCE.md",
+      "size_bytes": 2184,
+      "sha256": "e54f489bd190fcb2aac47baf29469f8e0daed31adc9bed09113a2f660c566028"
+    },
+    {
+      "path": "docs/RECIPE_POLICY.md",
+      "size_bytes": 1310,
+      "sha256": "a25ac0cd3c5f0e513f557798499132ae67ac5c49fc4a9bd683417c5ec75ffc91"
+    },
+    {
+      "path": "docs/RELEASE_CHECKLIST.md",
+      "size_bytes": 559,
+      "sha256": "055e55a592ac5453c93e25579a4d48ad26f3660798e95532f2fb07b1ad8e4722"
+    },
+    {
+      "path": "docs/SOURCE_AUDIT.md",
+      "size_bytes": 1830,
+      "sha256": "cbdf9f026acd6439f7494d85a17c3de35b29d25726d0e3b6b072efb167399a9e"
+    },
+    {
+      "path": "LICENSE_DECISION_REQUIRED.md",
+      "size_bytes": 536,
+      "sha256": "0407d75b7df46c0093fd940be7f58a3bd6ea85dcac42315c5992ad4965189280"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 1732,
+      "sha256": "9f4bb527d8d921cb59262e1991053f3cc38ab059f8c8b0a229970736e86c278a"
+    },
+    {
+      "path": "scripts/validate_specs.py",
+      "size_bytes": 6861,
+      "sha256": "97af5cf0dd7b7401142143bcdf69ed0bdbfad5c1dca7246701846b255d94e51e"
+    },
+    {
+      "path": "spec/coverage_inventory.json",
+      "size_bytes": 23566,
+      "sha256": "990c25bd50c11bf184b5878e7859a48d131992aa00c726ddffd2ba45823b2dee"
+    },
+    {
+      "path": "spec/direct_harvest_rules.json",
+      "size_bytes": 4010,
+      "sha256": "2d2d937fc8059ed666d14db1eb0ad9a240ac22536bb645b2239525839716e996"
+    },
+    {
+      "path": "spec/flower_cutting_recipes.json",
+      "size_bytes": 2453,
+      "sha256": "fb97ccb10487a8dc809df7601711af0762ddfa530ddc543d29970b06447a603d"
+    },
+    {
+      "path": "spec/forbidden_outputs.json",
+      "size_bytes": 739,
+      "sha256": "9b49ef4671729caa52e047355e97ffa10c1b54fea1ceab907ee0c440383d2e18"
+    },
+    {
+      "path": "spec/plant_cutting_recipes.json",
+      "size_bytes": 3526,
+      "sha256": "9e3cddebc392f3b7ce201bef8fa189b541c14f08d66a11d43b3ca2f885990b29"
+    },
+    {
+      "path": "spec/tag_integrations.json",
+      "size_bytes": 559,
+      "sha256": "5cef0f61d78754b7d59b7688372eae846cce335665fc3955b76bc963d2e91c8f"
+    },
+    {
+      "path": "spec/wood_families.json",
+      "size_bytes": 16400,
+      "sha256": "42d0d07ca5ffd0f200a14fd642f08a86788f9db6401d8aacf14111891cc93129"
+    },
+    {
+      "path": "templates/en_us.json",
+      "size_bytes": 141,
+      "sha256": "16b53535bb840ea64efc73acd64019776ae6a62e7caad6444286b42282aa37ea"
+    },
+    {
+      "path": "templates/fr_fr.json",
+      "size_bytes": 146,
+      "sha256": "48dce788b6eca371150158f40a9358421cc43fea8176c66d041c9166900041a7"
+    },
+    {
+      "path": "templates/gitignore.example",
+      "size_bytes": 140,
+      "sha256": "1f57f4371625c46e9e0bf5c5e08e208d238756143760d2e4b147ecc82421a28f"
+    },
+    {
+      "path": "templates/gradle.properties.example",
+      "size_bytes": 540,
+      "sha256": "ee064b27aaf5f394eddd9e47c543dd532d4953fb7460c21f25958fd9af42ecf9"
+    },
+    {
+      "path": "templates/neoforge.mods.toml.example",
+      "size_bytes": 554,
+      "sha256": "cccd354409d80d44484e96cb75db49949590f059c75c9ad7c8511861d4fbc437"
+    },
+    {
+      "path": "templates/pack.mcmeta.example",
+      "size_bytes": 123,
+      "sha256": "a6afec8b05eca092bbabae9b4f31239a238c1ec46ee3f7294f7d22b3a6996a7d"
+    },
+    {
+      "path": "VALIDATION_REPORT.txt",
+      "size_bytes": 199,
+      "sha256": "7f2477cafedff87be39485c6d18e2954631e19fa7d24e1c8d3c2f96f4c641bf5"
+    }
+  ]
+}

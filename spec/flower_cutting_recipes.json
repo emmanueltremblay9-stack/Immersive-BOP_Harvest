@@ -1,0 +1,106 @@
+{
+  "policy": "Use exactly the same output and count as the existing BOP crafting recipe. Do not double yields.",
+  "tool": "#c:tools/knife",
+  "recipes": [
+    {
+      "source": "biomesoplenty:cattail",
+      "output": "minecraft:brown_dye",
+      "count": 2
+    },
+    {
+      "source": "biomesoplenty:glowflower",
+      "output": "minecraft:cyan_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:wilted_lily",
+      "output": "minecraft:gray_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:blue_hydrangea",
+      "output": "minecraft:light_blue_dye",
+      "count": 2
+    },
+    {
+      "source": "biomesoplenty:icy_iris",
+      "output": "minecraft:light_blue_dye",
+      "count": 2
+    },
+    {
+      "source": "biomesoplenty:endbloom",
+      "output": "minecraft:light_gray_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:wildflower",
+      "output": "minecraft:magenta_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:burning_blossom",
+      "output": "minecraft:orange_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:orange_cosmos",
+      "output": "minecraft:orange_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:pink_daffodil",
+      "output": "minecraft:pink_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:pink_hibiscus",
+      "output": "minecraft:pink_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:lavender",
+      "output": "minecraft:purple_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:tall_lavender",
+      "output": "minecraft:purple_dye",
+      "count": 2
+    },
+    {
+      "source": "biomesoplenty:violet",
+      "output": "minecraft:purple_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:rose",
+      "output": "minecraft:red_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:waterlily",
+      "output": "minecraft:red_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:white_lavender",
+      "output": "minecraft:white_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:tall_white_lavender",
+      "output": "minecraft:white_dye",
+      "count": 2
+    },
+    {
+      "source": "biomesoplenty:white_petals",
+      "output": "minecraft:white_dye",
+      "count": 1
+    },
+    {
+      "source": "biomesoplenty:goldenrod",
+      "output": "minecraft:yellow_dye",
+      "count": 2
+    }
+  ]
+}

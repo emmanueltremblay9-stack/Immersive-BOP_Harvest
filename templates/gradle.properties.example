@@ -1,0 +1,16 @@
+# Copy only after the exact NeoForge MDK and dependency versions are known.
+mod_id=immersive_bop_harvest
+mod_name=Immersive BOP_Harvest
+mod_license=LICENSE_PENDING
+mod_version=0.1.0
+mod_group_id=com.oblixorprime.immersivebopharvest
+mod_authors=OblixorPrime
+mod_description=Conservative Biomes O' Plenty compatibility for Farmer's Delight and Immersive Engineering.
+
+minecraft_version=1.21.1
+# neoforge_version=
+# biomesoplenty_version=
+# glitchcore_version=
+# terrablender_version=
+# farmersdelight_version=
+# immersiveengineering_version=

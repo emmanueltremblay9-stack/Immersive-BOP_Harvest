@@ -1,0 +1,13 @@
+IMMERSIVE BOP_HARVEST — START HERE
+
+1. Extract this archive into a clean working directory.
+2. Open 01_CODEX_MASTER_PROMPT.txt.
+3. Give that file and the complete extracted folder to Codex.
+4. If a NeoForge 1.21.1 repository already exists, place this pack at its root before starting Codex.
+5. If no repository exists, Codex must bootstrap from the official NeoForge 1.21.1 MDK and use the exact dependency versions available to the target modpack.
+6. Run:
+   python scripts/validate_specs.py
+7. Do not publish until LICENSE_DECISION_REQUIRED.md has been resolved.
+8. Use docs/QA_ACCEPTANCE.md as the release gate.
+
+The /spec directory is machine-readable and is intended to prevent Codex from improvising unbalanced recipes.

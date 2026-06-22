@@ -1,0 +1,316 @@
+CODEX MASTER PROMPT
+PROJECT: Immersive BOP_Harvest
+TARGET: Minecraft 1.21.1 / NeoForge
+MOD ID: immersive_bop_harvest
+
+ROLE
+You are the lead NeoForge integration developer responsible for delivering a small, maintainable, server-safe compatibility addon between:
+- Biomes O' Plenty
+- Farmer's Delight
+- Immersive Engineering
+- Minecraft vanilla
+
+Work directly in the supplied repository. Do not merely describe code. Inspect, implement, generate data, test, and leave the repository in a buildable state.
+
+PRIMARY OBJECTIVE
+Give Biomes O' Plenty vegetation and natural materials a modest, credible use in Farmer's Delight and Immersive Engineering without changing the identity or progression of any dependency.
+
+This is intentionally conservative:
+- Prefer existing BOP behavior.
+- Prefer recipes and common tags over random bonus drops.
+- Add direct tool-harvest outputs only for clearly fibrous, grassy, woody or web-like blocks.
+- Never create powerful or magical resource shortcuts.
+- Never add new gameplay items, blocks, fluids, entities, textures or models.
+
+FIRST ACTION: AUDIT THE WORKSPACE
+Before editing:
+1. Read all Gradle files, mod metadata, source sets and existing generated resources.
+2. Determine the exact installed versions and Maven coordinates for NeoForge, BOP, GlitchCore, TerraBlender, Farmer's Delight and Immersive Engineering.
+3. Inspect the actual registries and serializers from those exact versions.
+4. Run the current build and record the baseline result.
+5. Read all files in /spec. Treat them as the machine-readable design source.
+6. Create docs/COMPATIBILITY_MATRIX.md if it does not exist. Every scoped ID must be classified as implemented, already covered, or intentionally unchanged.
+
+Do not invent dependency versions, registry IDs, recipe serializer fields or API calls.
+
+NON-NEGOTIABLE CONSTRAINTS
+- Target Minecraft 1.21.1 and NeoForge.
+- Required gameplay mods: Biomes O' Plenty, Farmer's Delight and Immersive Engineering.
+- Keep GlitchCore/TerraBlender requirements consistent with the installed BOP version.
+- No Fabric or Forge implementation.
+- No KubeJS, CraftTweaker or scripting dependency.
+- No mixins, coremods, access transformers or reflection.
+- No custom items, blocks, fluids, entities, menus, textures, sounds or models.
+- Do not copy code, textures or other assets from BOP.
+- Do not replace files in data/biomesoplenty/loot_table.
+- Do not replace BOP crafting recipes.
+- Do not use block-break events to manufacture drops.
+- Do not add a custom loot modifier serializer unless the standard NeoForge facilities provably cannot satisfy a required rule.
+- Do not add Garden Cloche, Crusher, Squeezer or Fermenter recipes in v1.
+- Do not add recipes for speculative outputs.
+- Do not choose a software license on the user's behalf.
+
+DESIGN PRECEDENCE
+When instructions conflict, use this order:
+1. This master prompt.
+2. docs/RECIPE_POLICY.md.
+3. JSON files in /spec.
+4. docs/MASTER_PLAN.md.
+5. Existing implementation, if compatible with the above.
+
+CONSERVATIVE DESIGN RULES
+1. Preserve native BOP loot first.
+2. Cisailles and Silk Touch must never receive an extra compatibility drop.
+3. Fortune must not change any new compatibility output.
+4. Hand harvesting must not receive extra compatibility drops.
+5. Potted plants receive no compatibility bonus and no replacement logic.
+6. Existing BOP dye, compost, sapling, stick and mushroom behavior remains authoritative.
+7. Never output:
+   - emeralds
+   - ender pearls
+   - blaze powder
+   - glowstone dust
+   - diamonds, ingots or netherite
+   - IE hemp fiber or IE hemp seeds
+   - IE fertilizer or sulfur
+8. Do not convert:
+   - barley into wheat
+   - reeds into sugar cane
+   - watergrass into kelp or seagrass
+   - End vegetation into chorus fruit
+   - organic special blocks into mob drops without an exact material equivalence
+9. If an idea feels useful but biologically or materially dubious, do not implement it.
+
+IMPLEMENTATION ARCHITECTURE
+
+A. DATA GENERATION
+Use datagen as the source of generated JSON wherever the installed APIs permit it.
+Create one central Java definition model for:
+- wood families
+- Cutting Board recipes
+- direct-harvest rules
+- tag integrations
+
+Do not manually duplicate dozens of nearly identical JSON files.
+
+B. GLOBAL LOOT MODIFIERS
+Use the built-in NeoForge additive table modifier for the direct-harvest rules:
+- target the exact BOP block loot table
+- match the required tool tag
+- reject BOP shears
+- reject Silk Touch
+- apply the configured chance
+- add only the configured low-value item
+- do not apply Fortune
+- do not replace or remove BOP loot
+
+Generate one clear modifier/subtable pair per target block unless the installed datagen API provides a safe grouped alternative.
+
+C. FARMER'S DELIGHT CUTTING BOARD
+Use the installed Farmer's Delight 1.21 recipe serializer and its current item-ability/tool syntax.
+For knife recipes, support both the current knife item ability and #c:tools/knife if that is the dependency's native pattern.
+For wood stripping, mirror Farmer's Delight's vanilla log recipe:
+- one unstripped log or wood block
+- one matching stripped block
+- one farmersdelight:tree_bark
+- axe strip ability / #minecraft:axes
+- axe strip sound
+
+D. IMMERSIVE ENGINEERING SAWMILL
+Mirror Immersive Engineering's native vanilla-wood balance exactly:
+Unstripped log or wood:
+- 1600 energy
+- 6 matching BOP planks
+- one #c:dusts/wood secondary
+- matching stripped block
+- one #c:dusts/wood stripping secondary
+
+Stripped log or stripped wood:
+- 800 energy
+- 6 matching BOP planks
+- one #c:dusts/wood secondary
+- no stripping output
+
+Generate these recipes for exactly these 13 BOP wood families:
+fir, pine, maple, redwood, mahogany, jacaranda, palm, willow, dead, magic, umbran, hellbark, empyreal.
+
+Do not add sawmill recipes for planks, stairs, slabs, doors, trapdoors, fences, signs or boats in v1.
+
+E. TAG INTEGRATIONS
+Add:
+- biomesoplenty:barley to c:crops/grain
+- biomesoplenty:toadstool to c:mushrooms
+
+Do not add glowshroom to c:mushrooms without direct evidence in the installed version that it is intended as food.
+
+EXACT CUTTING BOARD POLICY
+
+1. FLOWER/DYE PARITY
+Generate Cutting Board alternatives for every entry in:
+spec/flower_cutting_recipes.json
+
+The output count must match BOP's existing crafting conversion exactly.
+Do not use Farmer's Delight's higher vanilla flower yield if it would exceed BOP's own yield.
+Do not add byproducts.
+
+2. LOW-VALUE PLANT PROCESSING
+Generate exactly the recipes in:
+spec/plant_cutting_recipes.json
+
+Important:
+- barley yields straw only; grain compatibility comes from the common tag
+- flesh salvage intentionally loses material
+- web/silk/tendon/hair conversions yield only one string
+- no plant creates hemp fiber
+- no luminous plant creates glowstone dust
+
+3. WOOD STRIPPING
+Generate stripping recipes for both the log and wood form of all 13 wood families.
+Each recipe returns one stripped counterpart and one tree bark.
+
+EXACT DIRECT-HARVEST POLICY
+Implement exactly the rules in:
+spec/direct_harvest_rules.json
+
+Key behavior:
+- knife-only grassy/woody drops are intentionally 25% or 50%
+- web-like blocks may yield one guaranteed string with a knife or sword
+- vertical body/head IDs share the same profile but may never cause duplicate output beyond one roll for each block actually destroyed
+- barley must be lower-half-only
+- webbing yields at most one string regardless of face count
+- stringy_cobweb remains unchanged in v1 if it cannot be handled by normal loot data
+
+POTTED PLANTS
+All potted BOP plants are in scope for compatibility verification, but must remain unchanged:
+- normal BOP pot/content drop remains intact
+- no knife bonus
+- no custom replacement modifier
+- no resource conversion at block-break time
+- the recovered underlying plant may then use its normal Cutting Board recipe
+
+ROOTS
+The audited BOP 1.21.1 baseline does not register a standalone root block.
+Do not invent any root ID.
+If the installed dependency differs:
+- list the discovered root IDs in docs/COMPATIBILITY_MATRIX.md
+- verify their native loot and tags
+- leave them unchanged unless a direct and low-value material equivalence is certain
+
+MUSHROOMS, MOSSES AND SPECIAL ORGANICS
+Use spec/coverage_inventory.json as the exact decision matrix.
+
+The following principles are mandatory:
+- toadstool: common mushroom tag only
+- glowshroom and glowing moss: no glowstone output
+- huge mushroom blocks: preserve native drops only
+- Spanish moss: preserve native shears/compost behavior
+- spider egg, pus bubble, barnacles, wispjelly, null blocks and anomaly: no added salvage
+- eyebulb: no spider-eye conversion
+- enderphyte/null vegetation: no chorus fruit, pearl or dye shortcuts
+- flesh and porous flesh: Cutting Board salvage only
+- flesh tendons and hair: low-value string recovery only
+
+PROJECT STRUCTURE
+Keep the repository conventional and small. A suggested structure is:
+
+src/main/java/<group>/immersivebopharvest/
+  BOPHarvestLinks.java
+  data/HarvestDefinitions.java
+  datagen/BOPHLDataGenerators.java
+  datagen/BOPHLCuttingRecipeProvider.java
+  datagen/BOPHLSawmillRecipeProvider.java
+  datagen/BOPHLGlobalLootModifierProvider.java
+  datagen/BOPHLLootTableProvider.java
+  datagen/BOPHLBlockTagProvider.java
+  datagen/BOPHLItemTagProvider.java
+  validation/BOPHLDefinitionValidator.java
+
+src/main/resources/
+  META-INF/neoforge.mods.toml
+  pack.mcmeta
+  assets/immersive_bop_harvest/lang/en_us.json
+  assets/immersive_bop_harvest/lang/fr_fr.json
+
+src/generated/resources/
+  data/immersive_bop_harvest/...
+  data/c/tags/...
+
+Adapt class names and source-set layout to the actual MDK and existing repository.
+
+VALIDATION REQUIREMENTS
+Fail datagen or tests when:
+- a configured block/item ID does not exist
+- a duplicate recipe/modifier ID is generated
+- a probability is outside [0, 1]
+- an output count is below 1
+- an output namespace is not minecraft, farmersdelight or immersiveengineering
+- an output appears in spec/forbidden_outputs.json
+- a direct-harvest rule targets a potted block
+- a direct-harvest rule lacks a tool condition
+- barley's rule lacks the lower-half condition
+- webbing can output more than one string
+- any generated file replaces BOP data
+- any wood family is omitted
+- a source item in a Cutting Board recipe is not obtainable
+- generated resources are not deterministic
+
+TEST PLAN
+At minimum:
+1. Run spec validation.
+2. Run datagen twice and verify no diff on the second run.
+3. Run the full Gradle build.
+4. Start a dedicated server long enough to confirm registry and datapack loading.
+5. Test representative wood recipes for at least:
+   - fir
+   - maple
+   - hellbark
+   - empyreal
+6. Test every generated recipe ID loads.
+7. Test direct harvesting:
+   - hand: no bonus
+   - knife: configured low-value output
+   - shears: native BOP behavior only
+   - Silk Touch: native BOP behavior only
+   - Fortune III: no change to compatibility output
+8. Test double/strand blocks for duplication.
+9. Test potted plants for unchanged pot/content behavior.
+10. Test common tags in Farmer's Delight recipes.
+11. Test a server without client-only classes.
+
+DOCUMENTATION DELIVERABLES
+Update/create:
+- README.md
+- CHANGELOG.md
+- docs/COMPATIBILITY_MATRIX.md
+- docs/ARCHITECTURE.md
+- docs/QA_ACCEPTANCE.md
+- docs/RELEASE_CHECKLIST.md
+
+The compatibility matrix must show every scoped ID and one of:
+- IMPLEMENTED
+- ALREADY_COVERED
+- INTENTIONALLY_UNCHANGED
+- VERSION_MISMATCH
+
+RELEASE QUALITY
+- No unresolved TODO in production code.
+- No generated resources committed outside the intended generated-resource directory.
+- No warnings caused by this addon during normal startup.
+- Clear English and French mod descriptions.
+- Semantic version starts at 0.1.0 for the first tested development build.
+- Do not publish until the user chooses a license.
+
+FINAL RESPONSE FORMAT
+When the implementation is complete, report:
+1. Exact dependency versions used.
+2. Files created/changed.
+3. Number of Cutting Board recipes.
+4. Number of Sawmill recipes.
+5. Number of loot modifiers.
+6. Tags added.
+7. Commands executed and their results.
+8. Any scoped ID intentionally unchanged and why.
+9. Any deviation from the JSON specification.
+10. Final build artifact path.
+
+Do not stop at a plan. Complete the implementation and tests to the maximum extent possible in the current workspace.

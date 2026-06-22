@@ -1,0 +1,185 @@
+{
+  "policy": "One obvious low-value conversion per collected plant. No rare items, crop seeds, glowstone, hemp or magical substitutions.",
+  "recipes": [
+    {
+      "source": "biomesoplenty:high_grass",
+      "outputs": [
+        {
+          "item": "farmersdelight:straw",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:dune_grass",
+      "outputs": [
+        {
+          "item": "farmersdelight:straw",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:desert_grass",
+      "outputs": [
+        {
+          "item": "farmersdelight:straw",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:dead_grass",
+      "outputs": [
+        {
+          "item": "farmersdelight:straw",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:sea_oats",
+      "outputs": [
+        {
+          "item": "farmersdelight:straw",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:reed",
+      "outputs": [
+        {
+          "item": "farmersdelight:straw",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:barley",
+      "outputs": [
+        {
+          "item": "farmersdelight:straw",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:bush",
+      "outputs": [
+        {
+          "item": "minecraft:stick",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:tundra_shrub",
+      "outputs": [
+        {
+          "item": "minecraft:stick",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:bramble",
+      "outputs": [
+        {
+          "item": "minecraft:stick",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:dead_branch",
+      "outputs": [
+        {
+          "item": "minecraft:stick",
+          "count": 2
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:glowworm_silk",
+      "outputs": [
+        {
+          "item": "minecraft:string",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:hanging_cobweb",
+      "outputs": [
+        {
+          "item": "minecraft:string",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:webbing",
+      "outputs": [
+        {
+          "item": "minecraft:string",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:hair",
+      "outputs": [
+        {
+          "item": "minecraft:string",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:flesh_tendons",
+      "outputs": [
+        {
+          "item": "minecraft:string",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:flesh",
+      "outputs": [
+        {
+          "item": "minecraft:rotten_flesh",
+          "count": 2
+        }
+      ],
+      "tool": "knife"
+    },
+    {
+      "source": "biomesoplenty:porous_flesh",
+      "outputs": [
+        {
+          "item": "minecraft:rotten_flesh",
+          "count": 1
+        }
+      ],
+      "tool": "knife"
+    }
+  ]
+}

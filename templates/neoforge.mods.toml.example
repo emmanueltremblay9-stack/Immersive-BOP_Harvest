@@ -1,0 +1,14 @@
+# TEMPLATE ONLY. Codex must adapt syntax and dependency ranges to the installed NeoForge 1.21.1 MDK.
+modLoader="javafml"
+loaderVersion="[REPLACE]"
+license="LICENSE_PENDING"
+
+[[mods]]
+modId="immersive_bop_harvest"
+version="${file.jarVersion}"
+displayName="Immersive BOP_Harvest"
+authors="OblixorPrime"
+description='''Conservative Biomes O' Plenty compatibility for Farmer's Delight and Immersive Engineering.'''
+
+# Add required dependencies for neoforge, glitchcore, biomesoplenty,
+# farmersdelight and immersiveengineering using verified version ranges.

@@ -1,0 +1,19 @@
+{
+  "assets_version": "0.1.0-spec",
+  "style": "original botanical-industrial",
+  "no_dependency_assets_copied": true,
+  "no_font_files_included": true,
+  "raster_png_omitted": true,
+  "files": [
+    {
+      "path": "assets/branding/branding_preview.html",
+      "size_bytes": 815,
+      "sha256": "9db506c4e601748d51320f2a5ea972cf7bdda17dfff16fd8e0b3e28ad8558d24"
+    },
+    {
+      "path": "assets/branding/transparent/immersive_bop_harvest_logo_vector.svg",
+      "size_bytes": 1829,
+      "sha256": "e9ce83098aada14d212464a52003a4a7cbf17b5963d755ad449a1750b3e5ae27"
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "policy": {
+    "implementation": "Built-in NeoForge additive loot modifiers and generated subtables only.",
+    "conditions": [
+      "Correct BOP block loot table",
+      "Required knife or sword tag",
+      "No BOP shears",
+      "No Silk Touch",
+      "No Fortune scaling"
+    ],
+    "hand_harvest": "No additional drops.",
+    "explosions": "No new drops because a matching tool is required."
+  },
+  "rules": [
+    {
+      "blocks": [
+        "biomesoplenty:high_grass",
+        "biomesoplenty:high_grass_plant"
+      ],
+      "tools_any": [
+        "#c:tools/knife"
+      ],
+      "output": "farmersdelight:straw",
+      "count": 1,
+      "chance": 0.5,
+      "state_condition": null,
+      "notes": "One roll per destroyed segment. No Fortune scaling."
+    },
+    {
+      "blocks": [
+        "biomesoplenty:dune_grass",
+        "biomesoplenty:desert_grass",
+        "biomesoplenty:dead_grass",
+        "biomesoplenty:sea_oats",
+        "biomesoplenty:reed"
+      ],
+      "tools_any": [
+        "#c:tools/knife"
+      ],
+      "output": "farmersdelight:straw",
+      "count": 1,
+      "chance": 0.5,
+      "state_condition": null,
+      "notes": "No hand-harvest bonus."
+    },
+    {
+      "blocks": [
+        "biomesoplenty:barley"
+      ],
+      "tools_any": [
+        "#c:tools/knife"
+      ],
+      "output": "farmersdelight:straw",
+      "count": 1,
+      "chance": 0.5,
+      "state_condition": {
+        "half": "lower"
+      },
+      "notes": "Lower half only. Do not convert barley into wheat."
+    },
+    {
+      "blocks": [
+        "biomesoplenty:bush",
+        "biomesoplenty:tundra_shrub"
+      ],
+      "tools_any": [
+        "#c:tools/knife"
+      ],
+      "output": "minecraft:stick",
+      "count": 1,
+      "chance": 0.5,
+      "state_condition": null,
+      "notes": "Small woody material."
+    },
+    {
+      "blocks": [
+        "biomesoplenty:bramble_leaves"
+      ],
+      "tools_any": [
+        "#c:tools/knife"
+      ],
+      "output": "minecraft:stick",
+      "count": 1,
+      "chance": 0.25,
+      "state_condition": null,
+      "notes": "Low yield; leaves are not a reliable wood source."
+    },
+    {
+      "blocks": [
+        "biomesoplenty:glowworm_silk",
+        "biomesoplenty:glowworm_silk_strand"
+      ],
+      "tools_any": [
+        "#c:tools/knife",
+        "#minecraft:swords"
+      ],
+      "output": "minecraft:string",
+      "count": 1,
+      "chance": 1.0,
+      "state_condition": null,
+      "notes": "One string per destroyed segment."
+    },
+    {
+      "blocks": [
+        "biomesoplenty:hanging_cobweb",
+        "biomesoplenty:hanging_cobweb_strand"
+      ],
+      "tools_any": [
+        "#c:tools/knife",
+        "#minecraft:swords"
+      ],
+      "output": "minecraft:string",
+      "count": 1,
+      "chance": 1.0,
+      "state_condition": null,
+      "notes": "Vanilla cobweb-style conversion."
+    },
+    {
+      "blocks": [
+        "biomesoplenty:webbing"
+      ],
+      "tools_any": [
+        "#c:tools/knife",
+        "#minecraft:swords"
+      ],
+      "output": "minecraft:string",
+      "count": 1,
+      "chance": 1.0,
+      "state_condition": null,
+      "notes": "Maximum one string per block, regardless of number of faces."
+    },
+    {
+      "blocks": [
+        "biomesoplenty:flesh_tendons",
+        "biomesoplenty:flesh_tendons_strand"
+      ],
+      "tools_any": [
+        "#c:tools/knife"
+      ],
+      "output": "minecraft:string",
+      "count": 1,
+      "chance": 0.5,
+      "state_condition": null,
+      "notes": "Represents recovered sinew; one roll per segment."
+    },
+    {
+      "blocks": [
+        "biomesoplenty:hair"
+      ],
+      "tools_any": [
+        "#c:tools/knife"
+      ],
+      "output": "minecraft:string",
+      "count": 1,
+      "chance": 0.5,
+      "state_condition": null,
+      "notes": "Low-yield fibrous salvage."
+    }
+  ],
+  "explicit_exclusion": {
+    "block": "biomesoplenty:stringy_cobweb",
+    "reason": "It has no native loot table. Do not add a break-event or mixin workaround in v1."
+  }
+}
