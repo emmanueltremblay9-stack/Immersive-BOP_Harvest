@@ -20,10 +20,11 @@
 - `.\gradlew.bat --no-configuration-cache runData --stacktrace`
 - private Prism Test play install with matching source/target SHA-256 and one installed jar for this mod.
 - bounded dedicated-server smoke reached `Done`.
+- Prism Test play live-client smoke reached the Minecraft title screen with `immersive_bop_harvest` 0.1.1-alpha.3 loaded.
 
 ### Known release blockers
 - Public binary release still needs a license decision.
-- Live-client smoke remains open.
+- Full gameplay/world interaction smoke was not performed in this pass.
 
 ## [0.1.1-alpha.1] - 2026-06-23
 

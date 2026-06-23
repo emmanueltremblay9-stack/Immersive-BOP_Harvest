@@ -104,7 +104,29 @@ Evidence:
 - wrapper exit status: 0
 - no remaining Gradle/Java process for this repo after cleanup
 
+## Live-Client Smoke
+
+The actual Prism `1.21.1 TesT play` instance was launched with the installed
+alpha.3 jar and reached the Minecraft Java Edition title screen.
+
+Evidence:
+
+- launched through Prism Launcher CLI with the full instance name
+- active log path:
+  `C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\logs\latest.log`
+- log discovered `immersive_bop_harvest-0.1.1-alpha.3.jar` in the Test play `mods` directory
+- mod list included `Immersive BOP_Harvest 0.1.1-alpha.3 (immersive_bop_harvest)`
+- runtime log emitted `Loaded Immersive BOP_Harvest data compatibility`
+- screenshot captured:
+  `build\live-client-smoke\test-play-client-20260623-024445.png`
+- no new crash report was written during the 2026-06-23 02:42-02:44 smoke window
+
+The first launch attempt was blocked by Prism's RAM warning because the instance
+requests 6144 MB while the system had less free RAM. For the smoke run only,
+`MaxMemAlloc` was temporarily lowered to 4096 before launch and restored to 6144
+after process cleanup; Prism had rewritten the temporary value on exit.
+
 ## Remaining Release Gates
 
 - Public binary release is blocked until `LICENSE_DECISION_REQUIRED.md` is resolved.
-- Live-client smoke has not been completed.
+- Full gameplay/world interaction smoke was not performed in this pass.

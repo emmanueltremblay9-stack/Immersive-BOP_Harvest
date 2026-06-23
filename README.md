@@ -1,6 +1,6 @@
 # Immersive BOP_Harvest
 
-- **Status:** beta QA candidate / private Test play install verified
+- **Status:** beta QA candidate / private Test play install and title-screen client smoke verified
 - **Target:** Minecraft 1.21.1, NeoForge
 - **Mod ID:** `immersive_bop_harvest`
 - **Current alpha:** `0.1.1-alpha.3`
@@ -70,7 +70,7 @@ values, metadata readback, dependency proof, and remaining-jar counts.
 The project must pass every item in `docs/QA_ACCEPTANCE.md`.  
 A software license must be selected before publication.
 
-Current alpha proof is recorded in `docs/PLAYABLE_ALPHA_PROOF.md`. Public binary release remains blocked until the license decision and live-client smoke are complete.
+Current alpha proof is recorded in `docs/PLAYABLE_ALPHA_PROOF.md`. Public binary release remains blocked until the license decision is complete.
 
 ## Branding assets
 

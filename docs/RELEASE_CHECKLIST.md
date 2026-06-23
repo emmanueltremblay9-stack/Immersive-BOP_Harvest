@@ -10,8 +10,8 @@
 - [x] Dedicated-server smoke reached the server-ready `Done` signal.
 - [x] Private Prism Test play install was hash-verified.
 - [x] Required BOP runtime dependencies were present and verified.
+- [x] Prism Test play live-client smoke reached the Minecraft title screen with the mod loaded.
 - [ ] License decision is still open.
-- [ ] Live-client smoke is still open.
 - [ ] Public binary release is still blocked.
 
 ## Public release gate

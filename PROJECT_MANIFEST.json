@@ -4,7 +4,7 @@
   "package_type": "NeoForge playable alpha source project",
   "design_profile": "conservative_realistic_with_original_vector_branding",
   "version": "0.1.1-alpha.3",
-  "validation": "spec-build-gametest-runData-server-install-passed-live-client-open",
+  "validation": "spec-build-gametest-runData-server-install-live-client-title-screen-passed",
   "asset_summary": {
     "vector_logos": 1,
     "raster_png_assets": 0,
@@ -25,8 +25,11 @@
     "runData_passed": true,
     "game_tests_passed": true,
     "dedicated_server_smoke_tested": true,
-    "live_client_smoke_tested": false,
-    "public_release_blocked_by_license": true
+    "live_client_smoke_tested": true,
+    "public_release_blocked_by_license": true,
+    "live_client_smoke_level": "title_screen",
+    "live_client_smoke_screenshot": "build/live-client-smoke/test-play-client-20260623-024445.png",
+    "full_gameplay_world_smoke_tested": false
   },
   "files": [
     {
@@ -71,8 +74,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "size_bytes": 2946,
-      "sha256": "e4b9f3d4e386d8caa28dcdbf3dcdf841d287ba39e04e28c42cbbf754afcccfcf"
+      "size_bytes": 3106,
+      "sha256": "9fb8c17e6e259c26c4e99d7659f1ec2932d54e48c89cc5644e66b1bc390dcd13"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -96,8 +99,8 @@
     },
     {
       "path": "docs/PLAYABLE_ALPHA_PROOF.md",
-      "size_bytes": 3461,
-      "sha256": "f012197f94f5e65be9cf263cb268fb2494268c95736e477bbec1af45679838fa"
+      "size_bytes": 4593,
+      "sha256": "50bff9470fa2b2303173207faeeb6335245e8f58789a2128de09911595aef7ac"
     },
     {
       "path": "docs/QA_ACCEPTANCE.md",
@@ -111,8 +114,8 @@
     },
     {
       "path": "docs/RELEASE_CHECKLIST.md",
-      "size_bytes": 1210,
-      "sha256": "d588604325f5eebc5641bed43b8afa1ca48bf0fb195d6ee774a4153946f355ed"
+      "size_bytes": 1267,
+      "sha256": "4895b69e540eb8ccc306785f5b52e57a6e966ebfcdb63ec597494624cb0e49d4"
     },
     {
       "path": "docs/SOURCE_AUDIT.md",
@@ -151,8 +154,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 3248,
-      "sha256": "0c7526c9376637ce3d92de6b0d7a13fce4ae5e99e522b270f3048ec2a86860a3"
+      "size_bytes": 3255,
+      "sha256": "7bdb991f1550b566901e05ebcc3adc73bef8625989b99464c9a0d0212d59ab2f"
     },
     {
       "path": "scripts/generate_alpha_resources.py",
@@ -1001,8 +1004,8 @@
     },
     {
       "path": "VALIDATION_REPORT.txt",
-      "size_bytes": 3002,
-      "sha256": "e4b43d7a2933bc11557838e035110016e81c1790fecf9fbe8d49d10ccdab71e7"
+      "size_bytes": 4054,
+      "sha256": "ddf231d26a0c31110668555bffba3519dc17355fbf400cf995636c0705d6b8b4"
     }
   ]
 }
