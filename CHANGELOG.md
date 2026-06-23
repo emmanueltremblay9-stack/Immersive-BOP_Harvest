@@ -7,6 +7,7 @@
 - Added `scripts/sync_runtime_deps.ps1` and Gradle `syncRuntimeDeps` wiring for local Test play runtime dependencies.
 - Added GameTests for server runtime boot and representative generated recipe loading.
 - Added the empty GameTest structure template required by `runGameTestServer`.
+- Added beta release audit, legal reuse inventory, release notes draft, and `scripts/check_beta_release_gate.py`.
 
 ### Changed
 - Updated the private install target to the `1.21.1 TesT play` Prism modpack.
@@ -21,6 +22,7 @@
 - private Prism Test play install with matching source/target SHA-256 and one installed jar for this mod.
 - bounded dedicated-server smoke reached `Done`.
 - Prism Test play live-client smoke reached the Minecraft title screen with `immersive_bop_harvest` 0.1.1-alpha.3 loaded.
+- `python scripts/check_beta_release_gate.py` reports the expected license blockers while all documented technical proof gates remain present.
 
 ### Known release blockers
 - Public binary release still needs a license decision.

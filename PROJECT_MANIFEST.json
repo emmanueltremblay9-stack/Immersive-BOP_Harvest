@@ -4,7 +4,7 @@
   "package_type": "NeoForge playable alpha source project",
   "design_profile": "conservative_realistic_with_original_vector_branding",
   "version": "0.1.1-alpha.3",
-  "validation": "spec-build-gametest-runData-server-install-live-client-title-screen-passed",
+  "validation": "spec-build-gametest-runData-server-install-live-client-title-screen-beta-gate-blocked-by-license",
   "asset_summary": {
     "vector_logos": 1,
     "raster_png_assets": 0,
@@ -31,7 +31,12 @@
     "public_release_blocked_by_license": true,
     "live_client_smoke_level": "title_screen",
     "live_client_smoke_screenshot": "build/live-client-smoke/test-play-client-20260623-024445.png",
-    "full_gameplay_world_smoke_tested": false
+    "full_gameplay_world_smoke_tested": false,
+    "beta_release_gate_checker": "scripts/check_beta_release_gate.py",
+    "beta_release_gate_expected_status": "blocked_by_license",
+    "legal_reuse_inventory": "docs/LEGAL_REUSE_INVENTORY.md",
+    "beta_release_audit": "docs/BETA_RELEASE_AUDIT.md",
+    "beta_release_notes_draft": "docs/BETA_RELEASE_NOTES_DRAFT.md"
   },
   "files": [
     {
@@ -76,8 +81,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "size_bytes": 3106,
-      "sha256": "9fb8c17e6e259c26c4e99d7659f1ec2932d54e48c89cc5644e66b1bc390dcd13"
+      "size_bytes": 3363,
+      "sha256": "072a86ac196d84424ef3b9c532b808e72c6e1bb7961b7479f708d58fc0ba18af"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -116,8 +121,8 @@
     },
     {
       "path": "docs/RELEASE_CHECKLIST.md",
-      "size_bytes": 1267,
-      "sha256": "4895b69e540eb8ccc306785f5b52e57a6e966ebfcdb63ec597494624cb0e49d4"
+      "size_bytes": 1499,
+      "sha256": "d197f5493d19e7be95885be5f1007672eb47912d7a0f7f9935fade751319012e"
     },
     {
       "path": "docs/SOURCE_AUDIT.md",
@@ -151,13 +156,13 @@
     },
     {
       "path": "LICENSE_DECISION_REQUIRED.md",
-      "size_bytes": 536,
-      "sha256": "0407d75b7df46c0093fd940be7f58a3bd6ea85dcac42315c5992ad4965189280"
+      "size_bytes": 689,
+      "sha256": "b71468e5907a12f99c678d2417f341933c6a82f0a254c23aa534c4b19df5af38"
     },
     {
       "path": "README.md",
-      "size_bytes": 3255,
-      "sha256": "7bdb991f1550b566901e05ebcc3adc73bef8625989b99464c9a0d0212d59ab2f"
+      "size_bytes": 3702,
+      "sha256": "735414c8baa36842f742d617ab4e7eaf61dee032bd7aaa21e4261a087664d876"
     },
     {
       "path": "scripts/generate_alpha_resources.py",
@@ -1013,6 +1018,26 @@
       "path": "assets/branding/cover/immersive_bop_harvest_banner_vector.svg",
       "size_bytes": 3668,
       "sha256": "4cdaac67c602a580b032a32093c7dfd94b071a9810606dc8d6a6e074cb7c33be"
+    },
+    {
+      "path": "docs/LEGAL_REUSE_INVENTORY.md",
+      "size_bytes": 2610,
+      "sha256": "a01ab67c2a6dd1ba3cccd995eff5028c1f5f27e36cb63fde1f419d21b2ea8772"
+    },
+    {
+      "path": "docs/BETA_RELEASE_AUDIT.md",
+      "size_bytes": 2762,
+      "sha256": "80a1a6a7b5c7e3467dbc387a1cd74db3b1408b67154a827780fc2842ffb34bbc"
+    },
+    {
+      "path": "docs/BETA_RELEASE_NOTES_DRAFT.md",
+      "size_bytes": 2054,
+      "sha256": "410b6dfc1d7401dd842721d9888950ec62b829e46621ac7a6fd69a405c6e3482"
+    },
+    {
+      "path": "scripts/check_beta_release_gate.py",
+      "size_bytes": 4729,
+      "sha256": "d973181602e9b8de6f5f429429ab76aa8dadbec0cb424e0648f685ec029a96bb"
     }
   ]
 }

@@ -8,5 +8,7 @@ Before publishing:
 3. Reference dependency registry IDs and public APIs only.
 4. Add the chosen `LICENSE` file.
 5. Update `neoforge.mods.toml`, README and distribution pages.
+6. Rebuild, reinstall and hash-verify the license-correct jar.
+7. Run `python scripts/check_beta_release_gate.py` and require `BETA RELEASE GATE: PASS`.
 
 Until then, treat this package as private project material and do not publish a compiled release.

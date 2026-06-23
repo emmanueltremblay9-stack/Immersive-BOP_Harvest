@@ -35,6 +35,7 @@ It does **not** add new items, blocks, textures, magical drops, hemp from unrela
 - `scripts/qa_alpha_resources.py` — generated-resource QA gate
 - `scripts/sync_runtime_deps.ps1` — local runtime dependency sync from the configured Prism modpack
 - `scripts/install_alpha_to_lab.ps1` — Windows Test play install and hash proof script
+- `scripts/check_beta_release_gate.py` — public beta release gate checker
 - Gradle wrapper and NeoForge build files
 
 ## Build and validate
@@ -70,7 +71,19 @@ values, metadata readback, dependency proof, and remaining-jar counts.
 The project must pass every item in `docs/QA_ACCEPTANCE.md`.  
 A software license must be selected before publication.
 
-Current alpha proof is recorded in `docs/PLAYABLE_ALPHA_PROOF.md`. Public binary release remains blocked until the license decision is complete.
+Current alpha proof is recorded in `docs/PLAYABLE_ALPHA_PROOF.md`.
+The current release audit is recorded in `docs/BETA_RELEASE_AUDIT.md`.
+Legal provenance is recorded in `docs/LEGAL_REUSE_INVENTORY.md`.
+Draft public notes are in `docs/BETA_RELEASE_NOTES_DRAFT.md`.
+
+Run the release gate checker before any public beta upload:
+
+```powershell
+python scripts/check_beta_release_gate.py
+```
+
+Public binary release remains blocked until the license decision is complete and
+the checker reports `BETA RELEASE GATE: PASS`.
 
 ## Branding assets
 
