@@ -1,7 +1,43 @@
-SPEC VALIDATION: PASSED
-Wood families: 13
-Flower/dye Cutting Board recipes: 20
-Plant/material Cutting Board recipes: 18
-Direct-harvest rules: 10
-Direct-harvest block IDs: 19
-Coverage IDs: 116
+VALIDATION REPORT - Immersive BOP_Harvest
+Date: 2026-06-23
+Version: 0.1.1-alpha.1
+
+Specification validation:
+- Command: python scripts\validate_specs.py
+- Exit status: 0
+- Result: PASSED
+- Wood families: 13
+- Flower/dye Cutting Board recipes: 20
+- Plant/material Cutting Board recipes: 18
+- Direct-harvest rules: 10
+- Direct-harvest block IDs: 19
+- Coverage IDs: 116
+
+Generated resource validation:
+- Command: python scripts\generate_alpha_resources.py
+- Exit status: 0
+- Cutting recipes: 64
+- Sawmill recipes: 39
+- Direct-harvest modifiers: 19
+- Item tags: 2
+- Generated JSON parse check: 146 JSON files parsed successfully
+
+Build validation:
+- Command: .\gradlew.bat clean build --stacktrace
+- Exit status: 0
+- Result: BUILD SUCCESSFUL
+- Built jar: build\libs\immersive_bop_harvest-0.1.1-alpha.1.jar
+
+Private LAB install validation:
+- Command: powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\install_alpha_to_lab.ps1
+- Exit status: 0
+- Installed jar: C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT LaB\minecraft\mods\immersive_bop_harvest-0.1.1-alpha.1.jar
+- SHA-256: a7e776f242828bd75c356edc5a22890e2428be05ac1eabd04ca63898600dcf1e
+- Hash match: true
+- Remaining jars for mod id immersive_bop_harvest: 1
+- Report: build\install-report.json
+
+Open gates:
+- License decision remains required before public binary release.
+- Live-client smoke was not performed in this report.
+- Dedicated-server smoke was not performed in this report.

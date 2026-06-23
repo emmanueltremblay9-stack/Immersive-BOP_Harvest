@@ -1,10 +1,10 @@
 {
   "project": "Immersive BOP_Harvest",
   "mod_id": "immersive_bop_harvest",
-  "package_type": "Codex professional implementation handoff",
+  "package_type": "NeoForge playable alpha source project",
   "design_profile": "conservative_realistic_with_original_vector_branding",
-  "version": "0.1.1-spec",
-  "validation": "passed-current-run",
+  "version": "0.1.1-alpha.1",
+  "validation": "spec-build-install-passed-live-client-open",
   "asset_summary": {
     "vector_logos": 1,
     "raster_png_assets": 0,
@@ -12,7 +12,21 @@
     "branding_guide": true,
     "png_assets_omitted_per_current_scope": true
   },
+  "build_summary": {
+    "minecraft_version": "1.21.1",
+    "loader": "NeoForge",
+    "neoforge_version": "21.1.233",
+    "built_jar": "build/libs/immersive_bop_harvest-0.1.1-alpha.1.jar",
+    "install_report": "build/install-report.json",
+    "public_release_blocked_by_license": true,
+    "live_client_smoke_tested": false
+  },
   "files": [
+    {
+      "path": ".gitattributes",
+      "size_bytes": 257,
+      "sha256": "f6a0003ffc9606f7134a05cd022e0db6f6b6b7d3ae4b6cdfe58cdb9c12acb28e"
+    },
     {
       "path": ".gitignore",
       "size_bytes": 140,
@@ -44,9 +58,14 @@
       "sha256": "e9ce83098aada14d212464a52003a4a7cbf17b5963d755ad449a1750b3e5ae27"
     },
     {
+      "path": "build.gradle",
+      "size_bytes": 8354,
+      "sha256": "2303894b2b89659d2ae9317b3f302e1bee683747f033f892923d859ce284e24b"
+    },
+    {
       "path": "CHANGELOG.md",
-      "size_bytes": 761,
-      "sha256": "2f11b4d964c2a064e2b1ca59c0d77297002255b50da86f8c24289b15a3ad0dec"
+      "size_bytes": 1746,
+      "sha256": "ff3c5067aa4317cc5a2d042e602ed6853d606a1b98ce192e2c01887cbbdb5b00"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -69,6 +88,11 @@
       "sha256": "76aecc04b1f984ce98c58c2915bb4ff04b37050802cc8309d327b99c53818945"
     },
     {
+      "path": "docs/PLAYABLE_ALPHA_PROOF.md",
+      "size_bytes": 2521,
+      "sha256": "6a83690fdae70886ba09b63e09821ff725ba8ee97e5713e8d66cdea93da504b0"
+    },
+    {
       "path": "docs/QA_ACCEPTANCE.md",
       "size_bytes": 2184,
       "sha256": "e54f489bd190fcb2aac47baf29469f8e0daed31adc9bed09113a2f660c566028"
@@ -80,13 +104,38 @@
     },
     {
       "path": "docs/RELEASE_CHECKLIST.md",
-      "size_bytes": 559,
-      "sha256": "055e55a592ac5453c93e25579a4d48ad26f3660798e95532f2fb07b1ad8e4722"
+      "size_bytes": 1022,
+      "sha256": "a1dbdc2c032184f554126c1af2d0ff0d9b41f1c0b308de1be766df5fd1fc1460"
     },
     {
       "path": "docs/SOURCE_AUDIT.md",
       "size_bytes": 1830,
       "sha256": "cbdf9f026acd6439f7494d85a17c3de35b29d25726d0e3b6b072efb167399a9e"
+    },
+    {
+      "path": "gradle.properties",
+      "size_bytes": 770,
+      "sha256": "433ac440ba48508ccb96b7352318a5eac579f6f3c5e184c4d2b0b7c06798e06b"
+    },
+    {
+      "path": "gradle/wrapper/gradle-wrapper.jar",
+      "size_bytes": 43764,
+      "sha256": "7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172"
+    },
+    {
+      "path": "gradle/wrapper/gradle-wrapper.properties",
+      "size_bytes": 259,
+      "sha256": "12477f32fffa5c8d0de945ce81005a4a7a19a55182d916644a0fcfe0fab946a6"
+    },
+    {
+      "path": "gradlew",
+      "size_bytes": 8984,
+      "sha256": "28d2c82e7f9cca986ee8da10ba939cf9260d682f73936b2b6d2545e35360ce7b"
+    },
+    {
+      "path": "gradlew.bat",
+      "size_bytes": 2937,
+      "sha256": "1d297e00bd21de3ace22b4d7f2de1f9dfa858883d66bbf7c1ccbecccec8f4f3b"
     },
     {
       "path": "LICENSE_DECISION_REQUIRED.md",
@@ -95,13 +144,28 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 1732,
-      "sha256": "9f4bb527d8d921cb59262e1991053f3cc38ab059f8c8b0a229970736e86c278a"
+      "size_bytes": 2799,
+      "sha256": "268bbc0c34285365b8fa5d82808809d923f5c3af5ef5a8845e04a6ae30206513"
+    },
+    {
+      "path": "scripts/generate_alpha_resources.py",
+      "size_bytes": 7972,
+      "sha256": "ca774425e7bffc7e3e49e9c0799ea696b399115b55c9c3bf31a451fac71e8d38"
+    },
+    {
+      "path": "scripts/install_alpha_to_lab.ps1",
+      "size_bytes": 14429,
+      "sha256": "603a4f16afaad0ac30bf6961d17bb1674685d93dfacd6eb558bda4a76e326ce1"
     },
     {
       "path": "scripts/validate_specs.py",
       "size_bytes": 6861,
       "sha256": "97af5cf0dd7b7401142143bcdf69ed0bdbfad5c1dca7246701846b255d94e51e"
+    },
+    {
+      "path": "settings.gradle",
+      "size_bytes": 212,
+      "sha256": "dd3d60319671337edc60bd60cb8f211f7a466eb9fcff344684ccb11682c97c52"
     },
     {
       "path": "spec/coverage_inventory.json",
@@ -139,6 +203,746 @@
       "sha256": "42d0d07ca5ffd0f200a14fd642f08a86788f9db6401d8aacf14111891cc93129"
     },
     {
+      "path": "src/main/java/com/oblixorprime/immersivebopharvest/ImmersiveBopHarvest.java",
+      "size_bytes": 470,
+      "sha256": "478ef0a0ccb7519e6d3f8ef2962b8348547195b4292b9c426ffb04a3eda2ef88"
+    },
+    {
+      "path": "src/main/resources/assets/immersive_bop_harvest/lang/en_us.json",
+      "size_bytes": 141,
+      "sha256": "16b53535bb840ea64efc73acd64019776ae6a62e7caad6444286b42282aa37ea"
+    },
+    {
+      "path": "src/main/resources/assets/immersive_bop_harvest/lang/fr_fr.json",
+      "size_bytes": 145,
+      "sha256": "aabbd65a31e88cfa9805915a60143c4a94149c5c46371254378415502cc3f6dd"
+    },
+    {
+      "path": "src/main/resources/data/c/tags/item/crops/grain.json",
+      "size_bytes": 75,
+      "sha256": "35649e0bdf54f7ec0eba24c6f325e75accc023265ae5b5f496f2cf84d3cefbf0"
+    },
+    {
+      "path": "src/main/resources/data/c/tags/item/mushrooms.json",
+      "size_bytes": 78,
+      "sha256": "f5634c5ef68eec583f51ecb0a3895470f7489292c3f76b98d7b975540098f498"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/barley.json",
+      "size_bytes": 1123,
+      "sha256": "68297e6dfa70eca4d6b87eba32509f2cfe3981ab58880384f66a4225ba2f8b7f"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/bramble_leaves.json",
+      "size_bytes": 1082,
+      "sha256": "ac4cc78e853c82d92036e91c13d5dfd2695276e8620978bc184fafa11da061bc"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/bush.json",
+      "size_bytes": 1061,
+      "sha256": "1832b35e5efbd55e0aacd6d762e081362d67a55fa2c27f838f6b893052f71def"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/dead_grass.json",
+      "size_bytes": 1073,
+      "sha256": "8c6f0ef9812e4bdf2f6bd95acd16b9e81d3d88d5c8135219cf1d12b1059b7496"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/desert_grass.json",
+      "size_bytes": 1077,
+      "sha256": "d70f6b3e5f2449ff73592aacde94a33ed8398f401f61f5e50fcef46b4c3e3afd"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/dune_grass.json",
+      "size_bytes": 1073,
+      "sha256": "7e66fe6e96fc76c3a39ec6e55f0d805d46fa01c7b36f1338e8ff33ff0b90aec7"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/flesh_tendons_strand.json",
+      "size_bytes": 1093,
+      "sha256": "68c4fe9e5058f524a499351fd7d0a5edb1dceff9590f5cf883cb68620cee5477"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/flesh_tendons.json",
+      "size_bytes": 1079,
+      "sha256": "c41f43a7d62e51b41a52f7d0f485f062c97363149c7c04830b9c4e833d4727ca"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/glowworm_silk_strand.json",
+      "size_bytes": 1267,
+      "sha256": "10ebabcdabb32138e49706caf443435710446c8fc26a5d3f44527108a5d3c652"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/glowworm_silk.json",
+      "size_bytes": 1253,
+      "sha256": "480c2da89f5dc43fd1aca0a25d92219af581bb11de78a2bc8e8b86b5c61c9082"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/hair.json",
+      "size_bytes": 1061,
+      "sha256": "22ec476785b2b9a3ba006c59a380c816c5c1856ec4d9f08cff097379dbf1c621"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/hanging_cobweb_strand.json",
+      "size_bytes": 1269,
+      "sha256": "4581cc49300cff3690346af306e6800125d8d26176518a6c459e3a1b32703d2d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/hanging_cobweb.json",
+      "size_bytes": 1255,
+      "sha256": "5e1029b1b60aafa0604509e3c2dd67095f62f74f2dec2264b656e11ec8d7419a"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/high_grass_plant.json",
+      "size_bytes": 1085,
+      "sha256": "70b9278310111293b9f37fd3ed7a6da77a18965695f8121ad49ced0aad7ae80e"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/high_grass.json",
+      "size_bytes": 1073,
+      "sha256": "b236775e2b55073e1786f1a4b29cb5d2ae1c9303dbc6a9a868c68928e409fc4d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/reed.json",
+      "size_bytes": 1061,
+      "sha256": "b62d1b7b566570ad45224c9239c91e46578e18bf839ed9a9d318d2f8b68b6023"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/sea_oats.json",
+      "size_bytes": 1069,
+      "sha256": "6422afcef0586c37a69f0f3aa9092b4db1d7f76c30bceeb661f2cffc4118867e"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/tundra_shrub.json",
+      "size_bytes": 1077,
+      "sha256": "356f7dec9f487770b3ebb5baca4679151bd1aac76ba371de2a5cf356265af849"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/webbing.json",
+      "size_bytes": 1241,
+      "sha256": "778e790f199c93c4db92c7deed7b0fbdabb55ee377a52716d4a3e908a783b569"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/barley.json",
+      "size_bytes": 218,
+      "sha256": "284118dbfd9e759e69648aeed88ee0b5d9f47536a854b934f4d0cf2e4b638569"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/bramble_leaves.json",
+      "size_bytes": 213,
+      "sha256": "b3ab3dac2b9ec570365f980c509973dc6a19b9629509594eba59f78bfe30a656"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/bush.json",
+      "size_bytes": 213,
+      "sha256": "b3ab3dac2b9ec570365f980c509973dc6a19b9629509594eba59f78bfe30a656"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/dead_grass.json",
+      "size_bytes": 218,
+      "sha256": "284118dbfd9e759e69648aeed88ee0b5d9f47536a854b934f4d0cf2e4b638569"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/desert_grass.json",
+      "size_bytes": 218,
+      "sha256": "284118dbfd9e759e69648aeed88ee0b5d9f47536a854b934f4d0cf2e4b638569"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/dune_grass.json",
+      "size_bytes": 218,
+      "sha256": "284118dbfd9e759e69648aeed88ee0b5d9f47536a854b934f4d0cf2e4b638569"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/flesh_tendons_strand.json",
+      "size_bytes": 214,
+      "sha256": "5a830f12054c36f8af99246c6066d30bd4ca1148c75c3a02170ce8228475e40d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/flesh_tendons.json",
+      "size_bytes": 214,
+      "sha256": "5a830f12054c36f8af99246c6066d30bd4ca1148c75c3a02170ce8228475e40d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/glowworm_silk_strand.json",
+      "size_bytes": 214,
+      "sha256": "5a830f12054c36f8af99246c6066d30bd4ca1148c75c3a02170ce8228475e40d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/glowworm_silk.json",
+      "size_bytes": 214,
+      "sha256": "5a830f12054c36f8af99246c6066d30bd4ca1148c75c3a02170ce8228475e40d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/hair.json",
+      "size_bytes": 214,
+      "sha256": "5a830f12054c36f8af99246c6066d30bd4ca1148c75c3a02170ce8228475e40d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/hanging_cobweb_strand.json",
+      "size_bytes": 214,
+      "sha256": "5a830f12054c36f8af99246c6066d30bd4ca1148c75c3a02170ce8228475e40d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/hanging_cobweb.json",
+      "size_bytes": 214,
+      "sha256": "5a830f12054c36f8af99246c6066d30bd4ca1148c75c3a02170ce8228475e40d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/high_grass_plant.json",
+      "size_bytes": 218,
+      "sha256": "284118dbfd9e759e69648aeed88ee0b5d9f47536a854b934f4d0cf2e4b638569"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/high_grass.json",
+      "size_bytes": 218,
+      "sha256": "284118dbfd9e759e69648aeed88ee0b5d9f47536a854b934f4d0cf2e4b638569"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/reed.json",
+      "size_bytes": 218,
+      "sha256": "284118dbfd9e759e69648aeed88ee0b5d9f47536a854b934f4d0cf2e4b638569"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/sea_oats.json",
+      "size_bytes": 218,
+      "sha256": "284118dbfd9e759e69648aeed88ee0b5d9f47536a854b934f4d0cf2e4b638569"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/tundra_shrub.json",
+      "size_bytes": 213,
+      "sha256": "b3ab3dac2b9ec570365f980c509973dc6a19b9629509594eba59f78bfe30a656"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/webbing.json",
+      "size_bytes": 214,
+      "sha256": "5a830f12054c36f8af99246c6066d30bd4ca1148c75c3a02170ce8228475e40d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/barley.json",
+      "size_bytes": 393,
+      "sha256": "795392d370db445a4370a8e66189dfeafb1063e11248e018d9667c963fa985ed"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/blue_hydrangea.json",
+      "size_bytes": 405,
+      "sha256": "a152b6b41a73f323d12b1734c99c7a10a46248749c7fc93f831c4810456bdeed"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/bramble.json",
+      "size_bytes": 389,
+      "sha256": "c41d69f7dbee42b165af86c3b725c59b92958a174b50c09518fbb70349cf1831"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/burning_blossom.json",
+      "size_bytes": 402,
+      "sha256": "2475c9b6b311a06000e339e154f0b172a25fd168977a91b9a5790d04cad98b88"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/bush.json",
+      "size_bytes": 386,
+      "sha256": "d658c5aa1873f5ffe442c8644a1182bdbd44f09d34c1b8e7a1d72d2fdd9bd8ec"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/cattail.json",
+      "size_bytes": 393,
+      "sha256": "ea2e846759fc32ff53a9f56084310a996ce7eb17fb2bad63436005c00f28e72a"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/dead_branch.json",
+      "size_bytes": 393,
+      "sha256": "d48bbf431f764cafb615c8821392352ee8657a7c25c979394a5ea7e9459eaf11"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/dead_grass.json",
+      "size_bytes": 397,
+      "sha256": "492ef15cdea3bf8ced607863c7957cf2a0f5981ab88952b3a87d232320d3eeff"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/dead_log.json",
+      "size_bytes": 575,
+      "sha256": "de85e4c678587cfa880abac348d6ca82e1047b888fb8446c8c239a1d1f40e8b6"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/dead_wood.json",
+      "size_bytes": 577,
+      "sha256": "8398f34888b9f589530cbadf53338bd401f3a3689d7413e7f2137da185c90a0c"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/desert_grass.json",
+      "size_bytes": 399,
+      "sha256": "1aa9b6173fd1c193f0d84210c9e463fe3f3df60216a2b5e6b6d8e0772a33aa29"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/dune_grass.json",
+      "size_bytes": 397,
+      "sha256": "006797ca333c9ed0126d1f64ce67e2c12de6658ba7f7c649d0ea36525e15e2fe"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/empyreal_log.json",
+      "size_bytes": 583,
+      "sha256": "d339f6df4238bd4a86268567103c125c584efe107d271f11f0332d031b2c3edd"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/empyreal_wood.json",
+      "size_bytes": 585,
+      "sha256": "fa22bb400ffe79cafa9e4e16c9418533d1adc4ec3c2665c8c2d5c5124fce4786"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/endbloom.json",
+      "size_bytes": 399,
+      "sha256": "60b3b23ce95f630e2092bd98607b5d276131aadc510653969c5752ac0b6c59a5"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/fir_log.json",
+      "size_bytes": 573,
+      "sha256": "514150c0ebf2cf4694d6d9d1eaecab42bb1b7f9d89d1d4a2f0542a885015929c"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/fir_wood.json",
+      "size_bytes": 575,
+      "sha256": "1c66f8188f4db714f3cb984adfbe845800e5d7c3f305d043bc6494a8c9f67aa4"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/flesh_tendons.json",
+      "size_bytes": 396,
+      "sha256": "3eb85fa453d1e72ee4f4af527984e023280945fa8a8c1e0a01fdafc900c17ab3"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/flesh.json",
+      "size_bytes": 394,
+      "sha256": "a663165fdfdc29df9f6da3b630ae3b9d6da926f02c8d4f77602ae1ce4c4e531d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/glowflower.json",
+      "size_bytes": 395,
+      "sha256": "0a9ddc2be52e8bb37852e2548dd617641ee58a1989e2a424eb38efdcd4096517"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/glowworm_silk.json",
+      "size_bytes": 396,
+      "sha256": "bc6a97b0e8ed0f8954ea49e17cc56a574fb0152138852cc25f2f52f6fad375ff"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/goldenrod.json",
+      "size_bytes": 396,
+      "sha256": "363f2506a0c042ec0e1e502f805099d825e8b2a5bcc7075ddb3d79ec13723109"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/hair.json",
+      "size_bytes": 387,
+      "sha256": "1a5c279f41c27629296e684d68aadbe14903c04fb1f73604d4d36c5136becc0f"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/hanging_cobweb.json",
+      "size_bytes": 397,
+      "sha256": "5e8d1f61e66a2de5af9ada0afa7bb7f85c9642659e5de1b0afa7567284d53d3f"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/hellbark_log.json",
+      "size_bytes": 583,
+      "sha256": "7f05fd9b41915366c15431fe63c7163678a9a4d110308c2f6b38dd8feb80d6c7"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/hellbark_wood.json",
+      "size_bytes": 585,
+      "sha256": "cb518e123481372a04069efb6c758f87731759e60d2766d8fa8c29448758424e"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/high_grass.json",
+      "size_bytes": 397,
+      "sha256": "6c0f925ca4239663d2633961a039bddffa2991e6d0b71a8986deb96a0ee7ab06"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/icy_iris.json",
+      "size_bytes": 399,
+      "sha256": "b03b687c5b4ab378bf70faf02f4685d4af6cac412cae65d0a016284c2b48ee76"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/jacaranda_log.json",
+      "size_bytes": 585,
+      "sha256": "361aa2dc9f2f72e766036790ee6bffbb4589121e1ca613f0026fe56e0a184173"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/jacaranda_wood.json",
+      "size_bytes": 587,
+      "sha256": "b2594cdae360954d69a44adc18f2b173a19ec56cfcc6060e0e7766e157cff3bd"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/lavender.json",
+      "size_bytes": 395,
+      "sha256": "68539d843a5165fa2a7674e671d14ca93cf3ef105802311fa87e1f0b1b7b7581"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/magic_log.json",
+      "size_bytes": 577,
+      "sha256": "50d484ebb4882209e3450207a69a2792ec0b0dc06151a95bb5392360dcfea5cd"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/magic_wood.json",
+      "size_bytes": 579,
+      "sha256": "9d5a74cb0ad781e561223de1364d55e4a27eb1ae067b56f8b830ddb9e76dc6f6"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/mahogany_log.json",
+      "size_bytes": 583,
+      "sha256": "fb6619a32f10036d4166a4d1ce8144b66cb366ad9126c5ac24f025cfe7ad0686"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/mahogany_wood.json",
+      "size_bytes": 585,
+      "sha256": "e7c997f4cbd6ade65418b0ee75601575bf8e84f82ce66ceecde597b8d732a8e3"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/maple_log.json",
+      "size_bytes": 577,
+      "sha256": "d403a17fc70da6a722e70cab5b2d33101a04c14c327f267a7ec1ea3181793b37"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/maple_wood.json",
+      "size_bytes": 579,
+      "sha256": "86817c780c8c7663e939760e0dbb608f211d0332b55b1e45d5125383968e0611"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/orange_cosmos.json",
+      "size_bytes": 400,
+      "sha256": "7a7b57c868318f458ccee0cb27bfbee849abc14094b655fc789b1925d6389752"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/palm_log.json",
+      "size_bytes": 575,
+      "sha256": "45edb55408da5260143d97f5e1b1136ba08bb413722df9f65d6492b3ec59d0a8"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/palm_wood.json",
+      "size_bytes": 577,
+      "sha256": "9af6897e16f9ccf14e569e52fea9dd243dda5d160e87d032863c41784bf18448"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/pine_log.json",
+      "size_bytes": 575,
+      "sha256": "f649e0153210367d701d641e3ec00943875a4cf85bf1566a8af3f856f4305133"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/pine_wood.json",
+      "size_bytes": 577,
+      "sha256": "2a73129f7e16b17870112772cc4fc7e8f6dddac31bdf19f910b6ec3abdc0bf73"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/pink_daffodil.json",
+      "size_bytes": 398,
+      "sha256": "98093e7a7185b972a33515e203df84f3f35f217192b8412e1dd75e23f758ce10"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/pink_hibiscus.json",
+      "size_bytes": 398,
+      "sha256": "0a6f90c3cc5150ec90a7280dcb5a348fac83f564c06ce88cb439f731012ef200"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/porous_flesh.json",
+      "size_bytes": 401,
+      "sha256": "d3bd45721be6722906f332b18a0231e57df6937c1d9ae7e77358fc02d44c418e"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/redwood_log.json",
+      "size_bytes": 581,
+      "sha256": "4ebe5c98b6da44f82b9209f0b6e67874ae994045590c48f1bed6687f1dc15661"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/redwood_wood.json",
+      "size_bytes": 583,
+      "sha256": "2d759ef9dbec6d74dc92b6fb412716f66d0db44928c0dcb42d07c93f52ceffc5"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/reed.json",
+      "size_bytes": 391,
+      "sha256": "4fcbabce9b4e6222fdd45453d807a5df3e6ba7ca1ce58a54c0953222d06a7225"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/rose.json",
+      "size_bytes": 388,
+      "sha256": "2a3074b7926db59c31dfdc20d772aceb904fb8ba051c9c2de20a4a7b7e244431"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/sea_oats.json",
+      "size_bytes": 395,
+      "sha256": "ef946c2f53f74eef9b5fc78a8342d4dfa12fb70e729c6048bcf0a3759fb4fb73"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/tall_lavender.json",
+      "size_bytes": 400,
+      "sha256": "6825c6cdd2e9dd06ae95224083f25e471a9422e21d0435979ca984a05d9eaaa4"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/tall_white_lavender.json",
+      "size_bytes": 405,
+      "sha256": "a35f3a1b593ab884e51985edaed5d55e0079781bd914ec40f47426b8f98f167c"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/tundra_shrub.json",
+      "size_bytes": 394,
+      "sha256": "b51c69b3d3f6995c6a6089a697c53d3ace16cf8c770a9ee5b1b7d6567978d36c"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/umbran_log.json",
+      "size_bytes": 579,
+      "sha256": "85852591f33548a3caa2877e184dc0f91457167e8c43153f7314562d8dc31816"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/umbran_wood.json",
+      "size_bytes": 581,
+      "sha256": "0f75eb6e26bc1b9a26e3ab57f75c685b7336c0be0f299a9171741fae1fa951c7"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/violet.json",
+      "size_bytes": 393,
+      "sha256": "1670e606ff7e7113ae52c34ee423c07fc9079d86e2011e0d19314d031d1a4da4"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/waterlily.json",
+      "size_bytes": 393,
+      "sha256": "017c987be390d7fb04ffc15d59414c949b693799a419b4c35b3e906edb38d5a3"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/webbing.json",
+      "size_bytes": 390,
+      "sha256": "8eb3b7abbe279ed60021d19f89dd87766ca57914ae5c6a8154147f93ea6c03ab"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/white_lavender.json",
+      "size_bytes": 400,
+      "sha256": "55dd0936ad7b40854ffb4f0cc08f0f579f16eff8726fb9cdd896791c0d00c37d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/white_petals.json",
+      "size_bytes": 398,
+      "sha256": "2170ef709d76e62c69df01dc624982ee5a8c481d041a9a68692faa1120ad53c8"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/wildflower.json",
+      "size_bytes": 398,
+      "sha256": "9ef9fb623627a9d3dd8bc9cb163dd001e5291a5c69e0554c2137e540e4739d22"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/willow_log.json",
+      "size_bytes": 579,
+      "sha256": "48a9ebf2fa8e18c3a6216eea2975e09f80fe94877ff867b293f43c3f37e74204"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/willow_wood.json",
+      "size_bytes": 581,
+      "sha256": "19e1c790dd33106f3633a0826521a5b6efa85198aeac58bb8dfec7e764ec1da0"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/cutting/wilted_lily.json",
+      "size_bytes": 396,
+      "sha256": "6e983116547b61a4a86ef211bc804bfe30656ef0e4b4e5b512b6f0c2f2c21822"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/dead_log.json",
+      "size_bytes": 422,
+      "sha256": "adafbfa804029e08a93f0973a134b861357e6f8840a933a4b72c430b43b2f4e8"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/dead_wood.json",
+      "size_bytes": 424,
+      "sha256": "d40d0ab3f067c734d74df1dc6e61ecfa2c1b77beae1f348c9a2512eb5ec26df6"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/empyreal_log.json",
+      "size_bytes": 434,
+      "sha256": "e1777fca8c75699b206a75a2503efa286bcf4ba9715a847b56268f76b7890f71"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/empyreal_wood.json",
+      "size_bytes": 436,
+      "sha256": "c606aeb1ef820530ae2e9e3f24da047c95746f56b0455b6532899f935bb2817b"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/fir_log.json",
+      "size_bytes": 419,
+      "sha256": "15e6484056838ced5fa4563f14890fda125cfbf4eac464609319a1e6a8e8bde2"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/fir_wood.json",
+      "size_bytes": 421,
+      "sha256": "2838d87a6095e1a8c39e28a1e13c6a78a908d8a6f332db41aa096308b79e3ce7"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/hellbark_log.json",
+      "size_bytes": 434,
+      "sha256": "0fd3f04520bd15dd292f7822c847d788248687c1c71ab9a1c5f9f0ab6fab79de"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/hellbark_wood.json",
+      "size_bytes": 436,
+      "sha256": "dca0ec92e698d245647dd50c4050cb0e339c6d0129deff4113670d9ddfcef510"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/jacaranda_log.json",
+      "size_bytes": 437,
+      "sha256": "04cbfb784147ab3a4a367fe441eaff20ed3823d266c180a3f42d5b97c825fa92"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/jacaranda_wood.json",
+      "size_bytes": 439,
+      "sha256": "ae39eaa955b432d02a553973c5838559a5f79451f4da68d95bd2afb4896a1e4a"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/magic_log.json",
+      "size_bytes": 425,
+      "sha256": "0f34ca3810e6ce5a6486885d0d96cb2e8099b164180d5026a94b6198d391bc76"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/magic_wood.json",
+      "size_bytes": 427,
+      "sha256": "7ed479ffb6e9004e277ce256b07b202e4003f0a167d144388dc575134dc80d54"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/mahogany_log.json",
+      "size_bytes": 434,
+      "sha256": "508299d5432d8685218cd5126668ac6dbd6e7fb4faba33151c6f32312633bb1c"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/mahogany_wood.json",
+      "size_bytes": 436,
+      "sha256": "94b4ff85504d68491085a94b7bd1c2cfe0fe39489ed2e71ac6a161dd7c6654c2"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/maple_log.json",
+      "size_bytes": 425,
+      "sha256": "91778463241a16c9a2140c4b05c1e389333f58148db1898663df56b32cd12f61"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/maple_wood.json",
+      "size_bytes": 427,
+      "sha256": "c54e51c5fd17deea50231f649a014dfa4b42da13a8462a4cb949b3c41da06c56"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/palm_log.json",
+      "size_bytes": 422,
+      "sha256": "f9f81ed9a826dc9de977f7265652f4e388c6a228af2c32000d15200bb4f63015"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/palm_wood.json",
+      "size_bytes": 424,
+      "sha256": "3d7d7793bb1c0468572151b8ad373279342fb2cad99af6b26c5d419eff862b8f"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/pine_log.json",
+      "size_bytes": 422,
+      "sha256": "1600171ab08acfe3d97fd6f94c60bfc9dcc7549496d169b4f3209b01e6412fcb"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/pine_wood.json",
+      "size_bytes": 424,
+      "sha256": "b7984f64552afe47408b4f561e7354f492781afa97f7a87c181f300e28c70a0f"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/redwood_log.json",
+      "size_bytes": 431,
+      "sha256": "5927407354e7dd1e56ba9057d6bfd0cb02e3622227e4980c96da334bdcfe4454"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/redwood_wood.json",
+      "size_bytes": 433,
+      "sha256": "f936abcf8679798bb385c57a6b168e35bcd1128755595c22d5c3e9e61912b4ca"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/stripped_dead.json",
+      "size_bytes": 396,
+      "sha256": "a4234de23c24e8d05253f0be6baade2db2ae894a2b0a9545303d90ad6f29861c"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/stripped_empyreal.json",
+      "size_bytes": 408,
+      "sha256": "d21a462d748b34e1442c2d4286fb226593c138a0386d60903ac7cd378d098b1b"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/stripped_fir.json",
+      "size_bytes": 393,
+      "sha256": "6f9aef1a94a90c1764821afd248a572364d26ce6c1460c093bde13a62164bf63"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/stripped_hellbark.json",
+      "size_bytes": 408,
+      "sha256": "012d03a0911a91105987dfacd57a1f57a488547f572db95c5106c7854f5a0404"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/stripped_jacaranda.json",
+      "size_bytes": 411,
+      "sha256": "9d1a80eab7301bba25eada466b8a0c4f37f738c8597ffcf62b7596d195e9c7fe"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/stripped_magic.json",
+      "size_bytes": 399,
+      "sha256": "7d42ed86bdf4bf843ebf17258de40301c9e73b8c4c4fd73e4e26c4c5d9d69226"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/stripped_mahogany.json",
+      "size_bytes": 408,
+      "sha256": "8df3e6e5fb8772024882eaf692c12c17111d64264dcb22110af464bee5dec1b4"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/stripped_maple.json",
+      "size_bytes": 399,
+      "sha256": "c5d880b95eef64f6712baabb3800038c5b7c28b90ce058206537aedd49d829b1"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/stripped_palm.json",
+      "size_bytes": 396,
+      "sha256": "78cf96c738c3aed2d85bf8303751e469f9758e0501fa9474b6965987408f7b3d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/stripped_pine.json",
+      "size_bytes": 396,
+      "sha256": "d2e9ffc959ef83da5eb0d3dc1ac2073160d14025df5e278a74b8869cd52715c0"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/stripped_redwood.json",
+      "size_bytes": 405,
+      "sha256": "7e4da812294d93e724f0b3aa8ae57ff5a0a22d86cc198e270499d1ad3a690758"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/stripped_umbran.json",
+      "size_bytes": 402,
+      "sha256": "aa604512364c6548db57f592e86292b74e30c68bd709740ec56eeed4f813be5d"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/stripped_willow.json",
+      "size_bytes": 402,
+      "sha256": "2fd86cbdf6c9362de466f1699abfb1a5890b2393e6a3176f32baecb09b927a7e"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/umbran_log.json",
+      "size_bytes": 428,
+      "sha256": "092a6951ad22ec4cc178bb7863dfbb32028496b084413302c5467886a5429b3e"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/umbran_wood.json",
+      "size_bytes": 430,
+      "sha256": "f196b8fa3f22af0a6b582bf0a14781aeeeb5601b4a65e0a5eb0b495a88bbb88c"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/willow_log.json",
+      "size_bytes": 428,
+      "sha256": "f2a76ddbe449fd2aaaf55b3f7ecc316e8120bbe5dbaf06282036656bd89ace9b"
+    },
+    {
+      "path": "src/main/resources/data/immersive_bop_harvest/recipe/sawmill/willow_wood.json",
+      "size_bytes": 430,
+      "sha256": "b48621c901a9621b7fbe33709ba9f3ecc9ddba78163de1aa7b86b23647d1dbde"
+    },
+    {
+      "path": "src/main/resources/data/neoforge/loot_modifiers/global_loot_modifiers.json",
+      "size_bytes": 1139,
+      "sha256": "6e7ac186f72f2e751eb6be26e821ab2d627360ce10fa008e4113ec567f669218"
+    },
+    {
+      "path": "src/main/templates/META-INF/neoforge.mods.toml",
+      "size_bytes": 1256,
+      "sha256": "827e5089c2426fb6c63258d72fa545e205339fd518820e0c37041c8c6fe21725"
+    },
+    {
       "path": "templates/en_us.json",
       "size_bytes": 141,
       "sha256": "16b53535bb840ea64efc73acd64019776ae6a62e7caad6444286b42282aa37ea"
@@ -170,8 +974,8 @@
     },
     {
       "path": "VALIDATION_REPORT.txt",
-      "size_bytes": 199,
-      "sha256": "7f2477cafedff87be39485c6d18e2954631e19fa7d24e1c8d3c2f96f4c641bf5"
+      "size_bytes": 1481,
+      "sha256": "f8dce7fe5a7884765f1332c409ee8d5269fda8879a6eebf7b5bf7cf67c800c63"
     }
   ]
 }
