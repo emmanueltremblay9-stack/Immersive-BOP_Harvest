@@ -22,7 +22,7 @@ the unresolved license decision.
 | Datagen/runtime dependency load | Passed | `.\\gradlew.bat --no-configuration-cache runData --stacktrace` |
 | Dedicated server smoke | Passed | bounded `runServer` smoke reached `Done` |
 | Test play install | Passed | source and installed SHA-256 matched |
-| Remaining installed jars | Passed | exactly 1 jar for `immersive_bop_harvest` |
+| Remaining installed jars | Passed | checker scans installed jars by embedded `modId` and finds exactly 1 jar for `immersive_bop_harvest` |
 | Live client smoke | Passed | Prism `1.21.1 TesT play` reached title screen with alpha.3 loaded |
 | Notion project paper | Passed | page readback includes current proof, icon, and banner |
 | Branding | Passed | original vector logo and vector banner are present |

@@ -13,7 +13,7 @@
 - [x] Prism Test play live-client smoke reached the Minecraft title screen with the mod loaded.
 - [x] Legal reuse inventory is present.
 - [x] Beta release notes draft is present.
-- [x] Deterministic beta release gate checker is present.
+- [x] Deterministic beta release gate checker is present and verifies built/installed jar hashes plus duplicate installed jars by embedded `modId`.
 - [ ] License decision is still open.
 - [ ] Public binary release is still blocked.
 

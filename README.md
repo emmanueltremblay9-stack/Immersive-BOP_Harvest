@@ -35,7 +35,7 @@ It does **not** add new items, blocks, textures, magical drops, hemp from unrela
 - `scripts/qa_alpha_resources.py` — generated-resource QA gate
 - `scripts/sync_runtime_deps.ps1` — local runtime dependency sync from the configured Prism modpack
 - `scripts/install_alpha_to_lab.ps1` — Windows Test play install and hash proof script
-- `scripts/check_beta_release_gate.py` — public beta release gate checker
+- `scripts/check_beta_release_gate.py` — public beta release gate checker with built/installed jar hash and duplicate install checks
 - Gradle wrapper and NeoForge build files
 
 ## Build and validate

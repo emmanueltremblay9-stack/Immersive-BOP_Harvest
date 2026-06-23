@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 import zipfile
 from pathlib import Path
@@ -42,10 +43,33 @@ def check(condition: bool, ok: str, fail: str, failures: list[str]) -> None:
         failures.append(fail)
 
 
-def read_installed_metadata(jar_path: Path) -> str:
+def resolve_project_path(path_value: str) -> Path:
+    path = Path(path_value)
+    if path.is_absolute():
+        return path
+    return ROOT / path
+
+
+def read_mod_metadata(jar_path: Path) -> str:
     with zipfile.ZipFile(jar_path) as jar:
         with jar.open("META-INF/neoforge.mods.toml") as metadata:
             return metadata.read().decode("utf-8", errors="replace")
+
+
+def metadata_declares_mod(metadata: str, mod_id: str) -> bool:
+    return re.search(rf'(?m)^\s*modId\s*=\s*"{re.escape(mod_id)}"\s*$', metadata) is not None
+
+
+def installed_jars_for_mod(mods_dir: Path, mod_id: str) -> list[Path]:
+    matches: list[Path] = []
+    for jar_path in sorted(mods_dir.glob("*.jar")):
+        try:
+            metadata = read_mod_metadata(jar_path)
+        except (KeyError, OSError, zipfile.BadZipFile):
+            continue
+        if metadata_declares_mod(metadata, mod_id):
+            matches.append(jar_path)
+    return matches
 
 
 def main() -> int:
@@ -57,6 +81,7 @@ def main() -> int:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     build = manifest["build_summary"]
 
+    mod_id = manifest.get("mod_id", "")
     mod_version = props.get("mod_version", "")
     mod_license = props.get("mod_license", "")
 
@@ -112,8 +137,20 @@ def main() -> int:
     for key, label in boolean_gates.items():
         check(bool(build.get(key)), label, f"{key} is not proven in PROJECT_MANIFEST.json", failures)
 
-    installed_jar = Path(build["installed_jar"])
+    built_jar = resolve_project_path(build["built_jar"])
+    installed_jar = resolve_project_path(build["installed_jar"])
+
+    check(built_jar.is_file(), "built jar exists", f"built jar is missing: {built_jar}", failures)
     check(installed_jar.is_file(), "installed jar exists", f"installed jar is missing: {installed_jar}", failures)
+
+    if built_jar.is_file():
+        source_sha = sha256_file(built_jar)
+        check(
+            source_sha == build.get("source_sha256"),
+            "built jar SHA-256 matches manifest",
+            "built jar SHA-256 does not match manifest",
+            failures,
+        )
 
     if installed_jar.is_file():
         installed_sha = sha256_file(installed_jar)
@@ -123,7 +160,21 @@ def main() -> int:
             "installed jar SHA-256 does not match manifest",
             failures,
         )
-        metadata = read_installed_metadata(installed_jar)
+        if built_jar.is_file():
+            check(
+                sha256_file(built_jar) == installed_sha,
+                "built jar and installed jar SHA-256 values match",
+                "built jar and installed jar SHA-256 values do not match",
+                failures,
+            )
+
+        metadata = read_mod_metadata(installed_jar)
+        check(
+            metadata_declares_mod(metadata, mod_id),
+            "installed jar metadata declares the expected mod id",
+            "installed jar metadata does not declare the expected mod id",
+            failures,
+        )
         check(
             f'version="{mod_version}"' in metadata,
             "installed jar metadata has current version",
@@ -136,6 +187,21 @@ def main() -> int:
             "installed jar metadata still lacks a selected license",
             failures,
         )
+
+        mod_jars = installed_jars_for_mod(installed_jar.parent, mod_id)
+        check(
+            len(mod_jars) == 1,
+            f"exactly one installed jar declares {mod_id}",
+            f"expected exactly one installed jar declaring {mod_id}; found {len(mod_jars)}",
+            failures,
+        )
+        if len(mod_jars) == 1:
+            check(
+                mod_jars[0].resolve() == installed_jar.resolve(),
+                "sole installed mod jar matches PROJECT_MANIFEST.json",
+                "sole installed mod jar does not match PROJECT_MANIFEST.json",
+                failures,
+            )
 
     if failures:
         print()
