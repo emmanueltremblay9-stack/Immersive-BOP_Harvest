@@ -1,5 +1,5 @@
 {
-  "assets_version": "0.1.0-spec",
+  "assets_version": "0.1.1-alpha.3-notion-cover",
   "style": "original botanical-industrial",
   "no_dependency_assets_copied": true,
   "no_font_files_included": true,
@@ -7,13 +7,18 @@
   "files": [
     {
       "path": "assets/branding/branding_preview.html",
-      "size_bytes": 815,
-      "sha256": "9db506c4e601748d51320f2a5ea972cf7bdda17dfff16fd8e0b3e28ad8558d24"
+      "size_bytes": 1012,
+      "sha256": "8b975edd5e08117384f814ca4208a1a22d70e7b49f877bccc0cff1c45770388f"
     },
     {
       "path": "assets/branding/transparent/immersive_bop_harvest_logo_vector.svg",
       "size_bytes": 1829,
       "sha256": "e9ce83098aada14d212464a52003a4a7cbf17b5963d755ad449a1750b3e5ae27"
+    },
+    {
+      "path": "assets/branding/cover/immersive_bop_harvest_banner_vector.svg",
+      "size_bytes": 3668,
+      "sha256": "4cdaac67c602a580b032a32093c7dfd94b071a9810606dc8d6a6e074cb7c33be"
     }
   ]
 }

@@ -24,6 +24,17 @@ Use for:
 - source repository;
 - project cards.
 
+### Vector banner
+
+```text
+assets/branding/cover/immersive_bop_harvest_banner_vector.svg
+```
+
+Use for:
+- Notion cover/banner;
+- repository and release page headers;
+- project status pages.
+
 ### Raster assets
 
 The source pack included PNG icons, banners and backgrounds. They are not part

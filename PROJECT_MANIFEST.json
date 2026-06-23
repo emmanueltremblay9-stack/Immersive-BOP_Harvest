@@ -10,7 +10,9 @@
     "raster_png_assets": 0,
     "preview_html": 1,
     "branding_guide": true,
-    "png_assets_omitted_per_current_scope": true
+    "png_assets_omitted_per_current_scope": true,
+    "vector_banners": 1,
+    "notion_cover_ready": true
   },
   "build_summary": {
     "minecraft_version": "1.21.1",
@@ -54,13 +56,13 @@
     },
     {
       "path": "assets/branding/ASSETS_MANIFEST.json",
-      "size_bytes": 601,
-      "sha256": "88f71d3b8e1fb95cb709897673a3a268ef56c29ead9437b2d93216e914545288"
+      "size_bytes": 824,
+      "sha256": "39aecba6157f1887fffced2f8ac892299987a87d8c5825d0d4037619e4878287"
     },
     {
       "path": "assets/branding/branding_preview.html",
-      "size_bytes": 815,
-      "sha256": "9db506c4e601748d51320f2a5ea972cf7bdda17dfff16fd8e0b3e28ad8558d24"
+      "size_bytes": 1012,
+      "sha256": "8b975edd5e08117384f814ca4208a1a22d70e7b49f877bccc0cff1c45770388f"
     },
     {
       "path": "assets/branding/transparent/immersive_bop_harvest_logo_vector.svg",
@@ -84,8 +86,8 @@
     },
     {
       "path": "docs/BRANDING_GUIDE.md",
-      "size_bytes": 1475,
-      "sha256": "4bbede7ff6a4470675988173d8efd6a830065e69278983ae4affd22f89a4dce3"
+      "size_bytes": 1665,
+      "sha256": "c8c6e72187bdb20643ea20d4c3783a7da97b148b150d71f787da0d2a68a5292a"
     },
     {
       "path": "docs/COMPATIBILITY_MATRIX.md",
@@ -1006,6 +1008,11 @@
       "path": "VALIDATION_REPORT.txt",
       "size_bytes": 4054,
       "sha256": "ddf231d26a0c31110668555bffba3519dc17355fbf400cf995636c0705d6b8b4"
+    },
+    {
+      "path": "assets/branding/cover/immersive_bop_harvest_banner_vector.svg",
+      "size_bytes": 3668,
+      "sha256": "4cdaac67c602a580b032a32093c7dfd94b071a9810606dc8d6a6e074cb7c33be"
     }
   ]
 }
