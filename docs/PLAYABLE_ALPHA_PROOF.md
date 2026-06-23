@@ -1,7 +1,7 @@
 # Playable Alpha Proof
 
 Date: 2026-06-23
-Version: 0.1.1-alpha.3
+Version: 0.1.1-alpha.4
 Loader: NeoForge 21.1.233
 Minecraft: 1.21.1
 Mod ID: `immersive_bop_harvest`
@@ -17,6 +17,8 @@ screen code, or custom runtime mechanics.
 ## Commands Run
 
 ```powershell
+python scripts\validate_specs.py
+.\gradlew.bat --no-configuration-cache compileJava --stacktrace
 .\gradlew.bat --no-configuration-cache check --stacktrace
 .\gradlew.bat --no-configuration-cache clean build --stacktrace
 .\gradlew.bat --no-configuration-cache runGameTestServer --stacktrace
@@ -24,28 +26,28 @@ screen code, or custom runtime mechanics.
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\install_alpha_to_lab.ps1
 ```
 
-All commands above exited with status 0 during the 2026-06-23 alpha.3 proof pass.
+All commands above exited with status 0 during the 2026-06-23 alpha.4 proof pass.
 
 ## Built Artifact
 
 ```text
-C:\Users\Emmanuel Tremblay\AI Depot\Codex Documents\Immersive BOP_Harvest\build\libs\immersive_bop_harvest-0.1.1-alpha.3.jar
+C:\Users\Emmanuel Tremblay\AI Depot\Codex Documents\Immersive BOP_Harvest\build\libs\immersive_bop_harvest-0.1.1-alpha.4.jar
 ```
 
-Size: 64,578 bytes
-SHA-256: `2a143596de0a7e5896cba9fe5292212840fe2cedae78ac8b2bfc3a83a708a64c`
+Size: 66,042 bytes
+SHA-256: `067275f2467feec22813f7ad868cc2d809e95435e5299e645400e634f30c7da7`
 
 ## Installed Artifact
 
 ```text
-C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\mods\immersive_bop_harvest-0.1.1-alpha.3.jar
+C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\mods\immersive_bop_harvest-0.1.1-alpha.4.jar
 ```
 
-Size: 64,578 bytes
-SHA-256: `2a143596de0a7e5896cba9fe5292212840fe2cedae78ac8b2bfc3a83a708a64c`
+Size: 66,042 bytes
+SHA-256: `067275f2467feec22813f7ad868cc2d809e95435e5299e645400e634f30c7da7`
 Hash match: true
-Previous installed version: `0.1.1-alpha.2`
-Deleted old jar: `immersive_bop_harvest-0.1.1-alpha.2.jar`
+Previous installed version: `0.1.1-alpha.3`
+Deleted old jar: `immersive_bop_harvest-0.1.1-alpha.3.jar`
 Remaining installed jars for `immersive_bop_harvest`: 1
 
 ## Runtime Dependencies
@@ -86,11 +88,8 @@ Installed metadata requires:
 
 - `qaAlphaResources`: passed with 146 generated JSON files.
 - `runGameTestServer`: passed 2 required tests.
-- Representative generated recipes asserted by GameTest:
-  - `immersive_bop_harvest:cutting/barley`
-  - `immersive_bop_harvest:sawmill/fir_log`
-  - `immersive_bop_harvest:sawmill/stripped_fir`
-- `runData`: loaded `immersive_bop_harvest` 0.1.1-alpha.3 and all required runtime dependency jars.
+- `allGeneratedRecipesLoad`: asserted all 103 generated recipe IDs.
+- `runData`: loaded `immersive_bop_harvest` 0.1.1-alpha.4 and all required runtime dependency jars.
 
 ## Dedicated-Server Smoke
 
@@ -102,31 +101,29 @@ Evidence:
 - `Loaded Immersive BOP_Harvest data compatibility`
 - `DedicatedServer`: `Done`
 - wrapper exit status: 0
-- no remaining Gradle/Java process for this repo after cleanup
+- output log: `build\runServer-smoke-alpha4-20260623-175911.out.log`
+- no remaining Java server process for this repo after cleanup
 
-## Live-Client Smoke
+## Live-Client Load Smoke
 
 The actual Prism `1.21.1 TesT play` instance was launched with the installed
-alpha.3 jar and reached the Minecraft Java Edition title screen.
+alpha.4 jar. The log proves client load reached late startup markers, but the
+captured screenshots are not accepted as title-screen proof.
 
 Evidence:
 
-- launched through Prism Launcher CLI with the full instance name
+- launched through Prism Launcher CLI with the full quoted instance name
 - active log path:
   `C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\logs\latest.log`
-- log discovered `immersive_bop_harvest-0.1.1-alpha.3.jar` in the Test play `mods` directory
-- mod list included `Immersive BOP_Harvest 0.1.1-alpha.3 (immersive_bop_harvest)`
+- log discovered `immersive_bop_harvest-0.1.1-alpha.4.jar` in the Test play `mods` directory
+- mod list included `Immersive BOP_Harvest 0.1.1-alpha.4 (immersive_bop_harvest)`
 - runtime log emitted `Loaded Immersive BOP_Harvest data compatibility`
-- screenshot captured:
-  `build\live-client-smoke\test-play-client-20260623-024445.png`
-- no new crash report was written during the 2026-06-23 02:42-02:44 smoke window
-
-The first launch attempt was blocked by Prism's RAM warning because the instance
-requests 6144 MB while the system had less free RAM. For the smoke run only,
-`MaxMemAlloc` was temporarily lowered to 4096 before launch and restored to 6144
-after process cleanup; Prism had rewritten the temporary value on exit.
+- runtime log reached `Sound engine started`
+- no new crash report was written during the alpha.4 client smoke attempts
+- process cleanup stopped Minecraft/Prism processes for the Test play launch
 
 ## Remaining Release Gates
 
 - Public binary release is blocked until `LICENSE_DECISION_REQUIRED.md` is resolved.
+- Alpha.4 visual title-screen proof remains open.
 - Full gameplay/world interaction smoke was not performed in this pass.

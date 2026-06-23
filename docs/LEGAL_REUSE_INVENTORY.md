@@ -2,7 +2,7 @@
 
 Date: 2026-06-23
 Project: Immersive BOP_Harvest
-Version audited: `0.1.1-alpha.3`
+Version audited: `0.1.1-alpha.4`
 
 ## Release Status
 
@@ -12,7 +12,7 @@ license and the chosen license is applied consistently.
 Current blocker:
 - `gradle.properties` has `mod_license=LICENSE_PENDING`.
 - No `LICENSE` file is present.
-- The installed alpha.3 jar was built with `license="LICENSE_PENDING"`.
+- The installed alpha.4 jar was built with `license="LICENSE_PENDING"`.
 
 ## Authored Project Material
 

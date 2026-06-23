@@ -1,16 +1,17 @@
 # Release Checklist
 
-## Current 0.1.1-alpha.3 status
+## Current 0.1.1-alpha.4 status
 
 - [x] Specification validation passed.
 - [x] Generated alpha resources parse as JSON and pass `qaAlphaResources`.
 - [x] Full Gradle build passed.
 - [x] `runData` loads the mod with synchronized Test play runtime dependencies.
-- [x] `runGameTestServer` passed 2 required tests.
+- [x] `runGameTestServer` passed 2 required tests, including all 103 generated recipe IDs.
 - [x] Dedicated-server smoke reached the server-ready `Done` signal.
 - [x] Private Prism Test play install was hash-verified.
 - [x] Required BOP runtime dependencies were present and verified.
-- [x] Prism Test play live-client smoke reached the Minecraft title screen with the mod loaded.
+- [x] Prism Test play client log-marker smoke loaded alpha.4 with no new crash report.
+- [ ] Alpha.4 visual title-screen screenshot proof is still open.
 - [x] Legal reuse inventory is present.
 - [x] Beta release notes draft is present.
 - [x] Deterministic beta release gate checker is present and verifies built/installed jar hashes plus duplicate installed jars by embedded `modId`.

@@ -2,8 +2,8 @@
 
 Date: 2026-06-23
 Project: Immersive BOP_Harvest
-Version: `0.1.1-alpha.3`
-Base pushed commit before this audit: `9b1613f63bdbfeacc96dc8c6e029fb54741a2c5a`
+Version: `0.1.1-alpha.4`
+Base pushed commit before this audit: `58b26b4285f9342f8edc78d46d3a0284236f6b42`
 
 ## Current Result
 
@@ -18,12 +18,13 @@ the unresolved license decision.
 | Specification validation | Passed | `python scripts/validate_specs.py` |
 | Generated-resource QA | Passed | `.\\gradlew.bat --no-configuration-cache check --stacktrace` and `qaAlphaResources` |
 | Clean build | Passed | `.\\gradlew.bat --no-configuration-cache clean build --stacktrace` |
-| GameTests | Passed | `.\\gradlew.bat --no-configuration-cache runGameTestServer --stacktrace`, 2 required tests |
+| GameTests | Passed | `.\\gradlew.bat --no-configuration-cache runGameTestServer --stacktrace`, 2 required tests, all 103 generated recipe IDs checked |
 | Datagen/runtime dependency load | Passed | `.\\gradlew.bat --no-configuration-cache runData --stacktrace` |
 | Dedicated server smoke | Passed | bounded `runServer` smoke reached `Done` |
 | Test play install | Passed | source and installed SHA-256 matched |
 | Remaining installed jars | Passed | checker scans installed jars by embedded `modId` and finds exactly 1 jar for `immersive_bop_harvest` |
-| Live client smoke | Passed | Prism `1.21.1 TesT play` reached title screen with alpha.3 loaded |
+| Live client load smoke | Passed | Prism `1.21.1 TesT play` loaded alpha.4 by log markers and wrote no new crash report |
+| Alpha.4 visual title-screen screenshot | Open | attempted screenshots did not show the title menu, so they are not accepted as title-screen proof |
 | Notion project paper | Passed | page readback includes current proof, icon, and banner |
 | Branding | Passed | original vector logo and vector banner are present |
 
@@ -32,16 +33,16 @@ the unresolved license decision.
 Installed jar:
 
 ```text
-C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\mods\immersive_bop_harvest-0.1.1-alpha.3.jar
+C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\mods\immersive_bop_harvest-0.1.1-alpha.4.jar
 ```
 
 SHA-256:
 
 ```text
-2a143596de0a7e5896cba9fe5292212840fe2cedae78ac8b2bfc3a83a708a64c
+067275f2467feec22813f7ad868cc2d809e95435e5299e645400e634f30c7da7
 ```
 
-The installed jar metadata currently reports version `0.1.1-alpha.3`.
+The installed jar metadata currently reports version `0.1.1-alpha.4`.
 
 ## Blocking Gate
 
@@ -67,6 +68,7 @@ choose the license before any public binary release.
 
 ## Known Residual Risk
 
-The live-client proof reached the Minecraft title screen. A full gameplay/world
-interaction smoke was not performed in this pass. That is useful before broad
-release, but it is separate from the currently blocking license decision.
+The alpha.4 live-client proof reached client load log markers, but the captured
+screenshots did not show the title menu. A full gameplay/world interaction smoke
+was not performed in this pass. These are useful before broad release, but they
+are separate from the currently blocking license decision.

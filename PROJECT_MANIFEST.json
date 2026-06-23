@@ -3,8 +3,8 @@
   "mod_id": "immersive_bop_harvest",
   "package_type": "NeoForge playable alpha source project",
   "design_profile": "conservative_realistic_with_original_vector_branding",
-  "version": "0.1.1-alpha.3",
-  "validation": "spec-build-gametest-runData-server-install-live-client-title-screen-beta-gate-blocked-by-license",
+  "version": "0.1.1-alpha.4",
+  "validation": "spec-build-all-recipes-gametest-runData-server-install-client-load-smoke-beta-gate-blocked-by-license",
   "asset_summary": {
     "vector_logos": 1,
     "raster_png_assets": 0,
@@ -18,26 +18,31 @@
     "minecraft_version": "1.21.1",
     "loader": "NeoForge",
     "neoforge_version": "21.1.233",
-    "built_jar": "build/libs/immersive_bop_harvest-0.1.1-alpha.3.jar",
-    "installed_jar": "C:/Users/Emmanuel Tremblay/AppData/Roaming/PrismLauncher/instances/1.21.1 TesT play/minecraft/mods/immersive_bop_harvest-0.1.1-alpha.3.jar",
+    "built_jar": "build/libs/immersive_bop_harvest-0.1.1-alpha.4.jar",
+    "installed_jar": "C:/Users/Emmanuel Tremblay/AppData/Roaming/PrismLauncher/instances/1.21.1 TesT play/minecraft/mods/immersive_bop_harvest-0.1.1-alpha.4.jar",
     "install_report": "build/install-report.json",
-    "source_sha256": "2a143596de0a7e5896cba9fe5292212840fe2cedae78ac8b2bfc3a83a708a64c",
-    "installed_sha256": "2a143596de0a7e5896cba9fe5292212840fe2cedae78ac8b2bfc3a83a708a64c",
+    "source_sha256": "067275f2467feec22813f7ad868cc2d809e95435e5299e645400e634f30c7da7",
+    "installed_sha256": "067275f2467feec22813f7ad868cc2d809e95435e5299e645400e634f30c7da7",
     "hash_match": true,
     "runData_passed": true,
     "game_tests_passed": true,
     "dedicated_server_smoke_tested": true,
     "live_client_smoke_tested": true,
     "public_release_blocked_by_license": true,
-    "live_client_smoke_level": "title_screen",
-    "live_client_smoke_screenshot": "build/live-client-smoke/test-play-client-20260623-024445.png",
+    "live_client_smoke_level": "alpha4_client_load_log_markers",
+    "live_client_smoke_screenshot": null,
     "full_gameplay_world_smoke_tested": false,
     "beta_release_gate_checker": "scripts/check_beta_release_gate.py",
     "beta_release_gate_expected_status": "blocked_by_license",
     "legal_reuse_inventory": "docs/LEGAL_REUSE_INVENTORY.md",
     "beta_release_audit": "docs/BETA_RELEASE_AUDIT.md",
     "beta_release_notes_draft": "docs/BETA_RELEASE_NOTES_DRAFT.md",
-    "beta_release_gate_checker_scope": "license-docs-built-installed-hash-and-duplicate-modid-scan"
+    "beta_release_gate_checker_scope": "license-docs-built-installed-hash-and-duplicate-modid-scan",
+    "remaining_installed_jars_for_mod": 1,
+    "game_test_recipe_ids_checked": 103,
+    "live_client_title_screen_visual_confirmed": false,
+    "live_client_crash_reports_before": 17,
+    "live_client_crash_reports_after": 17
   },
   "files": [
     {
@@ -82,8 +87,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "size_bytes": 3523,
-      "sha256": "ab90281859cfa17e9f27f84c1264feb13301d577869abe9ca851ab852ca5ace5"
+      "size_bytes": 5194,
+      "sha256": "7659b336fe96cbefc6cb74d45317baf7a794ae9be777dcd0015ea49a5a279d56"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -107,8 +112,8 @@
     },
     {
       "path": "docs/PLAYABLE_ALPHA_PROOF.md",
-      "size_bytes": 4593,
-      "sha256": "50bff9470fa2b2303173207faeeb6335245e8f58789a2128de09911595aef7ac"
+      "size_bytes": 4486,
+      "sha256": "36f5ca87744b940c8c459d9d8a809e956ae9ce5c52cbe1c31795ce53228f1518"
     },
     {
       "path": "docs/QA_ACCEPTANCE.md",
@@ -122,8 +127,8 @@
     },
     {
       "path": "docs/RELEASE_CHECKLIST.md",
-      "size_bytes": 1589,
-      "sha256": "51c4949f1f9241a487e0cfaf47e81aea2e944f519166a1e5154a90219b6c9356"
+      "size_bytes": 1686,
+      "sha256": "11713a7ee5de7deefcd603bb2fb525562f183b1d3d58ae50f414fdaaa7be5436"
     },
     {
       "path": "docs/SOURCE_AUDIT.md",
@@ -133,7 +138,7 @@
     {
       "path": "gradle.properties",
       "size_bytes": 770,
-      "sha256": "543012118de1d2a65f7a5f36e94760376308969818ce7402cc188af151aa13db"
+      "sha256": "47fb5d6ccd191710a6c354d5e71ef07dca0607a5a472903e0aad9a258efc61a7"
     },
     {
       "path": "gradle/wrapper/gradle-wrapper.jar",
@@ -162,8 +167,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 3761,
-      "sha256": "50b6bd1227be1c2bdc41c1f0321ecad60aa6ac0dc55d8d67e64fe4bde6be25bc"
+      "size_bytes": 3753,
+      "sha256": "b890ff60bd87c81d8d9bb64eef4d5fbb213f5af62fb303d30cbcfadcb269d9eb"
     },
     {
       "path": "scripts/generate_alpha_resources.py",
@@ -232,8 +237,8 @@
     },
     {
       "path": "src/main/java/com/oblixorprime/immersivebopharvest/gametest/BopHarvestGameTests.java",
-      "size_bytes": 1537,
-      "sha256": "26a6246832303c7897b60f0821417b2f27b2fd4334a980b8b964b5ccf5503233"
+      "size_bytes": 5118,
+      "sha256": "08f48f83ea0610d6d188edfbaf757e8700795e381e5dc69c14bd57d2584ff5cc"
     },
     {
       "path": "src/main/java/com/oblixorprime/immersivebopharvest/ImmersiveBopHarvest.java",
@@ -1012,8 +1017,8 @@
     },
     {
       "path": "VALIDATION_REPORT.txt",
-      "size_bytes": 4054,
-      "sha256": "ddf231d26a0c31110668555bffba3519dc17355fbf400cf995636c0705d6b8b4"
+      "size_bytes": 4017,
+      "sha256": "e3ec55a213d1fbba1de3028c07cb4fe998a1a4a26efe85615953c8f884b6d0b5"
     },
     {
       "path": "assets/branding/cover/immersive_bop_harvest_banner_vector.svg",
@@ -1023,22 +1028,22 @@
     {
       "path": "docs/LEGAL_REUSE_INVENTORY.md",
       "size_bytes": 2610,
-      "sha256": "a01ab67c2a6dd1ba3cccd995eff5028c1f5f27e36cb63fde1f419d21b2ea8772"
+      "sha256": "c81825f35e3a69ad5d26b683b33a984ddfe13d2c4bb328a7ee65c41afb7e44cf"
     },
     {
       "path": "docs/BETA_RELEASE_AUDIT.md",
-      "size_bytes": 2821,
-      "sha256": "bb7a2c999f538923dfac4dac050aff737e3e05e5dd258b76f32bc8a976a1cb75"
+      "size_bytes": 3101,
+      "sha256": "3ddbbe47d9bad90e07c6595a49ae848f93bf9650fc80d24b5bcb2cce69584f84"
     },
     {
       "path": "docs/BETA_RELEASE_NOTES_DRAFT.md",
-      "size_bytes": 2054,
-      "sha256": "410b6dfc1d7401dd842721d9888950ec62b829e46621ac7a6fd69a405c6e3482"
+      "size_bytes": 2256,
+      "sha256": "197faa164855f20c8325371985b71decc339ac1f7053c508167e10915b86849f"
     },
     {
       "path": "scripts/check_beta_release_gate.py",
-      "size_bytes": 7080,
-      "sha256": "d0b3b088af22e40b753c5ef19d9ff6fe3bc6d3c7fabc81080b1a0f0694943402"
+      "size_bytes": 7072,
+      "sha256": "304db35bd9f3f630413d2bf16eb36aad1add35c8466e514304f45836bb2b6448"
     }
   ]
 }

@@ -3,7 +3,7 @@
 This is a draft for the first public beta release. Do not publish it until the
 license gate is resolved and a rebuilt, license-correct jar is verified.
 
-## Immersive BOP_Harvest `0.1.1-alpha.3`
+## Immersive BOP_Harvest `0.1.1-alpha.4`
 
 Immersive BOP_Harvest is a conservative compatibility addon for Biomes O'
 Plenty, Farmer's Delight, and Immersive Engineering on Minecraft 1.21.1 with
@@ -36,15 +36,16 @@ NeoForge.
 - Specification validation passed.
 - Generated-resource QA passed with 146 generated JSON files.
 - Clean Gradle build passed.
-- GameTest server passed 2 required tests.
+- GameTest server passed 2 required tests, including all 103 generated recipe IDs.
 - Datagen/runtime dependency load passed.
 - Dedicated server smoke reached `Done`.
 - Prism `1.21.1 TesT play` install was hash-verified.
-- Prism live-client smoke reached the Minecraft title screen with the mod loaded.
+- Prism live-client load smoke discovered alpha.4, loaded the mod, reached sound-engine startup, and wrote no new crash report.
 
 ## Known Limits
 
 - Full gameplay/world interaction smoke was not performed in the latest pass.
+- Alpha.4 title-screen screenshot proof is still open; the latest captured screenshots did not show the title menu.
 - Public release is blocked until the owner selects and applies a license.
 
 ## Publication Checklist

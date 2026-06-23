@@ -1,6 +1,6 @@
 VALIDATION REPORT - Immersive BOP_Harvest
 Date: 2026-06-23
-Version: 0.1.1-alpha.3
+Version: 0.1.1-alpha.4
 
 Specification validation:
 - Command: python scripts\validate_specs.py
@@ -25,6 +25,11 @@ Generated resource validation:
 - Direct-harvest loot tables: 19
 - Item tags: 2
 
+Compile validation:
+- Command: .\gradlew.bat --no-configuration-cache compileJava --stacktrace
+- Exit status: 0
+- Result: BUILD SUCCESSFUL
+
 Runtime dependency sync:
 - Command: .\gradlew.bat --no-configuration-cache runGameTestServer --stacktrace
 - Exit status: 0
@@ -41,7 +46,7 @@ Build validation:
 - Command: .\gradlew.bat --no-configuration-cache clean build --stacktrace
 - Exit status: 0
 - Result: BUILD SUCCESSFUL
-- Built jar: build\libs\immersive_bop_harvest-0.1.1-alpha.3.jar
+- Built jar: build\libs\immersive_bop_harvest-0.1.1-alpha.4.jar
 
 GameTest validation:
 - Command: .\gradlew.bat --no-configuration-cache runGameTestServer --stacktrace
@@ -49,42 +54,43 @@ GameTest validation:
 - Result: BUILD SUCCESSFUL
 - Tests run: 2
 - Evidence: All 2 required tests passed.
-- Covered checks: server runtime boot and representative generated recipe load.
+- Covered checks: server runtime boot and all 103 generated recipe IDs.
 
 Datagen/runtime validation:
 - Command: .\gradlew.bat --no-configuration-cache runData --stacktrace
 - Exit status: 0
 - Result: BUILD SUCCESSFUL
-- Evidence: mod version 0.1.1-alpha.3 and all required runtime dependency jars loaded.
+- Evidence: mod version 0.1.1-alpha.4 and all required runtime dependency jars loaded.
 
 Private Test play install validation:
 - Command: powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\install_alpha_to_lab.ps1
 - Exit status: 0
-- Previous installed version: 0.1.1-alpha.2
-- Installed jar: C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\mods\immersive_bop_harvest-0.1.1-alpha.3.jar
-- Deleted old jar: immersive_bop_harvest-0.1.1-alpha.2.jar
-- Source SHA-256: 2a143596de0a7e5896cba9fe5292212840fe2cedae78ac8b2bfc3a83a708a64c
-- Installed SHA-256: 2a143596de0a7e5896cba9fe5292212840fe2cedae78ac8b2bfc3a83a708a64c
+- Previous installed version: 0.1.1-alpha.3
+- Installed jar: C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\mods\immersive_bop_harvest-0.1.1-alpha.4.jar
+- Deleted old jar: immersive_bop_harvest-0.1.1-alpha.3.jar
+- Source SHA-256: 067275f2467feec22813f7ad868cc2d809e95435e5299e645400e634f30c7da7
+- Installed SHA-256: 067275f2467feec22813f7ad868cc2d809e95435e5299e645400e634f30c7da7
 - Hash match: true
 - Remaining jars for mod id immersive_bop_harvest: 1
 - Report: build\install-report.json
 
 Dedicated-server smoke:
-- Command: bounded PowerShell wrapper for .\gradlew.bat --no-configuration-cache runServer --stacktrace
+- Command: bounded PowerShell wrapper for .\gradlew.bat --no-daemon --no-configuration-cache runServer --stacktrace
 - Exit status: 0
 - Result: READY
-- Evidence: Loaded Immersive BOP_Harvest data compatibility; DedicatedServer reached Done.
-- Process cleanup: no remaining Gradle/Java process for this repo after stop.
+- Evidence: alpha.4 loaded, Loaded Immersive BOP_Harvest data compatibility, and DedicatedServer reached Done.
+- Output log: build\runServer-smoke-alpha4-20260623-175911.out.log
+- Process cleanup: no remaining Java server process for this repo after stop.
 
-Live-client title-screen smoke:
+Live-client load smoke:
 - Command: Prism Launcher CLI launch of instance "1.21.1 TesT play"
-- Exit status: n/a; verified by process, log, and screenshot evidence.
-- Runtime note: the first launch was blocked by Prism's RAM warning. Gradle daemons were stopped, then MaxMemAlloc was temporarily lowered from 6144 to 4096 for the launched process. Prism rewrote the temporary value on exit, and the config was restored to 6144 after process cleanup.
-- Evidence: Test play latest.log discovered immersive_bop_harvest-0.1.1-alpha.3.jar, listed Immersive BOP_Harvest 0.1.1-alpha.3, and logged Loaded Immersive BOP_Harvest data compatibility.
-- Screenshot: build\live-client-smoke\test-play-client-20260623-024445.png shows the Minecraft Java Edition title screen for Minecraft NeoForge* 1.21.1.
-- Crash check: no new crash report was written during the 2026-06-23 02:42-02:44 smoke window; existing newest crash report remained from 2026-06-21.
-- Process cleanup: Minecraft and Prism processes were stopped after proof capture.
+- Exit status: 0 for the final fixed-wait wrapper command.
+- Evidence: Test play latest.log discovered immersive_bop_harvest-0.1.1-alpha.4.jar, listed Immersive BOP_Harvest 0.1.1-alpha.4, logged Loaded Immersive BOP_Harvest data compatibility, and reached Sound engine started.
+- Crash check: no new crash report was written; crash report count stayed 17.
+- Process cleanup: Minecraft/Prism processes for the Test play launch were stopped after capture.
+- Visual note: screenshots from this pass are not accepted as title-screen proof because they showed loading/foreground-window interference instead of the title menu.
 
 Open gates:
 - License decision remains required before public binary release.
+- Alpha.4 title-screen visual proof remains open.
 - Full gameplay/world interaction smoke was not performed in this report.
