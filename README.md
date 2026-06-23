@@ -1,9 +1,9 @@
 # Immersive BOP_Harvest
 
-- **Status:** playable alpha source project / private LAB install verified
+- **Status:** beta QA candidate / private Test play install verified
 - **Target:** Minecraft 1.21.1, NeoForge
 - **Mod ID:** `immersive_bop_harvest`
-- **Current alpha:** `0.1.1-alpha.1`
+- **Current alpha:** `0.1.1-alpha.3`
 
 ## Purpose
 
@@ -32,7 +32,9 @@ It does **not** add new items, blocks, textures, magical drops, hemp from unrela
 - `templates/` — neutral metadata templates
 - `scripts/validate_specs.py` — specification validator
 - `scripts/generate_alpha_resources.py` — source-to-resource generator
-- `scripts/install_alpha_to_lab.ps1` — Windows LAB install and hash proof script
+- `scripts/qa_alpha_resources.py` — generated-resource QA gate
+- `scripts/sync_runtime_deps.ps1` — local runtime dependency sync from the configured Prism modpack
+- `scripts/install_alpha_to_lab.ps1` — Windows Test play install and hash proof script
 - Gradle wrapper and NeoForge build files
 
 ## Build and validate
@@ -40,18 +42,21 @@ It does **not** add new items, blocks, textures, magical drops, hemp from unrela
 ```powershell
 python scripts/validate_specs.py
 python scripts/generate_alpha_resources.py
-.\gradlew.bat clean build
+.\gradlew.bat --no-configuration-cache check
+.\gradlew.bat --no-configuration-cache clean build
+.\gradlew.bat --no-configuration-cache runGameTestServer
+.\gradlew.bat --no-configuration-cache runData
 ```
 
-## Install to Prism LAB
+## Install to Prism Test play
 
-The default private NeoForge 1.21.1 LAB target is:
+The current private NeoForge 1.21.1 modpack target is:
 
 ```text
-C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT LaB\minecraft\mods
+C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\mods
 ```
 
-Install and verify the project jar plus required BOP runtime dependencies:
+Install and verify the project jar plus required runtime dependencies:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\install_alpha_to_lab.ps1
@@ -65,7 +70,7 @@ values, metadata readback, dependency proof, and remaining-jar counts.
 The project must pass every item in `docs/QA_ACCEPTANCE.md`.  
 A software license must be selected before publication.
 
-Current alpha proof is recorded in `docs/PLAYABLE_ALPHA_PROOF.md`.
+Current alpha proof is recorded in `docs/PLAYABLE_ALPHA_PROOF.md`. Public binary release remains blocked until the license decision and live-client smoke are complete.
 
 ## Branding assets
 

@@ -26,6 +26,57 @@ sourceSets.main.resources {
     exclude("src/generated/**/.cache") // datagen cache files
 }
 
+def pythonExecutable = providers.environmentVariable("PYTHON").orElse("python")
+def runtimeModsDir = providers.gradleProperty("bopHarvestRuntimeModsDir")
+        .orElse(providers.environmentVariable("BOP_HARVEST_RUNTIME_MODS_DIR"))
+        .orElse("C:\\Users\\Emmanuel Tremblay\\AppData\\Roaming\\PrismLauncher\\instances\\1.21.1 TesT play\\minecraft\\mods")
+def runtimeModsDirPath = runtimeModsDir.map { file(it).absolutePath }
+
+tasks.register("validateSpecs", Exec) {
+    group = "verification"
+    description = "Validates the machine-readable compatibility specification."
+    inputs.files(fileTree("spec") { include("*.json") })
+    inputs.file("scripts/validate_specs.py")
+    commandLine pythonExecutable.get(), "scripts/validate_specs.py"
+}
+
+tasks.register("generateAlphaResources", Exec) {
+    group = "build"
+    description = "Regenerates playable-alpha data resources from spec/*.json."
+    inputs.files(fileTree("spec") { include("*.json") })
+    inputs.file("scripts/generate_alpha_resources.py")
+    outputs.dirs(
+            "src/main/resources/data/immersive_bop_harvest",
+            "src/main/resources/data/neoforge/loot_modifiers",
+            "src/main/resources/data/c/tags/item"
+    )
+    commandLine pythonExecutable.get(), "scripts/generate_alpha_resources.py"
+}
+
+tasks.register("qaAlphaResources", Exec) {
+    group = "verification"
+    description = "Checks generated alpha recipes, tags, and loot modifiers against the QA acceptance rules."
+    dependsOn tasks.named("generateAlphaResources")
+    inputs.files(fileTree("spec") { include("*.json") })
+    inputs.files(fileTree("src/main/resources") { include("**/*.json") })
+    inputs.file("scripts/qa_alpha_resources.py")
+    commandLine pythonExecutable.get(), "scripts/qa_alpha_resources.py"
+}
+
+tasks.register("syncRuntimeDeps", Exec) {
+    group = "build setup"
+    description = "Copies required runtime dependency jars from the configured Prism modpack into build/runtime-deps."
+    inputs.files(fileTree(runtimeModsDirPath.get()) { include("*.jar") })
+    inputs.file("scripts/sync_runtime_deps.ps1")
+    inputs.file("gradle.properties")
+    outputs.dir("build/runtime-deps")
+    outputs.file("build/runtime-deps-report.json")
+    commandLine "powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "scripts/sync_runtime_deps.ps1", "-SourceModsDir", runtimeModsDirPath.get()
+    doFirst {
+        println "Using BOP_Harvest runtime mods: ${runtimeModsDirPath.get()}"
+    }
+}
+
 repositories {
     // Add here additional repositories if required by some of the dependencies below.
 }
@@ -136,6 +187,8 @@ dependencies {
     // Example project dependency using a sister or child project:
     // implementation project(":myproject")
 
+    localRuntime files(fileTree("build/runtime-deps") { include("*.jar") })
+
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
@@ -169,6 +222,19 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
 // Include the output of "generateModMetadata" as an input directory for the build
 // this works with both building through Gradle and the IDE.
 sourceSets.main.resources.srcDir generateModMetadata
+tasks.named("processResources").configure {
+    dependsOn tasks.named("generateAlphaResources")
+}
+tasks.named("check").configure {
+    dependsOn tasks.named("validateSpecs")
+    dependsOn tasks.named("qaAlphaResources")
+}
+["writeDataLegacyClasspath", "writeClientLegacyClasspath", "writeServerLegacyClasspath", "writeGameTestServerLegacyClasspath",
+ "runData", "runClient", "runServer", "runGameTestServer"].each { taskName ->
+    tasks.named(taskName).configure {
+        dependsOn tasks.named("syncRuntimeDeps")
+    }
+}
 // To avoid having to run "generateModMetadata" manually, make it run on every project reload
 neoForge.ideSyncTask generateModMetadata
 

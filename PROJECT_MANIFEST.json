@@ -3,8 +3,8 @@
   "mod_id": "immersive_bop_harvest",
   "package_type": "NeoForge playable alpha source project",
   "design_profile": "conservative_realistic_with_original_vector_branding",
-  "version": "0.1.1-alpha.1",
-  "validation": "spec-build-install-passed-live-client-open",
+  "version": "0.1.1-alpha.3",
+  "validation": "spec-build-gametest-runData-server-install-passed-live-client-open",
   "asset_summary": {
     "vector_logos": 1,
     "raster_png_assets": 0,
@@ -16,10 +16,17 @@
     "minecraft_version": "1.21.1",
     "loader": "NeoForge",
     "neoforge_version": "21.1.233",
-    "built_jar": "build/libs/immersive_bop_harvest-0.1.1-alpha.1.jar",
+    "built_jar": "build/libs/immersive_bop_harvest-0.1.1-alpha.3.jar",
+    "installed_jar": "C:/Users/Emmanuel Tremblay/AppData/Roaming/PrismLauncher/instances/1.21.1 TesT play/minecraft/mods/immersive_bop_harvest-0.1.1-alpha.3.jar",
     "install_report": "build/install-report.json",
-    "public_release_blocked_by_license": true,
-    "live_client_smoke_tested": false
+    "source_sha256": "2a143596de0a7e5896cba9fe5292212840fe2cedae78ac8b2bfc3a83a708a64c",
+    "installed_sha256": "2a143596de0a7e5896cba9fe5292212840fe2cedae78ac8b2bfc3a83a708a64c",
+    "hash_match": true,
+    "runData_passed": true,
+    "game_tests_passed": true,
+    "dedicated_server_smoke_tested": true,
+    "live_client_smoke_tested": false,
+    "public_release_blocked_by_license": true
   },
   "files": [
     {
@@ -59,13 +66,13 @@
     },
     {
       "path": "build.gradle",
-      "size_bytes": 8354,
-      "sha256": "2303894b2b89659d2ae9317b3f302e1bee683747f033f892923d859ce284e24b"
+      "size_bytes": 11411,
+      "sha256": "5a5d561749747d24e33bdee894a04521db904f983c55fb3163cfa97760da32ab"
     },
     {
       "path": "CHANGELOG.md",
-      "size_bytes": 1746,
-      "sha256": "ff3c5067aa4317cc5a2d042e602ed6853d606a1b98ce192e2c01887cbbdb5b00"
+      "size_bytes": 2946,
+      "sha256": "e4b9f3d4e386d8caa28dcdbf3dcdf841d287ba39e04e28c42cbbf754afcccfcf"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -89,8 +96,8 @@
     },
     {
       "path": "docs/PLAYABLE_ALPHA_PROOF.md",
-      "size_bytes": 2521,
-      "sha256": "6a83690fdae70886ba09b63e09821ff725ba8ee97e5713e8d66cdea93da504b0"
+      "size_bytes": 3461,
+      "sha256": "f012197f94f5e65be9cf263cb268fb2494268c95736e477bbec1af45679838fa"
     },
     {
       "path": "docs/QA_ACCEPTANCE.md",
@@ -104,8 +111,8 @@
     },
     {
       "path": "docs/RELEASE_CHECKLIST.md",
-      "size_bytes": 1022,
-      "sha256": "a1dbdc2c032184f554126c1af2d0ff0d9b41f1c0b308de1be766df5fd1fc1460"
+      "size_bytes": 1210,
+      "sha256": "d588604325f5eebc5641bed43b8afa1ca48bf0fb195d6ee774a4153946f355ed"
     },
     {
       "path": "docs/SOURCE_AUDIT.md",
@@ -115,7 +122,7 @@
     {
       "path": "gradle.properties",
       "size_bytes": 770,
-      "sha256": "433ac440ba48508ccb96b7352318a5eac579f6f3c5e184c4d2b0b7c06798e06b"
+      "sha256": "543012118de1d2a65f7a5f36e94760376308969818ce7402cc188af151aa13db"
     },
     {
       "path": "gradle/wrapper/gradle-wrapper.jar",
@@ -144,8 +151,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 2799,
-      "sha256": "268bbc0c34285365b8fa5d82808809d923f5c3af5ef5a8845e04a6ae30206513"
+      "size_bytes": 3248,
+      "sha256": "0c7526c9376637ce3d92de6b0d7a13fce4ae5e99e522b270f3048ec2a86860a3"
     },
     {
       "path": "scripts/generate_alpha_resources.py",
@@ -154,8 +161,18 @@
     },
     {
       "path": "scripts/install_alpha_to_lab.ps1",
-      "size_bytes": 14429,
-      "sha256": "603a4f16afaad0ac30bf6961d17bb1674685d93dfacd6eb558bda4a76e326ce1"
+      "size_bytes": 15224,
+      "sha256": "5ce851d1a2f05eb35782d6afb7a6e51877ff604633bfcf8e408a6a8631831b6e"
+    },
+    {
+      "path": "scripts/qa_alpha_resources.py",
+      "size_bytes": 15293,
+      "sha256": "a785ce3262d4d230eff1784afa409fb126d777c055cefa0ceb03643a678fcfbf"
+    },
+    {
+      "path": "scripts/sync_runtime_deps.ps1",
+      "size_bytes": 8080,
+      "sha256": "8b3b34bf11d4b934e3fecb683b72b17aa65631b90e54cc7c9b1e4b137079ac87"
     },
     {
       "path": "scripts/validate_specs.py",
@@ -201,6 +218,11 @@
       "path": "spec/wood_families.json",
       "size_bytes": 16400,
       "sha256": "42d0d07ca5ffd0f200a14fd642f08a86788f9db6401d8aacf14111891cc93129"
+    },
+    {
+      "path": "src/main/java/com/oblixorprime/immersivebopharvest/gametest/BopHarvestGameTests.java",
+      "size_bytes": 1537,
+      "sha256": "26a6246832303c7897b60f0821417b2f27b2fd4334a980b8b964b5ccf5503233"
     },
     {
       "path": "src/main/java/com/oblixorprime/immersivebopharvest/ImmersiveBopHarvest.java",
@@ -933,6 +955,11 @@
       "sha256": "b48621c901a9621b7fbe33709ba9f3ecc9ddba78163de1aa7b86b23647d1dbde"
     },
     {
+      "path": "src/main/resources/data/immersive_bop_harvest/structure/empty.nbt",
+      "size_bytes": 125,
+      "sha256": "2e82c2a750c919bb62d97f4b5365ee75a56681c1469b0860ed59ce773e142007"
+    },
+    {
       "path": "src/main/resources/data/neoforge/loot_modifiers/global_loot_modifiers.json",
       "size_bytes": 1139,
       "sha256": "6e7ac186f72f2e751eb6be26e821ab2d627360ce10fa008e4113ec567f669218"
@@ -974,8 +1001,8 @@
     },
     {
       "path": "VALIDATION_REPORT.txt",
-      "size_bytes": 1481,
-      "sha256": "f8dce7fe5a7884765f1332c409ee8d5269fda8879a6eebf7b5bf7cf67c800c63"
+      "size_bytes": 3002,
+      "sha256": "e4b43d7a2933bc11557838e035110016e81c1790fecf9fbe8d49d10ccdab71e7"
     }
   ]
 }

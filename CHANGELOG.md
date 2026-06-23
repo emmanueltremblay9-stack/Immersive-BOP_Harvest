@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.1.1-alpha.3] - 2026-06-23
+
+### Added
+- Added `scripts/qa_alpha_resources.py` as a deterministic generated-resource QA gate.
+- Added `scripts/sync_runtime_deps.ps1` and Gradle `syncRuntimeDeps` wiring for local Test play runtime dependencies.
+- Added GameTests for server runtime boot and representative generated recipe loading.
+- Added the empty GameTest structure template required by `runGameTestServer`.
+
+### Changed
+- Updated the private install target to the `1.21.1 TesT play` Prism modpack.
+- Updated Biomes O' Plenty compatibility metadata to `21.1.0.14`.
+- Hardened install-script hashing with .NET SHA-256/SHA-512 calculation.
+
+### Verified
+- `.\gradlew.bat --no-configuration-cache check --stacktrace`
+- `.\gradlew.bat --no-configuration-cache clean build --stacktrace`
+- `.\gradlew.bat --no-configuration-cache runGameTestServer --stacktrace`
+- `.\gradlew.bat --no-configuration-cache runData --stacktrace`
+- private Prism Test play install with matching source/target SHA-256 and one installed jar for this mod.
+- bounded dedicated-server smoke reached `Done`.
+
+### Known release blockers
+- Public binary release still needs a license decision.
+- Live-client smoke remains open.
+
 ## [0.1.1-alpha.1] - 2026-06-23
 
 ### Added

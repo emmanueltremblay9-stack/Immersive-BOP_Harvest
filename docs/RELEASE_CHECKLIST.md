@@ -1,15 +1,17 @@
 # Release Checklist
 
-## Current 0.1.1-alpha.1 status
+## Current 0.1.1-alpha.3 status
 
 - [x] Specification validation passed.
-- [x] Generated alpha resources parse as JSON.
+- [x] Generated alpha resources parse as JSON and pass `qaAlphaResources`.
 - [x] Full Gradle build passed.
-- [x] Private Prism LAB install was hash-verified.
-- [x] Required BOP runtime dependencies were installed and verified.
+- [x] `runData` loads the mod with synchronized Test play runtime dependencies.
+- [x] `runGameTestServer` passed 2 required tests.
+- [x] Dedicated-server smoke reached the server-ready `Done` signal.
+- [x] Private Prism Test play install was hash-verified.
+- [x] Required BOP runtime dependencies were present and verified.
 - [ ] License decision is still open.
 - [ ] Live-client smoke is still open.
-- [ ] Dedicated-server smoke is still open.
 - [ ] Public binary release is still blocked.
 
 ## Public release gate

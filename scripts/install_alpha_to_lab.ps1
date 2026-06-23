@@ -1,5 +1,5 @@
 param(
-    [string]$ModsDir = "C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT LaB\minecraft\mods"
+    [string]$ModsDir = "C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\mods"
 )
 
 $ErrorActionPreference = "Stop"
@@ -35,13 +35,35 @@ function Read-GradleProperties {
 function Get-FileSha256 {
     param([string]$Path)
 
-    return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
+    $stream = [System.IO.File]::OpenRead($Path)
+    try {
+        $hasher = [System.Security.Cryptography.SHA256]::Create()
+        try {
+            $bytes = $hasher.ComputeHash($stream)
+            return ([System.BitConverter]::ToString($bytes) -replace "-", "").ToLowerInvariant()
+        } finally {
+            $hasher.Dispose()
+        }
+    } finally {
+        $stream.Dispose()
+    }
 }
 
 function Get-FileSha512 {
     param([string]$Path)
 
-    return (Get-FileHash -LiteralPath $Path -Algorithm SHA512).Hash.ToLowerInvariant()
+    $stream = [System.IO.File]::OpenRead($Path)
+    try {
+        $hasher = [System.Security.Cryptography.SHA512]::Create()
+        try {
+            $bytes = $hasher.ComputeHash($stream)
+            return ([System.BitConverter]::ToString($bytes) -replace "-", "").ToLowerInvariant()
+        } finally {
+            $hasher.Dispose()
+        }
+    } finally {
+        $stream.Dispose()
+    }
 }
 
 function Get-ZipEntryText {
@@ -165,6 +187,22 @@ function Find-JarsByPrimaryModId {
     return @($matches)
 }
 
+function Test-VersionMatch {
+    param(
+        $Info,
+        [string]$JarName,
+        [string]$ExpectedVersion
+    )
+
+    if ($Info.version -eq $ExpectedVersion) {
+        return $true
+    }
+    if ($Info.version -eq '${file.jarVersion}' -and $JarName.Contains($ExpectedVersion)) {
+        return $true
+    }
+    return $false
+}
+
 function Select-ProjectJar {
     param(
         [string]$Directory,
@@ -276,6 +314,9 @@ function Verify-ExistingDependency {
         throw "Expected exactly one installed dependency jar for $ModId; found $($matches.Count)."
     }
     $metadata = Get-JarModInfo -JarPath $matches[0].path
+    if (-not (Test-VersionMatch -Info $metadata -JarName $matches[0].name -ExpectedVersion $ExpectedVersion)) {
+        throw "Installed dependency $ModId version '$($metadata.version)' did not match expected '$ExpectedVersion'."
+    }
     return [ordered]@{
         modId = $ModId
         expectedVersion = $ExpectedVersion
@@ -284,6 +325,49 @@ function Verify-ExistingDependency {
         installedSha256 = $matches[0].sha256
         installedMetadata = $metadata
         remainingJarsForMod = $matches.Count
+        copiedFromRuntimeDeps = $false
+    }
+}
+
+function Find-RuntimeDependencySource {
+    param(
+        [string]$Directory,
+        [string]$ModId,
+        [string]$ExpectedVersion
+    )
+
+    $matches = @(Find-JarsByPrimaryModId -Directory $Directory -ModId $ModId | Where-Object {
+        $metadata = Get-JarModInfo -JarPath $_.path
+        Test-VersionMatch -Info $metadata -JarName $_.name -ExpectedVersion $ExpectedVersion
+    })
+    if ($matches.Count -ne 1) {
+        $found = @(Find-JarsByPrimaryModId -Directory $Directory -ModId $ModId | ForEach-Object { "$($_.name)@$($_.version)" })
+        throw "Expected exactly one runtime dependency source jar for $ModId $ExpectedVersion; found $($matches.Count). Candidates: $($found -join ', ')"
+    }
+    return $matches[0].path
+}
+
+function Ensure-DependencyInstalled {
+    param(
+        [string]$TargetDirectory,
+        [string]$RuntimeDepsDirectory,
+        [string]$ModId,
+        [string]$ExpectedVersion
+    )
+
+    try {
+        return Verify-ExistingDependency -Directory $TargetDirectory -ModId $ModId -ExpectedVersion $ExpectedVersion
+    } catch {
+        $sourceJar = Find-RuntimeDependencySource -Directory $RuntimeDepsDirectory -ModId $ModId -ExpectedVersion $ExpectedVersion
+        $result = Install-VerifiedJar `
+            -SourceJar $sourceJar `
+            -TargetDirectory $TargetDirectory `
+            -ModId $ModId `
+            -ExpectedVersion $ExpectedVersion `
+            -AllowFileJarVersionPlaceholder
+        Assert-InstallResult -Result $result
+        $result["copiedFromRuntimeDeps"] = $true
+        return $result
     }
 }
 
@@ -295,58 +379,25 @@ $modVersion = $props["mod_version"]
 $modName = $props["mod_name"]
 $sourceJar = Select-ProjectJar -Directory $BuildLibsDir -ModId $modId -Version $modVersion
 
-$downloadedDependencies = @(
-    [ordered]@{
-        modId = "biomesoplenty"
-        expectedVersion = $props["biomesoplenty_version"]
-        fileName = "BiomesOPlenty-neoforge-$($props["minecraft_version"])-$($props["biomesoplenty_version"]).jar"
-        url = "https://cdn.modrinth.com/data/HXF82T3G/versions/8vIRXPpR/BiomesOPlenty-neoforge-1.21.1-21.1.0.13.jar"
-        expectedSha512 = "a238c6dbeccf9bb8f7144601e8f8fd7973d76c60344b50670141e76f49f886f6f89487eb81749dfca7c36166831924052106884a9f8dc18893261476a34d4b32"
-    },
-    [ordered]@{
-        modId = "glitchcore"
-        expectedVersion = $props["glitchcore_version"]
-        fileName = "GlitchCore-neoforge-$($props["minecraft_version"])-$($props["glitchcore_version"]).jar"
-        url = "https://cdn.modrinth.com/data/s3dmwKy5/versions/S2TfWrZR/GlitchCore-neoforge-1.21.1-2.1.0.2.jar"
-        expectedSha512 = "7a009ed163d03536fdfaee7b37cb1ec3073204dffcb06a683369aa88da8dbc3780b0ac69d466bb32a3ad9394c97b698d0fda676e1b4dd4edfc50ac5aa2283c32"
-    },
-    [ordered]@{
-        modId = "terrablender"
-        expectedVersion = $props["terrablender_version"]
-        fileName = "TerraBlender-neoforge-$($props["minecraft_version"])-$($props["terrablender_version"]).jar"
-        url = "https://cdn.modrinth.com/data/kkmrDlKT/versions/6e8GCrLb/TerraBlender-neoforge-1.21.1-4.1.0.8.jar"
-        expectedSha512 = "9d4b2a1be5139c0fb2fad92ed21805b17d9e83b6ea48e637e018bb14063c1823a206390755dbfe8d025c20fd62ac11cdd84db53ddb956dabaeda01bff57bac50"
-    }
-)
-
-$dependencyResults = @()
 if (-not (Test-Path -LiteralPath $RuntimeDepsDir)) {
     New-Item -ItemType Directory -Path $RuntimeDepsDir | Out-Null
 }
-foreach ($dependency in $downloadedDependencies) {
-    $dependencySourceJar = Join-Path $RuntimeDepsDir $dependency.fileName
-    if (-not (Test-Path -LiteralPath $dependencySourceJar)) {
-        Write-Host "DOWNLOADING: $($dependency.fileName)"
-        Invoke-WebRequest -Uri $dependency.url -OutFile $dependencySourceJar
-    }
 
-    $sha512 = Get-FileSha512 -Path $dependencySourceJar
-    if ($sha512 -ne $dependency.expectedSha512) {
-        throw "SHA-512 mismatch for $($dependency.fileName)."
-    }
+$runtimeDependencies = @(
+    [ordered]@{ modId = "biomesoplenty"; expectedVersion = $props["biomesoplenty_version"] },
+    [ordered]@{ modId = "glitchcore"; expectedVersion = $props["glitchcore_version"] },
+    [ordered]@{ modId = "terrablender"; expectedVersion = $props["terrablender_version"] },
+    [ordered]@{ modId = "farmersdelight"; expectedVersion = $props["farmersdelight_version"] },
+    [ordered]@{ modId = "immersiveengineering"; expectedVersion = $props["immersiveengineering_version"] }
+)
 
-    $installResult = Install-VerifiedJar `
-        -SourceJar $dependencySourceJar `
+$dependencyResults = @()
+foreach ($dependency in $runtimeDependencies) {
+    $dependencyResults += Ensure-DependencyInstalled `
         -TargetDirectory $resolvedModsDir.Path `
+        -RuntimeDepsDirectory $RuntimeDepsDir `
         -ModId $dependency.modId `
-        -ExpectedVersion $dependency.expectedVersion `
-        -AllowFileJarVersionPlaceholder
-    Assert-InstallResult -Result $installResult
-
-    $installResult["sourceSha512"] = $sha512
-    $installResult["expectedSha512"] = $dependency.expectedSha512
-    $installResult["sha512Match"] = ($sha512 -eq $dependency.expectedSha512)
-    $dependencyResults += $installResult
+        -ExpectedVersion $dependency.expectedVersion
 }
 
 $previousProjectJars = @(Find-JarsByPrimaryModId -Directory $resolvedModsDir.Path -ModId $modId)
@@ -357,10 +408,6 @@ $projectInstall = Install-VerifiedJar `
     -ExpectedVersion $modVersion
 Assert-InstallResult -Result $projectInstall
 $projectInstall["resourceCounts"] = Get-ResourceCounts -JarPath $projectInstall.installedJar
-
-$existingDependencyResults = @()
-$existingDependencyResults += Verify-ExistingDependency -Directory $resolvedModsDir.Path -ModId "farmersdelight" -ExpectedVersion $props["farmersdelight_version"]
-$existingDependencyResults += Verify-ExistingDependency -Directory $resolvedModsDir.Path -ModId "immersiveengineering" -ExpectedVersion $props["immersiveengineering_version"]
 
 $report = [ordered]@{
     generatedAt = (Get-Date).ToString("o")
@@ -374,8 +421,9 @@ $report = [ordered]@{
     modId = $modId
     modName = $modName
     projectJar = $projectInstall
-    copiedRuntimeDependencies = $dependencyResults
-    existingRuntimeDependencies = $existingDependencyResults
+    runtimeDependencies = $dependencyResults
+    copiedRuntimeDependencies = @($dependencyResults | Where-Object { $_.copiedFromRuntimeDeps })
+    existingRuntimeDependencies = @($dependencyResults | Where-Object { -not $_.copiedFromRuntimeDeps })
     liveClientSmokeTested = $false
     safeToLaunchMinecraft = $true
 }
