@@ -40,12 +40,11 @@ NeoForge.
 - Datagen/runtime dependency load passed.
 - Dedicated server smoke reached `Done`.
 - Prism `1.21.1 TesT play` install was hash-verified.
-- Prism live-client load smoke discovered alpha.4, loaded the mod, reached sound-engine startup, and wrote no new crash report.
+- Prism live-client title-screen smoke discovered alpha.4, loaded the mod, reached sound-engine startup, captured the `Minecraft NeoForge* 1.21.1` title window, and wrote no new crash report.
 
 ## Known Limits
 
 - Full gameplay/world interaction smoke was not performed in the latest pass.
-- Alpha.4 title-screen screenshot proof is still open; the latest captured screenshots did not show the title menu.
 - Public release is blocked until the owner selects and applies a license.
 
 ## Publication Checklist

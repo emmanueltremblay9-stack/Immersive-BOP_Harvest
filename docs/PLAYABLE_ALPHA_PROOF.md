@@ -104,11 +104,11 @@ Evidence:
 - output log: `build\runServer-smoke-alpha4-20260623-175911.out.log`
 - no remaining Java server process for this repo after cleanup
 
-## Live-Client Load Smoke
+## Live-Client Title-Screen Smoke
 
 The actual Prism `1.21.1 TesT play` instance was launched with the installed
-alpha.4 jar. The log proves client load reached late startup markers, but the
-captured screenshots are not accepted as title-screen proof.
+alpha.4 jar. The corrected quoted launch reached late startup markers and a
+visible Minecraft title-screen window.
 
 Evidence:
 
@@ -119,11 +119,14 @@ Evidence:
 - mod list included `Immersive BOP_Harvest 0.1.1-alpha.4 (immersive_bop_harvest)`
 - runtime log emitted `Loaded Immersive BOP_Harvest data compatibility`
 - runtime log reached `Sound engine started`
+- runtime log created `minecraft:textures/atlas/gui.png-atlas`
+- window title: `Minecraft NeoForge* 1.21.1`
+- screenshot: `build\live-client-smoke\test-play-client-alpha4-title-20260623-224522.png`
+- screenshot SHA-256: `59976d1143562be432f5e7ccdcb0e30bc59159a3c50cbfd7291e4d47c16b2532`
 - no new crash report was written during the alpha.4 client smoke attempts
 - process cleanup stopped Minecraft/Prism processes for the Test play launch
 
 ## Remaining Release Gates
 
 - Public binary release is blocked until `LICENSE_DECISION_REQUIRED.md` is resolved.
-- Alpha.4 visual title-screen proof remains open.
 - Full gameplay/world interaction smoke was not performed in this pass.

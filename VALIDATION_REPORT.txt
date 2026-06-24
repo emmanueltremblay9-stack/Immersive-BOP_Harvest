@@ -82,15 +82,16 @@ Dedicated-server smoke:
 - Output log: build\runServer-smoke-alpha4-20260623-175911.out.log
 - Process cleanup: no remaining Java server process for this repo after stop.
 
-Live-client load smoke:
+Live-client title-screen smoke:
 - Command: Prism Launcher CLI launch of instance "1.21.1 TesT play"
-- Exit status: 0 for the final fixed-wait wrapper command.
-- Evidence: Test play latest.log discovered immersive_bop_harvest-0.1.1-alpha.4.jar, listed Immersive BOP_Harvest 0.1.1-alpha.4, logged Loaded Immersive BOP_Harvest data compatibility, and reached Sound engine started.
+- Exit status: 0 for the bounded wrapper command.
+- Evidence: Test play latest.log discovered immersive_bop_harvest-0.1.1-alpha.4.jar, listed Immersive BOP_Harvest 0.1.1-alpha.4, logged Loaded Immersive BOP_Harvest data compatibility, reached Sound engine started, and created the GUI atlas.
+- Window title: Minecraft NeoForge* 1.21.1
+- Screenshot: build\live-client-smoke\test-play-client-alpha4-title-20260623-224522.png
+- Screenshot SHA-256: 59976d1143562be432f5e7ccdcb0e30bc59159a3c50cbfd7291e4d47c16b2532
 - Crash check: no new crash report was written; crash report count stayed 17.
 - Process cleanup: Minecraft/Prism processes for the Test play launch were stopped after capture.
-- Visual note: screenshots from this pass are not accepted as title-screen proof because they showed loading/foreground-window interference instead of the title menu.
 
 Open gates:
 - License decision remains required before public binary release.
-- Alpha.4 title-screen visual proof remains open.
 - Full gameplay/world interaction smoke was not performed in this report.

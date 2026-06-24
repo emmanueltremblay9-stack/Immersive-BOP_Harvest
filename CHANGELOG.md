@@ -7,7 +7,7 @@
 
 ### Changed
 - Bumped the private Test play build from `0.1.1-alpha.3` to `0.1.1-alpha.4`.
-- Updated the beta release checker wording to record live-client load smoke instead of overclaiming title-screen visual proof.
+- Recorded corrected Prism title-screen visual proof for the alpha.4 Test play install.
 
 ### Verified
 - `python scripts/validate_specs.py`
@@ -19,12 +19,12 @@
 - private Prism Test play install with matching source/target SHA-256 and one installed jar for this mod.
 - bounded dedicated-server smoke reached `Done` with alpha.4 loaded.
 - Prism Test play client log-marker smoke discovered `immersive_bop_harvest-0.1.1-alpha.4.jar`, listed `Immersive BOP_Harvest 0.1.1-alpha.4`, logged `Loaded Immersive BOP_Harvest data compatibility`, and reached `Sound engine started` without writing a new crash report.
+- Prism Test play title-screen capture verified the `Minecraft NeoForge* 1.21.1` window at `build\live-client-smoke\test-play-client-alpha4-title-20260623-224522.png`.
 - `python scripts/check_beta_release_gate.py` reports the expected license blockers while alpha.4 built/install hash proof and duplicate installed-jar checks pass.
 
 ### Known release blockers
 - Public binary release still needs a license decision.
 - Full gameplay/world interaction smoke was not performed in this pass.
-- Alpha.4 visual title-screen screenshot proof was attempted but not accepted because captured screenshots did not show the title menu.
 
 ## [0.1.1-alpha.3] - 2026-06-23
 

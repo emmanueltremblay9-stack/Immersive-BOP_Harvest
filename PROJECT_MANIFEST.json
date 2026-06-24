@@ -4,7 +4,7 @@
   "package_type": "NeoForge playable alpha source project",
   "design_profile": "conservative_realistic_with_original_vector_branding",
   "version": "0.1.1-alpha.4",
-  "validation": "spec-build-all-recipes-gametest-runData-server-install-client-load-smoke-beta-gate-blocked-by-license",
+  "validation": "spec-build-all-recipes-gametest-runData-server-install-client-title-screen-smoke-beta-gate-blocked-by-license",
   "asset_summary": {
     "vector_logos": 1,
     "raster_png_assets": 0,
@@ -29,8 +29,8 @@
     "dedicated_server_smoke_tested": true,
     "live_client_smoke_tested": true,
     "public_release_blocked_by_license": true,
-    "live_client_smoke_level": "alpha4_client_load_log_markers",
-    "live_client_smoke_screenshot": null,
+    "live_client_smoke_level": "alpha4_title_screen_visual",
+    "live_client_smoke_screenshot": "build/live-client-smoke/test-play-client-alpha4-title-20260623-224522.png",
     "full_gameplay_world_smoke_tested": false,
     "beta_release_gate_checker": "scripts/check_beta_release_gate.py",
     "beta_release_gate_expected_status": "blocked_by_license",
@@ -40,9 +40,11 @@
     "beta_release_gate_checker_scope": "license-docs-built-installed-hash-and-duplicate-modid-scan",
     "remaining_installed_jars_for_mod": 1,
     "game_test_recipe_ids_checked": 103,
-    "live_client_title_screen_visual_confirmed": false,
+    "live_client_title_screen_visual_confirmed": true,
     "live_client_crash_reports_before": 17,
-    "live_client_crash_reports_after": 17
+    "live_client_crash_reports_after": 17,
+    "live_client_screenshot_sha256": "59976d1143562be432f5e7ccdcb0e30bc59159a3c50cbfd7291e4d47c16b2532",
+    "live_client_window_title": "Minecraft NeoForge* 1.21.1"
   },
   "files": [
     {
@@ -87,8 +89,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "size_bytes": 5194,
-      "sha256": "7659b336fe96cbefc6cb74d45317baf7a794ae9be777dcd0015ea49a5a279d56"
+      "size_bytes": 5187,
+      "sha256": "23465fec6cb88b38f87f60deec10f4331f82c60eb290fdcf702c48f3065b6098"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -112,8 +114,8 @@
     },
     {
       "path": "docs/PLAYABLE_ALPHA_PROOF.md",
-      "size_bytes": 4486,
-      "sha256": "36f5ca87744b940c8c459d9d8a809e956ae9ce5c52cbe1c31795ce53228f1518"
+      "size_bytes": 4707,
+      "sha256": "047e8deac0d00c1030888c279a094ab04ccda85055f6c2681d4c59bd8bad1a32"
     },
     {
       "path": "docs/QA_ACCEPTANCE.md",
@@ -127,8 +129,8 @@
     },
     {
       "path": "docs/RELEASE_CHECKLIST.md",
-      "size_bytes": 1686,
-      "sha256": "11713a7ee5de7deefcd603bb2fb525562f183b1d3d58ae50f414fdaaa7be5436"
+      "size_bytes": 1684,
+      "sha256": "94803c0fef7929d053754bf3a0dc64ac8c6c43c0917276600b448246627f686b"
     },
     {
       "path": "docs/SOURCE_AUDIT.md",
@@ -167,8 +169,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 3753,
-      "sha256": "b890ff60bd87c81d8d9bb64eef4d5fbb213f5af62fb303d30cbcfadcb269d9eb"
+      "size_bytes": 3761,
+      "sha256": "156e93139a5b199bec2b07b6cfc685783f33563cceb7c60599d3ebaad82686e6"
     },
     {
       "path": "scripts/generate_alpha_resources.py",
@@ -1017,8 +1019,8 @@
     },
     {
       "path": "VALIDATION_REPORT.txt",
-      "size_bytes": 4017,
-      "sha256": "e3ec55a213d1fbba1de3028c07cb4fe998a1a4a26efe85615953c8f884b6d0b5"
+      "size_bytes": 4040,
+      "sha256": "1cf0f02a42ac5e6df7229bba7b750513f313dd1ef362e8213b624738b08785ca"
     },
     {
       "path": "assets/branding/cover/immersive_bop_harvest_banner_vector.svg",
@@ -1032,18 +1034,18 @@
     },
     {
       "path": "docs/BETA_RELEASE_AUDIT.md",
-      "size_bytes": 3101,
-      "sha256": "3ddbbe47d9bad90e07c6595a49ae848f93bf9650fc80d24b5bcb2cce69584f84"
+      "size_bytes": 3035,
+      "sha256": "96a9eb4cad73232d2d6f4956ce17eccf6e76155b674cab668148db93f91f88a8"
     },
     {
       "path": "docs/BETA_RELEASE_NOTES_DRAFT.md",
-      "size_bytes": 2256,
-      "sha256": "197faa164855f20c8325371985b71decc339ac1f7053c508167e10915b86849f"
+      "size_bytes": 2204,
+      "sha256": "b8e25f59e7f012a539f1aefc3787371b07fa95bdbe4a6a8f52158bf42c23f536"
     },
     {
       "path": "scripts/check_beta_release_gate.py",
-      "size_bytes": 7072,
-      "sha256": "304db35bd9f3f630413d2bf16eb36aad1add35c8466e514304f45836bb2b6448"
+      "size_bytes": 7080,
+      "sha256": "d0b3b088af22e40b753c5ef19d9ff6fe3bc6d3c7fabc81080b1a0f0694943402"
     }
   ]
 }

@@ -11,7 +11,7 @@
 - [x] Private Prism Test play install was hash-verified.
 - [x] Required BOP runtime dependencies were present and verified.
 - [x] Prism Test play client log-marker smoke loaded alpha.4 with no new crash report.
-- [ ] Alpha.4 visual title-screen screenshot proof is still open.
+- [x] Alpha.4 visual title-screen screenshot proof is captured.
 - [x] Legal reuse inventory is present.
 - [x] Beta release notes draft is present.
 - [x] Deterministic beta release gate checker is present and verifies built/installed jar hashes plus duplicate installed jars by embedded `modId`.

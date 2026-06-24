@@ -1,6 +1,6 @@
 # Immersive BOP_Harvest
 
-- **Status:** beta QA candidate / private Test play install and client load smoke verified
+- **Status:** beta QA candidate / private Test play install and title-screen client smoke verified
 - **Target:** Minecraft 1.21.1, NeoForge
 - **Mod ID:** `immersive_bop_harvest`
 - **Current alpha:** `0.1.1-alpha.4`

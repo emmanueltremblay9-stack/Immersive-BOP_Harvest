@@ -3,7 +3,7 @@
 Date: 2026-06-23
 Project: Immersive BOP_Harvest
 Version: `0.1.1-alpha.4`
-Base pushed commit before this audit: `58b26b4285f9342f8edc78d46d3a0284236f6b42`
+Base pushed commit before this title-screen proof update: `6314f3e30d66d4ce40b3d660c7b253e6694b32bb`
 
 ## Current Result
 
@@ -23,8 +23,8 @@ the unresolved license decision.
 | Dedicated server smoke | Passed | bounded `runServer` smoke reached `Done` |
 | Test play install | Passed | source and installed SHA-256 matched |
 | Remaining installed jars | Passed | checker scans installed jars by embedded `modId` and finds exactly 1 jar for `immersive_bop_harvest` |
-| Live client load smoke | Passed | Prism `1.21.1 TesT play` loaded alpha.4 by log markers and wrote no new crash report |
-| Alpha.4 visual title-screen screenshot | Open | attempted screenshots did not show the title menu, so they are not accepted as title-screen proof |
+| Live client title-screen smoke | Passed | Prism `1.21.1 TesT play` loaded alpha.4 by log markers and wrote no new crash report |
+| Alpha.4 visual title-screen screenshot | Passed | `build\live-client-smoke\test-play-client-alpha4-title-20260623-224522.png` shows the `Minecraft NeoForge* 1.21.1` title window |
 | Notion project paper | Passed | page readback includes current proof, icon, and banner |
 | Branding | Passed | original vector logo and vector banner are present |
 
@@ -68,7 +68,6 @@ choose the license before any public binary release.
 
 ## Known Residual Risk
 
-The alpha.4 live-client proof reached client load log markers, but the captured
-screenshots did not show the title menu. A full gameplay/world interaction smoke
-was not performed in this pass. These are useful before broad release, but they
-are separate from the currently blocking license decision.
+A full gameplay/world interaction smoke was not performed in this pass. That is
+useful before broad release, but it is separate from the currently blocking
+license decision.

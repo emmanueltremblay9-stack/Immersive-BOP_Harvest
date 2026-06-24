@@ -132,7 +132,7 @@ def main() -> int:
         "runData_passed": "runData passed",
         "game_tests_passed": "GameTests passed",
         "dedicated_server_smoke_tested": "dedicated server smoke passed",
-        "live_client_smoke_tested": "live client load smoke passed",
+        "live_client_smoke_tested": "live client title-screen smoke passed",
     }
     for key, label in boolean_gates.items():
         check(bool(build.get(key)), label, f"{key} is not proven in PROJECT_MANIFEST.json", failures)
