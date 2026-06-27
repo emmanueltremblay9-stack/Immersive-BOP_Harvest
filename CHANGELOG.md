@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.1.1-alpha.5] - 2026-06-27
+
+### Fixed
+- Fixed direct-harvest shears exclusion to use BOP's actual `#biomesoplenty:shears` item tag instead of the unsupported `#c:tools/shear` tag in the current Test play stack.
+
+### Added
+- Added a GameTest assertion that BOP's shears tag includes vanilla shears.
+- Added generated-resource QA coverage to reject `#c:tools/shear` in direct-harvest loot modifiers.
+
+### Changed
+- Bumped the private Test play build from `0.1.1-alpha.4` to `0.1.1-alpha.5`.
+- Regenerated all 19 direct-harvest loot modifiers so shears keep native BOP behavior while knife/sword compatibility drops remain active.
+
+### Verified
+- `python scripts/validate_specs.py`
+- `python scripts/generate_alpha_resources.py`
+- `python scripts/qa_alpha_resources.py`
+- `.\\gradlew.bat --no-configuration-cache compileJava --stacktrace`
+- `.\\gradlew.bat --no-configuration-cache check --stacktrace`
+- `.\\gradlew.bat --no-configuration-cache runGameTestServer --stacktrace`
+- `.\\gradlew.bat --no-configuration-cache clean build --stacktrace`
+- `.\\gradlew.bat --no-configuration-cache runData --stacktrace`
+- private Prism Test play install with matching source/target SHA-256 and one installed jar for this mod.
+- installed JAR readback: 19 direct-harvest modifiers, 19 `#biomesoplenty:shears` exclusions, 0 `#c:tools/shear` references.
+- bounded dedicated-server smoke reached `Done` with alpha.5 loaded.
+
+### Known release blockers
+- Public binary release still needs a license decision.
+- Fresh alpha.5 Prism client smoke was attempted, but Prism opened the Test play console and did not spawn a Minecraft JVM; no alpha.5 title-screen proof is claimed.
+- Full gameplay/world interaction smoke was not performed in this pass.
+
 ## [0.1.1-alpha.4] - 2026-06-23
 
 ### Added

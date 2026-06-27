@@ -3,7 +3,7 @@
 This is a draft for the first public beta release. Do not publish it until the
 license gate is resolved and a rebuilt, license-correct jar is verified.
 
-## Immersive BOP_Harvest `0.1.1-alpha.4`
+## Immersive BOP_Harvest `0.1.1-alpha.5`
 
 Immersive BOP_Harvest is a conservative compatibility addon for Biomes O'
 Plenty, Farmer's Delight, and Immersive Engineering on Minecraft 1.21.1 with
@@ -17,6 +17,8 @@ NeoForge.
   families.
 - Adds low-yield direct harvest data for selected fibrous plants and web-like
   blocks.
+- Keeps native BOP shear behavior by excluding `#biomesoplenty:shears` from
+  compatibility direct-harvest drops.
 - Adds common tag compatibility for barley and toadstool.
 - Avoids new blocks, new items, copied assets, magic drops, free glowstone, and
   progression-breaking conversions.
@@ -36,14 +38,18 @@ NeoForge.
 - Specification validation passed.
 - Generated-resource QA passed with 146 generated JSON files.
 - Clean Gradle build passed.
-- GameTest server passed 2 required tests, including all 103 generated recipe IDs.
+- GameTest server passed 3 required tests, including all 103 generated recipe IDs
+  and BOP shears-tag coverage.
 - Datagen/runtime dependency load passed.
 - Dedicated server smoke reached `Done`.
 - Prism `1.21.1 TesT play` install was hash-verified.
-- Prism live-client title-screen smoke discovered alpha.4, loaded the mod, reached sound-engine startup, captured the `Minecraft NeoForge* 1.21.1` title window, and wrote no new crash report.
+- Installed JAR readback found 19 direct-harvest modifiers, 19
+  `#biomesoplenty:shears` exclusions, and 0 stale `#c:tools/shear` references.
 
 ## Known Limits
 
+- Fresh alpha.5 Prism client title-screen smoke is still open; the CLI opened
+  the Test play console but did not spawn Minecraft during this pass.
 - Full gameplay/world interaction smoke was not performed in the latest pass.
 - Public release is blocked until the owner selects and applies a license.
 

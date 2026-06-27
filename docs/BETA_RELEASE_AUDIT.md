@@ -1,50 +1,52 @@
 # Beta Release Audit
 
-Date: 2026-06-23
+Date: 2026-06-27
 Project: Immersive BOP_Harvest
-Version: `0.1.1-alpha.4`
-Base pushed commit before this title-screen proof update: `6314f3e30d66d4ce40b3d660c7b253e6694b32bb`
+Version: `0.1.1-alpha.5`
 
 ## Current Result
 
-The project is a beta QA candidate. The technical proof stack is strong enough
-to continue release preparation, but public binary release remains blocked by
-the unresolved license decision.
+The project has complete generated drop coverage for the current spec and a
+hash-verified private Test play alpha.5 install. It is not ready for public beta
+release yet.
+
+Public binary release is blocked by the unresolved license decision and by the
+fresh alpha.5 client-smoke gap.
 
 ## Proven Technical Gates
 
 | Gate | Status | Evidence |
 |---|---|---|
 | Specification validation | Passed | `python scripts/validate_specs.py` |
-| Generated-resource QA | Passed | `.\\gradlew.bat --no-configuration-cache check --stacktrace` and `qaAlphaResources` |
+| Generated-resource QA | Passed | `python scripts/qa_alpha_resources.py` and `.\\gradlew.bat --no-configuration-cache check --stacktrace` |
+| Direct-harvest drop coverage | Passed | 19 spec block IDs, 19 modifiers, 19 loot tables, 0 missing |
+| Shears exclusion bug fix | Passed | installed JAR has 19 `#biomesoplenty:shears` references and 0 `#c:tools/shear` references |
 | Clean build | Passed | `.\\gradlew.bat --no-configuration-cache clean build --stacktrace` |
-| GameTests | Passed | `.\\gradlew.bat --no-configuration-cache runGameTestServer --stacktrace`, 2 required tests, all 103 generated recipe IDs checked |
+| GameTests | Passed | `.\\gradlew.bat --no-configuration-cache runGameTestServer --stacktrace`, 3 required tests, all 103 generated recipe IDs checked |
 | Datagen/runtime dependency load | Passed | `.\\gradlew.bat --no-configuration-cache runData --stacktrace` |
-| Dedicated server smoke | Passed | bounded `runServer` smoke reached `Done` |
+| Dedicated server smoke | Passed | bounded `runServer` smoke reached `Done` with alpha.5 loaded |
 | Test play install | Passed | source and installed SHA-256 matched |
-| Remaining installed jars | Passed | checker scans installed jars by embedded `modId` and finds exactly 1 jar for `immersive_bop_harvest` |
-| Live client title-screen smoke | Passed | Prism `1.21.1 TesT play` loaded alpha.4 by log markers and wrote no new crash report |
-| Alpha.4 visual title-screen screenshot | Passed | `build\live-client-smoke\test-play-client-alpha4-title-20260623-224522.png` shows the `Minecraft NeoForge* 1.21.1` title window |
-| Notion project paper | Passed | page readback includes current proof, icon, and banner |
+| Remaining installed jars | Passed | installer and checker find exactly 1 jar for `immersive_bop_harvest` |
 | Branding | Passed | original vector logo and vector banner are present |
+| Fresh alpha.5 client title-screen smoke | Open | Prism opened the Test play console but did not spawn a Minecraft JVM |
 
 ## Current Installed Artifact
 
 Installed jar:
 
 ```text
-C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\mods\immersive_bop_harvest-0.1.1-alpha.4.jar
+C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\mods\immersive_bop_harvest-0.1.1-alpha.5.jar
 ```
 
 SHA-256:
 
 ```text
-067275f2467feec22813f7ad868cc2d809e95435e5299e645400e634f30c7da7
+74c61d8965598afc6646c58d739e85f83e00dcf14a2e3b677368ea480a9120f8
 ```
 
-The installed jar metadata currently reports version `0.1.1-alpha.4`.
+The installed jar metadata currently reports version `0.1.1-alpha.5`.
 
-## Blocking Gate
+## Blocking Gates
 
 License is not selected.
 
@@ -52,9 +54,15 @@ Evidence:
 - `gradle.properties` contains `mod_license=LICENSE_PENDING`.
 - `LICENSE_DECISION_REQUIRED.md` is still present.
 - No `LICENSE` file exists.
+- The installed alpha.5 jar was built with `license="LICENSE_PENDING"`.
 
-This is a release blocker, not a technical test failure. The project owner must
-choose the license before any public binary release.
+Fresh alpha.5 client smoke is not complete.
+
+Evidence:
+- Prism CLI identified `1.21.1 TesT play` and opened the instance console.
+- No new Minecraft JVM spawned for the alpha.5 client-smoke attempt.
+- The Test play `latest.log` was not updated by that attempt.
+- Crash report count stayed 19, so no new crash report was written.
 
 ## Work Remaining For Public Beta Release
 
@@ -62,12 +70,12 @@ choose the license before any public binary release.
 2. Add `LICENSE`.
 3. Update `mod_license`.
 4. Rebuild, reinstall, and hash-verify a new jar after the license change.
-5. Re-run `scripts/check_beta_release_gate.py`.
-6. Update Notion and release notes with the chosen license.
-7. Tag and publish only after the checker passes.
+5. Complete fresh client title-screen smoke on the rebuilt jar.
+6. Re-run `scripts/check_beta_release_gate.py`.
+7. Update Notion and release notes with the chosen license and final proof.
+8. Tag and publish only after the checker passes.
 
 ## Known Residual Risk
 
 A full gameplay/world interaction smoke was not performed in this pass. That is
-useful before broad release, but it is separate from the currently blocking
-license decision.
+separate from generated drop coverage, which is complete for the current spec.

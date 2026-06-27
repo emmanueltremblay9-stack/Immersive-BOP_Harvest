@@ -16,7 +16,7 @@
       "term": {
         "condition": "minecraft:match_tool",
         "predicate": {
-          "items": "#c:tools/shear"
+          "items": "#biomesoplenty:shears"
         }
       }
     },

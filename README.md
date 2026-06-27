@@ -1,9 +1,9 @@
 # Immersive BOP_Harvest
 
-- **Status:** beta QA candidate / private Test play install and title-screen client smoke verified
+- **Status:** private Test play install verified / alpha.5 live-client smoke still pending
 - **Target:** Minecraft 1.21.1, NeoForge
 - **Mod ID:** `immersive_bop_harvest`
-- **Current alpha:** `0.1.1-alpha.4`
+- **Current alpha:** `0.1.1-alpha.5`
 
 ## Purpose
 
@@ -84,6 +84,11 @@ python scripts/check_beta_release_gate.py
 
 Public binary release remains blocked until the license decision is complete and
 the checker reports `BETA RELEASE GATE: PASS`.
+
+Current alpha.5 note: generated direct-harvest drops are covered by spec QA, GameTest,
+installed-JAR readback, and dedicated-server smoke. The fresh Prism CLI client smoke
+opened the Test play instance console but did not spawn a Minecraft JVM, so alpha.5
+client title-screen proof is not claimed.
 
 ## Branding assets
 

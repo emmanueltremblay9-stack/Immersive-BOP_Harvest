@@ -1,9 +1,13 @@
 package com.oblixorprime.immersivebopharvest.gametest;
 
 import com.oblixorprime.immersivebopharvest.ImmersiveBopHarvest;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
@@ -133,6 +137,16 @@ public final class BopHarvestGameTests {
         for (String path : GENERATED_RECIPE_PATHS) {
             assertRecipePresent(helper, path);
         }
+        helper.succeed();
+    }
+
+    @GameTest(template = "empty", timeoutTicks = 20)
+    public static void bopShearsTagContainsVanillaShears(GameTestHelper helper) {
+        TagKey<Item> bopShears = TagKey.create(
+                Registries.ITEM,
+                ResourceLocation.fromNamespaceAndPath("biomesoplenty", "shears")
+        );
+        helper.assertTrue(Items.SHEARS.builtInRegistryHolder().is(bopShears), "BOP shears tag must include vanilla shears");
         helper.succeed();
     }
 

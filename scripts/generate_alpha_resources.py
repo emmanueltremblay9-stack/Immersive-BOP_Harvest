@@ -12,6 +12,7 @@ SPEC = ROOT / "spec"
 RESOURCES = ROOT / "src" / "main" / "resources"
 DATA = RESOURCES / "data"
 MOD_ID = "immersive_bop_harvest"
+BOP_SHEARS_TAG = "#biomesoplenty:shears"
 
 
 def load(name: str):
@@ -181,7 +182,7 @@ def generate_direct_harvest() -> int:
             conditions.extend(
                 [
                     tool_condition(rule["tools_any"]),
-                    not_condition(match_tool("#c:tools/shear")),
+                    not_condition(match_tool(BOP_SHEARS_TAG)),
                     not_condition(silk_touch_condition()),
                     {"condition": "minecraft:block_state_property", "block": block},
                 ]

@@ -12,6 +12,7 @@ SPEC = ROOT / "spec"
 RESOURCES = ROOT / "src" / "main" / "resources"
 DATA = RESOURCES / "data"
 MOD_ID = "immersive_bop_harvest"
+BOP_SHEARS_TAG = "#biomesoplenty:shears"
 
 errors: list[str] = []
 
@@ -185,7 +186,8 @@ def validate_direct_harvest(harvest: dict) -> tuple[int, int]:
             expect(modifier.get("table") == table_id, f"{block}: modifier table id mismatch")
             expect(condition_contains(conditions, block), f"{block}: modifier missing block_state_property condition")
             expect(any(condition_contains(conditions, tool) for tool in rule["tools_any"]), f"{block}: modifier missing required tool condition")
-            expect(condition_contains(conditions, "#c:tools/shear"), f"{block}: modifier missing shear exclusion")
+            expect(condition_contains(conditions, BOP_SHEARS_TAG), f"{block}: modifier missing BOP shears exclusion")
+            expect("#c:tools/shear" not in serialized_conditions, f"{block}: modifier must not rely on the unsupported c:tools/shear tag")
             expect("silk_touch" in serialized_conditions, f"{block}: modifier missing Silk Touch exclusion")
             expect("fortune" not in serialized_conditions.lower(), f"{block}: modifier must not include Fortune scaling")
 

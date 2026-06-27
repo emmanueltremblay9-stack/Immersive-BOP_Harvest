@@ -1,17 +1,19 @@
 # Release Checklist
 
-## Current 0.1.1-alpha.4 status
+## Current 0.1.1-alpha.5 status
 
 - [x] Specification validation passed.
 - [x] Generated alpha resources parse as JSON and pass `qaAlphaResources`.
+- [x] Direct-harvest drop coverage is complete for the current spec: 19 spec block IDs, 19 modifiers, 19 loot tables.
+- [x] Direct-harvest shears exclusion uses `#biomesoplenty:shears`; stale `#c:tools/shear` references are rejected.
 - [x] Full Gradle build passed.
 - [x] `runData` loads the mod with synchronized Test play runtime dependencies.
-- [x] `runGameTestServer` passed 2 required tests, including all 103 generated recipe IDs.
-- [x] Dedicated-server smoke reached the server-ready `Done` signal.
+- [x] `runGameTestServer` passed 3 required tests, including all 103 generated recipe IDs and BOP shears-tag coverage.
+- [x] Dedicated-server smoke reached the server-ready `Done` signal with alpha.5 loaded.
 - [x] Private Prism Test play install was hash-verified.
 - [x] Required BOP runtime dependencies were present and verified.
-- [x] Prism Test play client log-marker smoke loaded alpha.4 with no new crash report.
-- [x] Alpha.4 visual title-screen screenshot proof is captured.
+- [ ] Fresh alpha.5 Prism Test play client title-screen smoke is complete.
+- [x] Previous alpha.4 visual title-screen screenshot proof is captured, but it is not alpha.5 proof.
 - [x] Legal reuse inventory is present.
 - [x] Beta release notes draft is present.
 - [x] Deterministic beta release gate checker is present and verifies built/installed jar hashes plus duplicate installed jars by embedded `modId`.
