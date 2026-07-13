@@ -4,7 +4,7 @@
   <img src="assets/branding/immersive_bop_harvest_logo.png" alt="Immersive BOP_Harvest logo" width="360">
 </p>
 
-- **Status:** alpha.9 technical gates passed / fresh Prism title-screen proof blocked by GUI interruption
+- **Status:** alpha.9 release gate passes with the fresh Prism title-screen smoke explicitly waived by the owner
 - **Target:** Minecraft 1.21.1, NeoForge
 - **Mod ID:** `immersive_bop_harvest`
 - **Current alpha:** `0.1.1-alpha.9`
@@ -93,8 +93,10 @@ Public binary release requires the checker to report `BETA RELEASE GATE: PASS`.
 
 Current alpha.9 note: generated recipes, direct-harvest loot-table scoping,
 common tags, manifest tests, clean build, installed-JAR readback, GameTests,
-runData, license, packaged logo and dedicated-server smoke passed. Fresh alpha.9
-Prism title-screen proof is not claimed because GUI recovery was interrupted.
+runData, license, packaged logo and dedicated-server smoke passed. The fresh
+alpha.9 Prism title-screen smoke is `NOT_PERFORMED`: the owner explicitly
+instructed Codex to skip this test phase. The release gate accepts only a
+complete, explicit waiver record and does not report the skipped test as passed.
 
 ## Branding assets
 

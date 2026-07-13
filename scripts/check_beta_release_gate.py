@@ -138,6 +138,48 @@ def validate_manifest_file_ledger(manifest: dict, failures: list[str]) -> None:
         print(f"PASS: PROJECT_MANIFEST.json file ledger matches current files ({len(entries)} entries)")
 
 
+def validate_live_client_gate(build: dict, failures: list[str]) -> None:
+    tested = build.get("live_client_smoke_tested") is True
+    waived = build.get("live_client_smoke_waived_by_owner") is True
+
+    if tested:
+        check(
+            not waived,
+            "live client title-screen smoke passed",
+            "live client smoke cannot be both tested and owner-waived",
+            failures,
+        )
+        return
+
+    if waived:
+        reason = build.get("live_client_smoke_waiver_reason")
+        scope = build.get("live_client_smoke_waiver_scope")
+        level = build.get("live_client_smoke_level")
+        waiver_is_explicit = (
+            isinstance(reason, str)
+            and bool(reason.strip())
+            and isinstance(scope, str)
+            and bool(scope.strip())
+            and level == "not_performed_owner_waived"
+        )
+        check(
+            waiver_is_explicit,
+            "owner waiver for the unperformed live client smoke is explicitly recorded",
+            "live client smoke owner waiver is incomplete or ambiguous",
+            failures,
+        )
+        if waiver_is_explicit:
+            print(f"NOT_PERFORMED: live client title-screen smoke was waived by the owner ({scope})")
+        return
+
+    check(
+        False,
+        "live client title-screen smoke passed or was explicitly waived",
+        "live_client_smoke_tested is not proven and no explicit owner waiver is recorded",
+        failures,
+    )
+
+
 def main() -> int:
     failures: list[str] = []
 
@@ -200,10 +242,11 @@ def main() -> int:
         "runData_passed": "runData passed",
         "game_tests_passed": "GameTests passed",
         "dedicated_server_smoke_tested": "dedicated server smoke passed",
-        "live_client_smoke_tested": "live client title-screen smoke passed",
     }
     for key, label in boolean_gates.items():
         check(bool(build.get(key)), label, f"{key} is not proven in PROJECT_MANIFEST.json", failures)
+
+    validate_live_client_gate(build, failures)
 
     built_jar = resolve_project_path(build["built_jar"])
     installed_jar = resolve_project_path(build["installed_jar"])

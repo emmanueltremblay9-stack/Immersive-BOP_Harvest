@@ -1,7 +1,7 @@
 # Beta Release Notes Draft
 
-This is a draft for the first public beta release. Do not publish it until a
-rebuilt, license-correct jar and the remaining runtime gates are verified.
+This is a draft for the first public beta release. The artifact and deterministic
+release gate are verified within the owner-selected reduced runtime-test scope.
 
 ## Immersive BOP_Harvest `0.1.1-alpha.9`
 
@@ -56,15 +56,15 @@ NeoForge.
 
 ## Known Limits
 
-- Fresh alpha.9 Prism client title-screen smoke is still open after a GUI automation interruption.
+- Fresh alpha.9 Prism client title-screen smoke is `NOT_PERFORMED / OWNER_WAIVED` and is not claimed as passed.
 - Full gameplay/world interaction smoke was not performed in the latest pass.
-- Fresh client title-screen evidence must still be captured for alpha.9 before publication.
+- Client startup and full gameplay therefore remain explicit residual risks.
 
 ## Publication Checklist
 
 Before publishing this draft:
 
 1. Confirm the rebuilt jar metadata includes `All Rights Reserved`.
-2. Confirm the alpha.9 runtime smoke evidence is current.
+2. Confirm the alpha.9 automated/server evidence and owner client-smoke waiver are current.
 3. Run `scripts/check_beta_release_gate.py` and require `BETA RELEASE GATE: PASS`.
 4. Attach the rebuilt jar, checksum, dependency list, and final release notes.

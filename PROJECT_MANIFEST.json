@@ -4,7 +4,7 @@
   "package_type": "NeoForge playable alpha source project",
   "design_profile": "conservative_realistic_with_owner_supplied_branding",
   "version": "0.1.1-alpha.9",
-  "validation": "spec-check-gametest-runData-server-install-license-logo-manifest-ledger-blocked-by-alpha9-client-smoke",
+  "validation": "spec-check-gametest-runData-server-install-license-logo-manifest-ledger-release-gate-pass-client-smoke-owner-waived",
   "asset_summary": {
     "vector_logos": 1,
     "raster_png_assets": 1,
@@ -31,17 +31,25 @@
     "game_tests_passed": true,
     "dedicated_server_smoke_tested": true,
     "live_client_smoke_tested": false,
+    "live_client_smoke_waived_by_owner": true,
+    "live_client_smoke_waiver_date": "2026-07-13",
+    "live_client_smoke_waiver_reason": "Owner explicitly instructed Codex to skip this test phase.",
+    "live_client_smoke_waiver_scope": "fresh alpha.9 Prism title-screen smoke",
     "public_release_blocked_by_license": false,
     "license": "All Rights Reserved",
-    "live_client_smoke_level": "alpha9_blocked_by_gui_automation_limit",
+    "live_client_smoke_level": "not_performed_owner_waived",
     "live_client_smoke_screenshot": null,
     "full_gameplay_world_smoke_tested": false,
     "beta_release_gate_checker": "scripts/check_beta_release_gate.py",
-    "beta_release_gate_expected_status": "blocked_by_alpha9_client_smoke",
+    "beta_release_gate_expected_status": "pass_with_owner_waiver",
+    "beta_release_gate_last_run_date": "2026-07-13",
+    "beta_release_gate_last_exit_status": 0,
+    "public_release_gate_passed": true,
+    "public_release_readiness": "release_ready_with_owner_waiver",
     "legal_reuse_inventory": "docs/LEGAL_REUSE_INVENTORY.md",
     "beta_release_audit": "docs/BETA_RELEASE_AUDIT.md",
     "beta_release_notes_draft": "docs/BETA_RELEASE_NOTES_DRAFT.md",
-    "beta_release_gate_checker_scope": "license-docs-built-installed-hash-duplicate-modid-scan-and-manifest-file-ledger",
+    "beta_release_gate_checker_scope": "license-docs-built-installed-hash-duplicate-modid-manifest-ledger-and-explicit-owner-waiver",
     "remaining_installed_jars_for_mod": 1,
     "game_test_recipe_ids_checked": 103,
     "live_client_title_screen_visual_confirmed": false,
@@ -56,7 +64,7 @@
     "direct_harvest_c_tools_shear_references": 0,
     "dedicated_server_smoke_log": "build/server-smoke/runServer-0.1.1-alpha.9-20260713-140412.out.log",
     "dedicated_server_smoke_shutdown_mode": "bounded_process_tree_termination_after_ready_marker",
-    "client_smoke_note": "Fresh alpha.9 Prism client title-screen smoke is blocked by the GUI automation limit after user input interrupted Prism control.",
+    "client_smoke_note": "NOT_PERFORMED: the owner explicitly waived the fresh alpha.9 Prism title-screen smoke after instructing Codex to skip this test phase.",
     "direct_harvest_loot_table_id_conditions": 19,
     "runtime_logo_file": "immersive_bop_harvest_logo.png",
     "runtime_logo_sha256": "8f88fdedc1872f35814227472d5b84c157411d0e506c6cfb5c1d75af2dcda31a"
@@ -84,13 +92,13 @@
     },
     {
       "path": "AGENTS.md",
-      "size_bytes": 4093,
-      "sha256": "3be3f4275bff01c15c2082bf4ff7c50676ebbf43426e705a1b7ab1bd64d15055"
+      "size_bytes": 4512,
+      "sha256": "deaf41f64c79a855e8fbe639280a5d9b4ffb9f04a5ff89bb922c9dffbe6c620c"
     },
     {
       "path": "CHANGELOG.md",
-      "size_bytes": 12615,
-      "sha256": "770c4ca2cbed1d531241c5eff7072132ea348bd0cf53d0de91cd9c9c9b3d8b10"
+      "size_bytes": 13007,
+      "sha256": "bb0cd2863266c9730218a29c0d901e1fb6f159040315d5111af5b3c3071b2441"
     },
     {
       "path": "LICENSE",
@@ -99,13 +107,13 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 4400,
-      "sha256": "8b133cc2cbfd01ba578c8bfaa2d24c8c3bce1bd0a9275aa3d44b3d12e3ef82a1"
+      "size_bytes": 4554,
+      "sha256": "7f717d50c8412d965ebe085cc08ea21e2360cffa4140aafe4d0d7c7f4f2a74ce"
     },
     {
       "path": "VALIDATION_REPORT.txt",
-      "size_bytes": 2834,
-      "sha256": "5b7305912c423a9f9fe253ffc04a7ac2a4017788e1b03ca3be60ad38308bee20"
+      "size_bytes": 3077,
+      "sha256": "2ee6b5b8b5069161ee9147f7cefe1026da86a7bb5a4d412ec0bd52768560b882"
     },
     {
       "path": "assets/branding/ASSETS_MANIFEST.json",
@@ -144,13 +152,13 @@
     },
     {
       "path": "docs/BETA_RELEASE_AUDIT.md",
-      "size_bytes": 3143,
-      "sha256": "a5447f55279641c2b3db1e45107bb82c74b07f82ecfca9c73b34be0703419c1f"
+      "size_bytes": 3327,
+      "sha256": "49635ee4178d1fea704bc69b204972f49da5b14b5de6b1bd80d2231ab9d0f06b"
     },
     {
       "path": "docs/BETA_RELEASE_NOTES_DRAFT.md",
-      "size_bytes": 2899,
-      "sha256": "25c7be52fc0135104ad1be662cec97cb6151926c89a1275bcdd1c51a5806de89"
+      "size_bytes": 2941,
+      "sha256": "bba9ea5610e66a85a6dfe91066d933a51ae89ccc7f3ccb7ddfde57cea921eeda"
     },
     {
       "path": "docs/BRANDING_GUIDE.md",
@@ -174,8 +182,8 @@
     },
     {
       "path": "docs/PLAYABLE_ALPHA_PROOF.md",
-      "size_bytes": 2327,
-      "sha256": "d48b8a19654470dd8e95b75843bc3a3bb297755dad6e2aebf03392a73b9046f3"
+      "size_bytes": 2280,
+      "sha256": "0b0be19535dffcaf3682b37617df858416e1294234e4c69b07eb6e46a7203ec4"
     },
     {
       "path": "docs/QA_ACCEPTANCE.md",
@@ -189,8 +197,8 @@
     },
     {
       "path": "docs/RELEASE_CHECKLIST.md",
-      "size_bytes": 2724,
-      "sha256": "6ded64f1c4cd31d1cd46d3a3624c3b4c56f996d93eac60a5c67593854fc2bfa5"
+      "size_bytes": 2924,
+      "sha256": "efb14e102e4af7fdb0bd447d2fd3a4ad9a37416e1a49d8814d69acd45bcaf3fc"
     },
     {
       "path": "docs/SOURCE_AUDIT.md",
@@ -224,8 +232,8 @@
     },
     {
       "path": "scripts/check_beta_release_gate.py",
-      "size_bytes": 9651,
-      "sha256": "1984526bc1d0e8321798c86417ed815c7f16d49fa5010929e1836816144bdf45"
+      "size_bytes": 11090,
+      "sha256": "060b2914b701bb0fd82b97e9a8a85a32a99bf75b67e563b19b79ec557dd85b84"
     },
     {
       "path": "scripts/generate_alpha_resources.py",
@@ -259,8 +267,8 @@
     },
     {
       "path": "scripts/test_check_beta_release_gate.py",
-      "size_bytes": 2013,
-      "sha256": "dbc16702ca3e5f1ab529408efd323caa1e57c977ab5e0e4d9d051653be12fabf"
+      "size_bytes": 3928,
+      "sha256": "187c3797a38cefac9b1f825ce3404522a07ee768393fd87cd6aaf30da6ab564d"
     },
     {
       "path": "scripts/validate_specs.py",

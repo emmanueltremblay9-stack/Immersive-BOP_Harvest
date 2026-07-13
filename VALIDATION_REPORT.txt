@@ -7,17 +7,17 @@ Minecraft: 1.21.1
 Java: 21
 License: All Rights Reserved
 
-CURRENT CLASSIFICATION: BLOCKED
-BLOCKER: BLOCKED-BY-GUI-AUTOMATION-LIMIT
-Reason: the fresh Prism Test play title-screen capture was interrupted by user
-input and recovery failed with "foreground window did not report a process id".
-No alpha.9 client-title success is claimed.
+CURRENT CLASSIFICATION: RELEASE_READY_WITH_OWNER_WAIVER
+CLIENT TITLE-SCREEN CLASSIFICATION: NOT_PERFORMED
+OWNER DECISION: the owner explicitly instructed Codex to skip this test phase.
+No alpha.9 client-title success is claimed. The release gate accepts the
+recorded owner waiver without converting the unperformed test into a pass.
 
 CONFIRMED TECHNICAL RESULTS
 - Resource generator ran twice with an identical binary diff.
 - python scripts\validate_specs.py: exit 0; 181 coverage IDs.
 - python scripts\qa_alpha_resources.py: exit 0; 146 generated JSON files.
-- python -m unittest scripts/test_check_beta_release_gate.py: exit 0; 3 tests.
+- python -m unittest scripts/test_check_beta_release_gate.py: exit 0; 7 tests.
 - .\gradlew.bat clean build --stacktrace: exit 0.
 - .\gradlew.bat runGameTestServer --stacktrace: exit 0; 3 required tests.
 - .\gradlew.bat runData --stacktrace: exit 0.
@@ -25,6 +25,8 @@ CONFIRMED TECHNICAL RESULTS
   The script then used bounded process-tree termination; underlying Gradle exit 1
   is recorded separately and is not represented as a normal Gradle success.
 - scripts\install_alpha_to_lab.ps1: exit 0.
+- python scripts\check_beta_release_gate.py: exit 0;
+  BETA RELEASE GATE: PASS with client smoke NOT_PERFORMED / OWNER_WAIVED.
 
 BUILT AND INSTALLED ARTIFACT
 Built jar: build\libs\immersive_bop_harvest-0.1.1-alpha.9.jar
@@ -58,8 +60,9 @@ DEPENDENCY READBACK
 WARNINGS / RESIDUAL RISK
 - NeoForge/Gradle reports deprecations that will matter for Gradle 10.
 - Runtime logs include dependency-owned BOP/NeoForge spawn-placement warnings.
-- Full gameplay/world interaction smoke was not performed.
-- Safe to launch Minecraft: yes for another title-screen validation attempt,
-  based on build, install, hashes, metadata, GameTests, runData and server smoke.
-- Public stable release-ready: no until a fresh alpha.9 client title-screen smoke
-  is captured and the beta release gate passes.
+- Fresh alpha.9 client title-screen smoke: NOT_PERFORMED / OWNER_WAIVED.
+- Full gameplay/world interaction smoke: NOT_PERFORMED.
+- Safe to launch Minecraft: yes, based on build, install, hashes, metadata,
+  GameTests, runData and server smoke.
+- Public release gate: PASS under the explicit owner-selected reduced test scope.
+- Residual risk: client startup and full gameplay remain unverified, not passed.

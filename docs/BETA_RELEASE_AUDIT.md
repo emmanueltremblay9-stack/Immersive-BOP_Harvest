@@ -10,9 +10,12 @@ Technical build, data, server and installation gates pass. The owner selected
 `All Rights Reserved`, the final JAR embeds that license, and the supplied PNG
 is used by the README and packaged as the NeoForge mod logo.
 
-Public release remains `BLOCKED` only because a fresh alpha.9 Prism client
-title-screen capture was interrupted by user input and could not be recovered
-reliably in this pass (`BLOCKED-BY-GUI-AUTOMATION-LIMIT`).
+The owner explicitly instructed Codex to skip the remaining Prism client test
+phase. The fresh alpha.9 title-screen smoke is therefore `NOT_PERFORMED` and
+`OWNER_WAIVED`, not passed. The deterministic release gate accepts this only
+when the manifest contains a complete, non-ambiguous waiver record.
+
+Final checker result: `BETA RELEASE GATE: PASS`, exit `0`.
 
 ## Proven Gates
 
@@ -21,7 +24,7 @@ reliably in this pass (`BLOCKED-BY-GUI-AUTOMATION-LIMIT`).
 | Specification validation | PASS | exit 0; 181 coverage IDs |
 | Generator determinism | PASS | identical binary diff after two successive generations |
 | Generated-resource QA | PASS | exit 0; 146 JSON files |
-| Release-checker regression tests | PASS | 3 unittest cases |
+| Release-checker regression tests | PASS | 7 unittest cases |
 | Clean build | PASS | `clean build`, exit 0 |
 | GameTests | PASS | 3 required tests; all 103 generated recipe IDs |
 | Datagen/runtime load | PASS | `runData`, exit 0 |
@@ -29,7 +32,7 @@ reliably in this pass (`BLOCKED-BY-GUI-AUTOMATION-LIMIT`).
 | License | PASS | `LICENSE`, Gradle property and installed metadata are `All Rights Reserved` |
 | Logo | PASS | packaged PNG SHA matches owner attachment SHA |
 | Prism install | PASS | source/install hashes match; exactly one project JAR remains |
-| Fresh alpha.9 client title screen | BLOCKED | GUI recovery error after user-input interruption |
+| Fresh alpha.9 client title screen | NOT_PERFORMED / OWNER_WAIVED | Explicit owner instruction: skip this test phase |
 
 ## Artifact Proof
 
@@ -55,12 +58,13 @@ Runtime output includes NeoForge/BOP spawn-placement warnings and Mixin class
 version debug messages from the dependency stack. They do not originate in this
 mod and did not produce a nonzero GameTest or datagen exit.
 
-## Remaining Gate
+## Owner-Selected Release Scope
 
-1. Retry the Prism `1.21.1 TesT play` launch without concurrent user input.
-2. Capture the `Minecraft NeoForge* 1.21.1` title window with alpha.9 in the log.
-3. Set the manifest client-smoke fields from that proof.
-4. Refresh the manifest ledger and require `BETA RELEASE GATE: PASS`.
+- Fresh alpha.9 client title-screen smoke: `NOT_PERFORMED / OWNER_WAIVED`.
+- Full gameplay/world interaction smoke: `NOT_PERFORMED`.
+- The waiver does not claim client runtime success and cannot coexist with a
+  `live_client_smoke_tested=true` claim.
+- All remaining automated, artifact, metadata, server, install and legal gates
+  must pass without waiver.
 
-Full gameplay/world interaction smoke is useful but remains a separately
-reported residual risk rather than a title-screen release-gate substitute.
+Client startup and full gameplay remain explicitly reported residual risks.

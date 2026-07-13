@@ -46,11 +46,11 @@ Version: `0.1.1-alpha.9`
 
 ## Client Smoke
 
-Fresh alpha.9 title-screen proof is not claimed. Computer-use recovery failed
-with `foreground window did not report a process id` after Windows detected user
-input in the Prism window. This is `BLOCKED-BY-GUI-AUTOMATION-LIMIT`.
+Fresh alpha.9 title-screen proof is not claimed. The owner explicitly instructed
+Codex to skip this test phase after two UI-interrupted attempts. Classification:
+`NOT_PERFORMED / OWNER_WAIVED`.
 
-The installed artifact is safe for another launch attempt because its build,
-hash, metadata, license, logo, dependencies, GameTests, datagen and server boot
-are verified. That statement does not substitute for the missing title-screen
-proof and does not claim full gameplay validation.
+The installed artifact is safe to launch based on its verified build, hash,
+metadata, license, logo, dependencies, GameTests, datagen and server boot. The
+owner waiver does not substitute for title-screen proof and does not claim
+client startup or full gameplay validation.

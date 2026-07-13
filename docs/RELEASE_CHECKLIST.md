@@ -16,13 +16,14 @@
 - [x] Dedicated-server smoke reached the server-ready `Done` signal with alpha.9 loaded.
 - [x] Private Prism Test play install was hash-verified.
 - [x] Required BOP runtime dependencies were present and verified.
-- [ ] Fresh alpha.9 Prism Test play client title-screen smoke is complete (`BLOCKED-BY-GUI-AUTOMATION-LIMIT`).
+- [x] Fresh alpha.9 Prism Test play client title-screen smoke is explicitly `NOT_PERFORMED / OWNER_WAIVED`; it is not represented as a passing test.
 - [x] Previous alpha.4 visual title-screen screenshot proof is captured, but it is not alpha.9 proof.
 - [x] Legal reuse inventory is present.
 - [x] Beta release notes draft is present.
 - [x] Deterministic beta release gate checker is present and verifies built/installed jar hashes, duplicate installed jars by embedded `modId`, and manifest file hashes.
 - [x] Owner selected `All Rights Reserved`; `LICENSE` and `mod_license` are synchronized.
-- [ ] Public binary release is still blocked only by the fresh alpha.9 client title-screen gate.
+- [x] Public binary release gate passes under the explicit owner-selected reduced test scope.
+- [x] Final `python scripts/check_beta_release_gate.py` returned exit `0` and `BETA RELEASE GATE: PASS`.
 
 ## Public release gate
 
@@ -32,7 +33,7 @@
 4. Run datagen twice.
 5. Run unit/GameTests.
 6. Run full build.
-7. Test client.
+7. Test client, or record an explicit owner waiver without claiming a pass.
 8. Test dedicated server.
 9. Test with only required dependencies.
 10. Test with the intended modpack.

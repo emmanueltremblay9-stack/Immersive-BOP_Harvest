@@ -85,6 +85,13 @@ For this project, public release is still blocked while `mod_license` is
 `LICENSE_PENDING`, no `LICENSE` file exists, or fresh client smoke is not
 proven.
 
+Owner exception for `0.1.1-alpha.9`: on 2026-07-13 Emmanuel explicitly
+instructed Codex to skip the remaining Prism client test phase. Preserve the
+client smoke as `NOT_PERFORMED / OWNER_WAIVED`; never convert it into a pass.
+The release checker may accept only the complete, explicit waiver record in
+`PROJECT_MANIFEST.json`. All other automated, artifact, install, metadata,
+server and legal gates remain mandatory.
+
 ## Required Report
 
 Report:

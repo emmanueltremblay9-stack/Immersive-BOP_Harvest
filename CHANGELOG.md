@@ -24,16 +24,19 @@
 - Resource generation was byte-for-byte stable across two successive runs.
 - Specification validation passed with 181 coverage IDs.
 - Generated-resource QA passed with 146 JSON files.
-- Three release-checker regression tests passed.
+- Seven release-checker regression tests passed, including explicit owner-waiver acceptance and fail-closed rejection cases.
 - Clean Gradle build, `runData` and all 3 required GameTests passed.
 - Dedicated-server smoke reached `Done (` with alpha.9 loaded; bounded termination is reported separately.
 - Source and installed JARs are 1,607,220 bytes with matching SHA-256 `20110892574faabf2fd2c47807ade1eca38ab0b2b248ac8187bdbf779c1c61cc`.
 - Installed metadata reports alpha.9 and `All Rights Reserved`; exactly one project JAR remains.
 - Packaged logo SHA-256 matches the owner attachment: `8f88fdedc1872f35814227472d5b84c157411d0e506c6cfb5c1d75af2dcda31a`.
+- Final deterministic checker returned exit `0` and `BETA RELEASE GATE: PASS` under the explicit owner waiver.
 
-### Remaining release blocker
-- Fresh alpha.9 Prism title-screen proof is `BLOCKED-BY-GUI-AUTOMATION-LIMIT` after user-input interruption and failed window recovery.
-- Full gameplay/world interaction smoke was not performed.
+### Owner-selected test scope
+- The owner explicitly instructed Codex to skip the fresh alpha.9 Prism title-screen test phase.
+- Client title-screen smoke is recorded as `NOT_PERFORMED / OWNER_WAIVED`, never as a pass.
+- Full gameplay/world interaction smoke was not performed and remains a documented residual risk.
+- The release checker now fails closed unless an unperformed client smoke has a complete explicit waiver record.
 
 ## [0.1.1-alpha.7] - 2026-07-05
 
