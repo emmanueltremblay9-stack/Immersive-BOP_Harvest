@@ -13,6 +13,16 @@ No dependency textures, icons, models, sounds or logos are copied.
 
 ## Included assets
 
+### Official project logo
+
+```text
+assets/branding/immersive_bop_harvest_logo.png
+```
+
+The project owner supplied this 1024 x 1024 PNG on 2026-07-13 and designated
+it as the project logo. Use it for the repository README, project icon, Notion
+project page and release listings.
+
 ### Vector logo
 
 ```text
@@ -35,10 +45,9 @@ Use for:
 - repository and release page headers;
 - project status pages.
 
-### Raster assets
+### Other raster assets
 
-The source pack included PNG icons, banners and backgrounds. They are not part
-of this repo payload per the current project scope.
+No additional PNG icons, banners or backgrounds are included.
 
 ## Typography
 

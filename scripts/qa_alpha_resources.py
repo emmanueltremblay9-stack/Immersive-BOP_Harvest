@@ -37,6 +37,11 @@ def path_name(identifier: str) -> str:
     return identifier.split(":", 1)[1].replace("/", "_")
 
 
+def tag_path(identifier: str) -> Path:
+    namespace, path = identifier.split(":", 1)
+    return DATA / namespace / "tags" / "item" / f"{path}.json"
+
+
 def item_result(item: str, count: int = 1) -> dict:
     return {"item": {"count": count, "id": item}}
 
@@ -74,6 +79,10 @@ def condition_contains(value, needle: str) -> bool:
     if isinstance(value, dict):
         return any(condition_contains(item, needle) for item in value.values())
     return False
+
+
+def expected_loot_table_id(block: str) -> str:
+    return f"biomesoplenty:blocks/{path_name(block)}"
 
 
 def collect_json_files(root: Path) -> list[Path]:
@@ -184,6 +193,15 @@ def validate_direct_harvest(harvest: dict) -> tuple[int, int]:
 
             expect(modifier.get("type") == "neoforge:add_table", f"{block}: modifier must use neoforge:add_table")
             expect(modifier.get("table") == table_id, f"{block}: modifier table id mismatch")
+            expect(
+                any(
+                    entry.get("condition") == "neoforge:loot_table_id"
+                    and entry.get("loot_table_id") == expected_loot_table_id(block)
+                    for entry in conditions
+                    if isinstance(entry, dict)
+                ),
+                f"{block}: modifier must be scoped to the native BOP block loot table",
+            )
             expect(condition_contains(conditions, block), f"{block}: modifier missing block_state_property condition")
             expect(any(condition_contains(conditions, tool) for tool in rule["tools_any"]), f"{block}: modifier missing required tool condition")
             expect(condition_contains(conditions, BOP_SHEARS_TAG), f"{block}: modifier missing BOP shears exclusion")
@@ -233,11 +251,15 @@ def validate_direct_harvest(harvest: dict) -> tuple[int, int]:
 
 
 def validate_tags(tags: dict) -> int:
+    expected_paths = {tag_path(row["tag"]) for row in tags.get("integrations", [])}
+    common_tag_root = DATA / "c" / "tags" / "item"
+    if common_tag_root.exists():
+        for tag in collect_json_files(common_tag_root):
+            expect(tag in expected_paths, f"stale generated common item tag is not declared in tag_integrations.json: {rel(tag)}")
+
     count = 0
     for integration in tags.get("integrations", []):
-        namespace, path = integration["tag"].split(":", 1)
-        tag_path = DATA / namespace / "tags" / "item" / f"{path}.json"
-        tag = read_generated(tag_path)
+        tag = read_generated(tag_path(integration["tag"]))
         expect(tag == {"replace": False, "values": integration["values"]}, f"{integration['tag']}: tag contents mismatch")
         count += 1
     return count

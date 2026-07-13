@@ -2,6 +2,76 @@
 
 Every scoped block is classified. Wood-family details are in `spec/wood_families.json`.
 
+## Bois transformé
+
+| ID | Décision | Justification |
+|---|---|---|
+| `biomesoplenty:fir_log` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | fir log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:fir_wood` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | fir wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:stripped_fir_log` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped fir log is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:stripped_fir_wood` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped fir wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:fir_planks` | `OUTPUT_ONLY_NO_EXTRA_RECIPE` | fir planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1. |
+| `biomesoplenty:pine_log` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | pine log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:pine_wood` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | pine wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:stripped_pine_log` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped pine log is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:stripped_pine_wood` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped pine wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:pine_planks` | `OUTPUT_ONLY_NO_EXTRA_RECIPE` | pine planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1. |
+| `biomesoplenty:maple_log` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | maple log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:maple_wood` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | maple wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:stripped_maple_log` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped maple log is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:stripped_maple_wood` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped maple wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:maple_planks` | `OUTPUT_ONLY_NO_EXTRA_RECIPE` | maple planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1. |
+| `biomesoplenty:redwood_log` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | redwood log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:redwood_wood` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | redwood wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:stripped_redwood_log` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped redwood log is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:stripped_redwood_wood` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped redwood wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:redwood_planks` | `OUTPUT_ONLY_NO_EXTRA_RECIPE` | redwood planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1. |
+| `biomesoplenty:mahogany_log` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | mahogany log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:mahogany_wood` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | mahogany wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:stripped_mahogany_log` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped mahogany log is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:stripped_mahogany_wood` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped mahogany wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:mahogany_planks` | `OUTPUT_ONLY_NO_EXTRA_RECIPE` | mahogany planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1. |
+| `biomesoplenty:jacaranda_log` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | jacaranda log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:jacaranda_wood` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | jacaranda wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:stripped_jacaranda_log` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped jacaranda log is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:stripped_jacaranda_wood` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped jacaranda wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:jacaranda_planks` | `OUTPUT_ONLY_NO_EXTRA_RECIPE` | jacaranda planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1. |
+| `biomesoplenty:palm_log` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | palm log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:palm_wood` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | palm wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:stripped_palm_log` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped palm log is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:stripped_palm_wood` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped palm wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:palm_planks` | `OUTPUT_ONLY_NO_EXTRA_RECIPE` | palm planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1. |
+| `biomesoplenty:willow_log` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | willow log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:willow_wood` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | willow wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:stripped_willow_log` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped willow log is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:stripped_willow_wood` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped willow wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:willow_planks` | `OUTPUT_ONLY_NO_EXTRA_RECIPE` | willow planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1. |
+| `biomesoplenty:dead_log` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | dead log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:dead_wood` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | dead wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:stripped_dead_log` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped dead log is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:stripped_dead_wood` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped dead wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:dead_planks` | `OUTPUT_ONLY_NO_EXTRA_RECIPE` | dead planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1. |
+| `biomesoplenty:magic_log` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | magic log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:magic_wood` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | magic wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:stripped_magic_log` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped magic log is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:stripped_magic_wood` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped magic wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:magic_planks` | `OUTPUT_ONLY_NO_EXTRA_RECIPE` | magic planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1. |
+| `biomesoplenty:umbran_log` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | umbran log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:umbran_wood` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | umbran wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:stripped_umbran_log` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped umbran log is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:stripped_umbran_wood` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped umbran wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:umbran_planks` | `OUTPUT_ONLY_NO_EXTRA_RECIPE` | umbran planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1. |
+| `biomesoplenty:hellbark_log` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | hellbark log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:hellbark_wood` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | hellbark wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:stripped_hellbark_log` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped hellbark log is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:stripped_hellbark_wood` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped hellbark wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:hellbark_planks` | `OUTPUT_ONLY_NO_EXTRA_RECIPE` | hellbark planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1. |
+| `biomesoplenty:empyreal_log` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | empyreal log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:empyreal_wood` | `CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD` | empyreal wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks. |
+| `biomesoplenty:stripped_empyreal_log` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped empyreal log is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:stripped_empyreal_wood` | `SAWMILL_PLANK_OUTPUT_ONLY` | Stripped empyreal wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping. |
+| `biomesoplenty:empyreal_planks` | `OUTPUT_ONLY_NO_EXTRA_RECIPE` | empyreal planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1. |
+
 ## Fleurs
 
 | ID | Décision | Justification |

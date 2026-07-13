@@ -6,6 +6,10 @@
       "chance": 0.5
     },
     {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "biomesoplenty:blocks/desert_grass"
+    },
+    {
       "condition": "minecraft:match_tool",
       "predicate": {
         "items": "#c:tools/knife"

@@ -3,6 +3,7 @@ build/
 run/
 out/
 .idea/
+.vscode/
 *.iml
 *.ipr
 *.iws
@@ -12,4 +13,9 @@ out/
 bin/
 logs/
 crash-reports/
+__pycache__/
+.pytest_cache/
+.codegraph/
+.codebase-memory/
+.understand-anything/
 src/generated/resources/.cache/

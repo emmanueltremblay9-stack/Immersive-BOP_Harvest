@@ -1,7 +1,7 @@
 # Copy only after the exact NeoForge MDK and dependency versions are known.
 mod_id=immersive_bop_harvest
 mod_name=Immersive BOP_Harvest
-mod_license=LICENSE_PENDING
+mod_license=All Rights Reserved
 mod_version=0.1.0
 mod_group_id=com.oblixorprime.immersivebopharvest
 mod_authors=OblixorPrime

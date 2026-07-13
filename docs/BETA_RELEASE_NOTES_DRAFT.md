@@ -1,9 +1,9 @@
 # Beta Release Notes Draft
 
-This is a draft for the first public beta release. Do not publish it until the
-license gate is resolved and a rebuilt, license-correct jar is verified.
+This is a draft for the first public beta release. Do not publish it until a
+rebuilt, license-correct jar and the remaining runtime gates are verified.
 
-## Immersive BOP_Harvest `0.1.1-alpha.5`
+## Immersive BOP_Harvest `0.1.1-alpha.9`
 
 Immersive BOP_Harvest is a conservative compatibility addon for Biomes O'
 Plenty, Farmer's Delight, and Immersive Engineering on Minecraft 1.21.1 with
@@ -19,7 +19,11 @@ NeoForge.
   blocks.
 - Keeps native BOP shear behavior by excluding `#biomesoplenty:shears` from
   compatibility direct-harvest drops.
+- Scopes every direct-harvest loot modifier to its matching BOP block loot table
+  with `neoforge:loot_table_id`.
 - Adds common tag compatibility for barley and toadstool.
+- Adds manifest-ledger validation and expanded wood-processing compatibility
+  coverage in the QA pass.
 - Avoids new blocks, new items, copied assets, magic drops, free glowstone, and
   progression-breaking conversions.
 
@@ -35,29 +39,32 @@ NeoForge.
 
 ## Verified In Private QA
 
-- Specification validation passed.
+- Specification validation passed with 181 compatibility coverage IDs.
 - Generated-resource QA passed with 146 generated JSON files.
+- Stale common-tag cleanup repro passed.
 - Clean Gradle build passed.
 - GameTest server passed 3 required tests, including all 103 generated recipe IDs
   and BOP shears-tag coverage.
 - Datagen/runtime dependency load passed.
 - Dedicated server smoke reached `Done`.
 - Prism `1.21.1 TesT play` install was hash-verified.
-- Installed JAR readback found 19 direct-harvest modifiers, 19
-  `#biomesoplenty:shears` exclusions, and 0 stale `#c:tools/shear` references.
+- Installed JAR readback found 64 cutting recipes, 39 sawmill recipes, 19
+  direct-harvest modifiers, 19 direct-harvest loot tables, 2 common item tags,
+  and a direct-harvest `neoforge:loot_table_id` guard.
+- The owner selected `All Rights Reserved`; redistribution and derivative use
+  require prior written permission.
 
 ## Known Limits
 
-- Fresh alpha.5 Prism client title-screen smoke is still open; the CLI opened
-  the Test play console but did not spawn Minecraft during this pass.
+- Fresh alpha.9 Prism client title-screen smoke is still open after a GUI automation interruption.
 - Full gameplay/world interaction smoke was not performed in the latest pass.
-- Public release is blocked until the owner selects and applies a license.
+- Fresh client title-screen evidence must still be captured for alpha.9 before publication.
 
 ## Publication Checklist
 
 Before publishing this draft:
 
-1. Replace this draft note with the chosen license name.
-2. Confirm the rebuilt jar metadata includes that license.
+1. Confirm the rebuilt jar metadata includes `All Rights Reserved`.
+2. Confirm the alpha.9 runtime smoke evidence is current.
 3. Run `scripts/check_beta_release_gate.py` and require `BETA RELEASE GATE: PASS`.
 4. Attach the rebuilt jar, checksum, dependency list, and final release notes.

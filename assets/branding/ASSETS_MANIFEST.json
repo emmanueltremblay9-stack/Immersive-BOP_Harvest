@@ -1,10 +1,15 @@
 {
-  "assets_version": "0.1.1-alpha.3-notion-cover",
+  "assets_version": "0.1.1-alpha.9-owner-logo",
   "style": "original botanical-industrial",
   "no_dependency_assets_copied": true,
   "no_font_files_included": true,
-  "raster_png_omitted": true,
+  "raster_png_omitted": false,
   "files": [
+    {
+      "path": "assets/branding/immersive_bop_harvest_logo.png",
+      "size_bytes": 1554071,
+      "sha256": "8f88fdedc1872f35814227472d5b84c157411d0e506c6cfb5c1d75af2dcda31a"
+    },
     {
       "path": "assets/branding/branding_preview.html",
       "size_bytes": 1012,

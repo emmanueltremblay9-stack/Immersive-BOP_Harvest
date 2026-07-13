@@ -1,18 +1,18 @@
 # Legal Reuse Inventory
 
-Date: 2026-06-27
+Date: 2026-07-13 owner license decision
 Project: Immersive BOP_Harvest
-Version audited: `0.1.1-alpha.5`
+Version audited: `0.1.1-alpha.9`
 
 ## Release Status
 
-Public binary release is blocked until the project owner selects a software
-license and the chosen license is applied consistently.
+The project owner selected `All Rights Reserved` on 2026-07-13.
 
-Current blocker:
-- `gradle.properties` has `mod_license=LICENSE_PENDING`.
-- No `LICENSE` file is present.
-- The installed alpha.5 jar was built with `license="LICENSE_PENDING"`.
+Current state:
+- `gradle.properties` has `mod_license=All Rights Reserved`.
+- `LICENSE` records the proprietary terms and third-party ownership disclaimer.
+- The alpha.9 JAR must be rebuilt and inspected before publication evidence can
+  claim that the installed metadata contains the selected license.
 
 ## Authored Project Material
 
@@ -24,7 +24,7 @@ The following material is original project content in this repository:
 - Build scripts and QA scripts under `scripts/`.
 - Documentation under `docs/`, `README.md`, `CHANGELOG.md`, and
   `VALIDATION_REPORT.txt`.
-- Vector branding under `assets/branding/`.
+- Owner-provided PNG and original vector branding under `assets/branding/`.
 
 ## Third-Party Material
 
@@ -53,19 +53,16 @@ The project intentionally avoids:
 
 ## Branding
 
-The project logo and banner are original vector SVG assets:
+The project branding consists of the owner-provided PNG project logo and the
+original vector SVG logo/banner:
 
+- `assets/branding/immersive_bop_harvest_logo.png`
 - `assets/branding/transparent/immersive_bop_harvest_logo_vector.svg`
 - `assets/branding/cover/immersive_bop_harvest_banner_vector.svg`
 
-PNG assets from the source pack remain omitted per scope correction: `forget .png`.
-
 ## Required Before Public Binary Release
 
-1. Owner selects the project license.
-2. Add the chosen `LICENSE` file.
-3. Set `mod_license` in `gradle.properties`.
-4. Rebuild the jar so `META-INF/neoforge.mods.toml` contains the chosen license.
-5. Reinstall and verify the rebuilt jar in Prism `1.21.1 TesT play`.
-6. Update README, changelog, Notion, and release metadata with the chosen license.
-7. Re-run `scripts/check_beta_release_gate.py` and require a passing result.
+1. Rebuild the alpha.9 jar so `META-INF/neoforge.mods.toml` contains `All Rights Reserved`.
+2. Reinstall and verify the rebuilt jar in Prism `1.21.1 TesT play`.
+3. Update README, changelog, Notion, and release metadata with the selected license.
+4. Re-run `scripts/check_beta_release_gate.py` and require a passing result.

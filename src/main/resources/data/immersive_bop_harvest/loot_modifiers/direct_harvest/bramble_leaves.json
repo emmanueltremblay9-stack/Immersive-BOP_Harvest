@@ -6,6 +6,10 @@
       "chance": 0.25
     },
     {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "biomesoplenty:blocks/bramble_leaves"
+    },
+    {
       "condition": "minecraft:match_tool",
       "predicate": {
         "items": "#c:tools/knife"

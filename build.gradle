@@ -63,6 +63,16 @@ tasks.register("qaAlphaResources", Exec) {
     commandLine pythonExecutable.get(), "scripts/qa_alpha_resources.py"
 }
 
+tasks.register("testReleaseGate", Exec) {
+    group = "verification"
+    description = "Runs regression tests for the deterministic beta release checker."
+    inputs.files(
+            "scripts/check_beta_release_gate.py",
+            "scripts/test_check_beta_release_gate.py"
+    )
+    commandLine pythonExecutable.get(), "-m", "unittest", "scripts/test_check_beta_release_gate.py"
+}
+
 tasks.register("syncRuntimeDeps", Exec) {
     group = "build setup"
     description = "Copies required runtime dependency jars from the configured Prism modpack into build/runtime-deps."
@@ -224,10 +234,14 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
 sourceSets.main.resources.srcDir generateModMetadata
 tasks.named("processResources").configure {
     dependsOn tasks.named("generateAlphaResources")
+    from("assets/branding/immersive_bop_harvest_logo.png") {
+        into ""
+    }
 }
 tasks.named("check").configure {
     dependsOn tasks.named("validateSpecs")
     dependsOn tasks.named("qaAlphaResources")
+    dependsOn tasks.named("testReleaseGate")
 }
 ["writeDataLegacyClasspath", "writeClientLegacyClasspath", "writeServerLegacyClasspath", "writeGameTestServerLegacyClasspath",
  "runData", "runClient", "runServer", "runGameTestServer"].each { taskName ->

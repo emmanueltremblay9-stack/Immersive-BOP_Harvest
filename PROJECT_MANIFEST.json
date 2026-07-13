@@ -2,47 +2,51 @@
   "project": "Immersive BOP_Harvest",
   "mod_id": "immersive_bop_harvest",
   "package_type": "NeoForge playable alpha source project",
-  "design_profile": "conservative_realistic_with_original_vector_branding",
-  "version": "0.1.1-alpha.5",
-  "validation": "spec-build-all-recipes-gametest-runData-server-install-drop-coverage-beta-gate-blocked-by-license-and-alpha5-client-smoke",
+  "design_profile": "conservative_realistic_with_owner_supplied_branding",
+  "version": "0.1.1-alpha.9",
+  "validation": "spec-check-gametest-runData-server-install-license-logo-manifest-ledger-blocked-by-alpha9-client-smoke",
   "asset_summary": {
     "vector_logos": 1,
-    "raster_png_assets": 0,
+    "raster_png_assets": 1,
     "preview_html": 1,
     "branding_guide": true,
-    "png_assets_omitted_per_current_scope": true,
+    "png_assets_omitted_per_current_scope": false,
     "vector_banners": 1,
-    "notion_cover_ready": true
+    "notion_cover_ready": true,
+    "owner_logo": "assets/branding/immersive_bop_harvest_logo.png",
+    "owner_logo_sha256": "8f88fdedc1872f35814227472d5b84c157411d0e506c6cfb5c1d75af2dcda31a",
+    "runtime_logo_file": "immersive_bop_harvest_logo.png"
   },
   "build_summary": {
     "minecraft_version": "1.21.1",
     "loader": "NeoForge",
     "neoforge_version": "21.1.233",
-    "built_jar": "build/libs/immersive_bop_harvest-0.1.1-alpha.5.jar",
-    "installed_jar": "C:/Users/Emmanuel Tremblay/AppData/Roaming/PrismLauncher/instances/1.21.1 TesT play/minecraft/mods/immersive_bop_harvest-0.1.1-alpha.5.jar",
+    "built_jar": "build/libs/immersive_bop_harvest-0.1.1-alpha.9.jar",
+    "installed_jar": "C:/Users/Emmanuel Tremblay/AppData/Roaming/PrismLauncher/instances/1.21.1 TesT play/minecraft/mods/immersive_bop_harvest-0.1.1-alpha.9.jar",
     "install_report": "build/install-report.json",
-    "source_sha256": "74c61d8965598afc6646c58d739e85f83e00dcf14a2e3b677368ea480a9120f8",
-    "installed_sha256": "74c61d8965598afc6646c58d739e85f83e00dcf14a2e3b677368ea480a9120f8",
+    "source_sha256": "20110892574faabf2fd2c47807ade1eca38ab0b2b248ac8187bdbf779c1c61cc",
+    "installed_sha256": "20110892574faabf2fd2c47807ade1eca38ab0b2b248ac8187bdbf779c1c61cc",
     "hash_match": true,
     "runData_passed": true,
     "game_tests_passed": true,
     "dedicated_server_smoke_tested": true,
     "live_client_smoke_tested": false,
-    "public_release_blocked_by_license": true,
-    "live_client_smoke_level": "alpha5_prism_cli_console_only_no_minecraft_jvm",
+    "public_release_blocked_by_license": false,
+    "license": "All Rights Reserved",
+    "live_client_smoke_level": "alpha9_blocked_by_gui_automation_limit",
     "live_client_smoke_screenshot": null,
     "full_gameplay_world_smoke_tested": false,
     "beta_release_gate_checker": "scripts/check_beta_release_gate.py",
-    "beta_release_gate_expected_status": "blocked_by_license_and_alpha5_client_smoke",
+    "beta_release_gate_expected_status": "blocked_by_alpha9_client_smoke",
     "legal_reuse_inventory": "docs/LEGAL_REUSE_INVENTORY.md",
     "beta_release_audit": "docs/BETA_RELEASE_AUDIT.md",
     "beta_release_notes_draft": "docs/BETA_RELEASE_NOTES_DRAFT.md",
-    "beta_release_gate_checker_scope": "license-docs-built-installed-hash-and-duplicate-modid-scan",
+    "beta_release_gate_checker_scope": "license-docs-built-installed-hash-duplicate-modid-scan-and-manifest-file-ledger",
     "remaining_installed_jars_for_mod": 1,
     "game_test_recipe_ids_checked": 103,
     "live_client_title_screen_visual_confirmed": false,
-    "live_client_crash_reports_before": 19,
-    "live_client_crash_reports_after": 19,
+    "live_client_crash_reports_before": null,
+    "live_client_crash_reports_after": null,
     "live_client_screenshot_sha256": null,
     "live_client_window_title": null,
     "game_tests_required_count": 3,
@@ -50,8 +54,12 @@
     "direct_harvest_spec_block_ids": 19,
     "direct_harvest_bop_shears_exclusions": 19,
     "direct_harvest_c_tools_shear_references": 0,
-    "dedicated_server_smoke_log": "build/runServer-smoke-alpha5-20260627-163738.out.log",
-    "client_smoke_note": "Prism CLI opened Test play console but did not spawn Minecraft JVM during alpha.5 smoke attempt."
+    "dedicated_server_smoke_log": "build/server-smoke/runServer-0.1.1-alpha.9-20260713-140412.out.log",
+    "dedicated_server_smoke_shutdown_mode": "bounded_process_tree_termination_after_ready_marker",
+    "client_smoke_note": "Fresh alpha.9 Prism client title-screen smoke is blocked by the GUI automation limit after user input interrupted Prism control.",
+    "direct_harvest_loot_table_id_conditions": 19,
+    "runtime_logo_file": "immersive_bop_harvest_logo.png",
+    "runtime_logo_sha256": "8f88fdedc1872f35814227472d5b84c157411d0e506c6cfb5c1d75af2dcda31a"
   },
   "files": [
     {
@@ -61,8 +69,8 @@
     },
     {
       "path": ".gitignore",
-      "size_bytes": 140,
-      "sha256": "1f57f4371625c46e9e0bf5c5e08e208d238756143760d2e4b147ecc82421a28f"
+      "size_bytes": 229,
+      "sha256": "8c5ff30209e5178fdd3527016079a3313a86a6a0b272ba706324a3e8bf256f19"
     },
     {
       "path": "00_START_HERE.txt",
@@ -75,34 +83,34 @@
       "sha256": "e6e9759db8883f5fa3df502dd8167a8636f95638643b3b4e1a7df5c3ab4350b5"
     },
     {
+      "path": "AGENTS.md",
+      "size_bytes": 4093,
+      "sha256": "3be3f4275bff01c15c2082bf4ff7c50676ebbf43426e705a1b7ab1bd64d15055"
+    },
+    {
       "path": "CHANGELOG.md",
-      "size_bytes": 6923,
-      "sha256": "57b4d4519d1e4d33ec7d35dbd732ecc05fef289574bf1f14447cd898676e9d0c"
+      "size_bytes": 12615,
+      "sha256": "770c4ca2cbed1d531241c5eff7072132ea348bd0cf53d0de91cd9c9c9b3d8b10"
     },
     {
-      "path": "LICENSE_DECISION_REQUIRED.md",
-      "size_bytes": 689,
-      "sha256": "b71468e5907a12f99c678d2417f341933c6a82f0a254c23aa534c4b19df5af38"
-    },
-    {
-      "path": "PROJECT_MANIFEST.json",
-      "size_bytes": 44603,
-      "sha256": "1f79100040ca51d4120779915fc6ecbdbaeb0ce7744e1307ffa0c717887b1939"
+      "path": "LICENSE",
+      "size_bytes": 683,
+      "sha256": "f1f908f84e45de2a4912270c4cf1b0b8765532c0a3e4cb2f9e8941c0613be086"
     },
     {
       "path": "README.md",
-      "size_bytes": 4052,
-      "sha256": "776fdcd02d26a5f2bd29f6d01efcacb9d8b47d98acd620ae554ecad8fcb3b044"
+      "size_bytes": 4400,
+      "sha256": "8b133cc2cbfd01ba578c8bfaa2d24c8c3bce1bd0a9275aa3d44b3d12e3ef82a1"
     },
     {
       "path": "VALIDATION_REPORT.txt",
-      "size_bytes": 4821,
-      "sha256": "69522001337f8238171068df82f392e0907605fe86900ec3d1fd820952c599ed"
+      "size_bytes": 2834,
+      "sha256": "5b7305912c423a9f9fe253ffc04a7ac2a4017788e1b03ca3be60ad38308bee20"
     },
     {
       "path": "assets/branding/ASSETS_MANIFEST.json",
-      "size_bytes": 824,
-      "sha256": "39aecba6157f1887fffced2f8ac892299987a87d8c5825d0d4037619e4878287"
+      "size_bytes": 1009,
+      "sha256": "2d5354d2dbb8ab71027064352c1430d3553730da78a9b405c4897d0aeaddd572"
     },
     {
       "path": "assets/branding/branding_preview.html",
@@ -115,14 +123,19 @@
       "sha256": "4cdaac67c602a580b032a32093c7dfd94b071a9810606dc8d6a6e074cb7c33be"
     },
     {
+      "path": "assets/branding/immersive_bop_harvest_logo.png",
+      "size_bytes": 1554071,
+      "sha256": "8f88fdedc1872f35814227472d5b84c157411d0e506c6cfb5c1d75af2dcda31a"
+    },
+    {
       "path": "assets/branding/transparent/immersive_bop_harvest_logo_vector.svg",
       "size_bytes": 1829,
       "sha256": "e9ce83098aada14d212464a52003a4a7cbf17b5963d755ad449a1750b3e5ae27"
     },
     {
       "path": "build.gradle",
-      "size_bytes": 11411,
-      "sha256": "5a5d561749747d24e33bdee894a04521db904f983c55fb3163cfa97760da32ab"
+      "size_bytes": 11925,
+      "sha256": "37caf9367f9d001fd44c0f85af7d2e83f1fda9fd7336f4dfeac14ed52def3b63"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -131,28 +144,28 @@
     },
     {
       "path": "docs/BETA_RELEASE_AUDIT.md",
-      "size_bytes": 3319,
-      "sha256": "ee00af624838174c86a6285880d16c2894b30544cad8bd5d3c2414b49d53eb99"
+      "size_bytes": 3143,
+      "sha256": "a5447f55279641c2b3db1e45107bb82c74b07f82ecfca9c73b34be0703419c1f"
     },
     {
       "path": "docs/BETA_RELEASE_NOTES_DRAFT.md",
-      "size_bytes": 2446,
-      "sha256": "3cfd26dcdfa3c1681b91c96e2b6e6c0377fbe9d1ea1c461224790a10588c9ec2"
+      "size_bytes": 2899,
+      "sha256": "25c7be52fc0135104ad1be662cec97cb6151926c89a1275bcdd1c51a5806de89"
     },
     {
       "path": "docs/BRANDING_GUIDE.md",
-      "size_bytes": 1665,
-      "sha256": "c8c6e72187bdb20643ea20d4c3783a7da97b148b150d71f787da0d2a68a5292a"
+      "size_bytes": 1881,
+      "sha256": "e6cea83c82ad50bad993f919c67c804eb661ca305c9b15451e761e4ab91c2ba0"
     },
     {
       "path": "docs/COMPATIBILITY_MATRIX.md",
-      "size_bytes": 17505,
-      "sha256": "e1f4427d11829d74e56722f7eb44aedfdcd359d8ec5b48548f8fd6002ee96c05"
+      "size_bytes": 30038,
+      "sha256": "52b62e6b028285b8527b65ce6ea5f2e4ade897ac96d27c7f242a1fe6e7b528c1"
     },
     {
       "path": "docs/LEGAL_REUSE_INVENTORY.md",
-      "size_bytes": 2610,
-      "sha256": "b9876ca0c8712cf1fe87a67b7245d24f6b50879123681ebb2d947da58f3f1390"
+      "size_bytes": 2634,
+      "sha256": "68d434cb364505137ba65b37823db28d8cc99a9f53bc99fe538843f641d45360"
     },
     {
       "path": "docs/MASTER_PLAN.md",
@@ -161,8 +174,8 @@
     },
     {
       "path": "docs/PLAYABLE_ALPHA_PROOF.md",
-      "size_bytes": 4982,
-      "sha256": "f67427eeee36f126bdf57fa3dc1c203c2d4484fd7f51dc6d855b598c651bbf0e"
+      "size_bytes": 2327,
+      "sha256": "d48b8a19654470dd8e95b75843bc3a3bb297755dad6e2aebf03392a73b9046f3"
     },
     {
       "path": "docs/QA_ACCEPTANCE.md",
@@ -176,8 +189,8 @@
     },
     {
       "path": "docs/RELEASE_CHECKLIST.md",
-      "size_bytes": 1992,
-      "sha256": "c1cae26e3974d765f41b0136b9fdc4f688ac6cf5bf09e8611ac6eed862e030cf"
+      "size_bytes": 2724,
+      "sha256": "6ded64f1c4cd31d1cd46d3a3624c3b4c56f996d93eac60a5c67593854fc2bfa5"
     },
     {
       "path": "docs/SOURCE_AUDIT.md",
@@ -186,8 +199,8 @@
     },
     {
       "path": "gradle.properties",
-      "size_bytes": 770,
-      "sha256": "44cf2aa48452ba95d2944da1e2997de29067bbc62026e589194a258aefc4636a"
+      "size_bytes": 774,
+      "sha256": "f9afbb1afbd03b67802379574129ba6ed01af11920eeffdfd6d5a69638cdd097"
     },
     {
       "path": "gradle/wrapper/gradle-wrapper.jar",
@@ -211,13 +224,13 @@
     },
     {
       "path": "scripts/check_beta_release_gate.py",
-      "size_bytes": 7080,
-      "sha256": "d0b3b088af22e40b753c5ef19d9ff6fe3bc6d3c7fabc81080b1a0f0694943402"
+      "size_bytes": 9651,
+      "sha256": "1984526bc1d0e8321798c86417ed815c7f16d49fa5010929e1836816144bdf45"
     },
     {
       "path": "scripts/generate_alpha_resources.py",
-      "size_bytes": 8011,
-      "sha256": "79d420ab5f6fed52831ff462f49cd786e5f95b19adf3600015fc3cdfad5cf6e5"
+      "size_bytes": 8603,
+      "sha256": "07d5006f0e831ba9c804422026c05346e9aa9b9c25a0da7b35c11b774174530d"
     },
     {
       "path": "scripts/install_alpha_to_lab.ps1",
@@ -226,8 +239,18 @@
     },
     {
       "path": "scripts/qa_alpha_resources.py",
-      "size_bytes": 15476,
-      "sha256": "2e4335c6e2b295556b3fc1632bf4a50bca9635942f23d5b36e2984826e9b6472"
+      "size_bytes": 16384,
+      "sha256": "9eeb72761a21180d0b2f799d05a54203546d80790a2fa53cdf932e014ff5a69c"
+    },
+    {
+      "path": "scripts/refresh_project_manifest.py",
+      "size_bytes": 2191,
+      "sha256": "98eb44049559297eac140d11e5afc908315ef9fd74e5a48f2f143d6f4a29f843"
+    },
+    {
+      "path": "scripts/run_server_smoke.ps1",
+      "size_bytes": 3566,
+      "sha256": "aed1e929a977c413c4ebe38051a6d7fdb54e16668779d77b6530cea978e69faa"
     },
     {
       "path": "scripts/sync_runtime_deps.ps1",
@@ -235,9 +258,14 @@
       "sha256": "8b3b34bf11d4b934e3fecb683b72b17aa65631b90e54cc7c9b1e4b137079ac87"
     },
     {
+      "path": "scripts/test_check_beta_release_gate.py",
+      "size_bytes": 2013,
+      "sha256": "dbc16702ca3e5f1ab529408efd323caa1e57c977ab5e0e4d9d051653be12fabf"
+    },
+    {
       "path": "scripts/validate_specs.py",
-      "size_bytes": 6861,
-      "sha256": "97af5cf0dd7b7401142143bcdf69ed0bdbfad5c1dca7246701846b255d94e51e"
+      "size_bytes": 7247,
+      "sha256": "7f76ae6bb307f91654ba2f5e74133f922c080b83a66e9741f0341c6c0c06c040"
     },
     {
       "path": "settings.gradle",
@@ -246,8 +274,8 @@
     },
     {
       "path": "spec/coverage_inventory.json",
-      "size_bytes": 23566,
-      "sha256": "990c25bd50c11bf184b5878e7859a48d131992aa00c726ddffd2ba45823b2dee"
+      "size_bytes": 40333,
+      "sha256": "26be5a312e3e6f49ffa7b6e96aed89d3044b5c293db14afa63e4df2a88cbc296"
     },
     {
       "path": "spec/direct_harvest_rules.json",
@@ -311,98 +339,98 @@
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/barley.json",
-      "size_bytes": 1130,
-      "sha256": "e8e11eee4f84b8669b2641b48d35ffbd0ce3f1735c6c535107a38342d689f88b"
+      "size_bytes": 1245,
+      "sha256": "5ded48d3ceaaae4d4f82448647b70ccd02dd0a2480e043a9478f5727894278b7"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/bramble_leaves.json",
-      "size_bytes": 1089,
-      "sha256": "4aa4c6b531de01bc1f3feb4086d3abb8278fd19fa4bc0340c8a7b1d326498278"
+      "size_bytes": 1212,
+      "sha256": "6cb3846aec93d638088a2ec1ca297b4483097cfe69fe6cb34c962284d7fba2d8"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/bush.json",
-      "size_bytes": 1068,
-      "sha256": "7621bfa4b2fadc3d44c5e3e69e9976a60a3321adf3a499ed9eb45b61bd2026f9"
+      "size_bytes": 1181,
+      "sha256": "372aeb172eb1374f892ab7060183f8f7b451d1145ea82b2ff56b3ea902f1a032"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/dead_grass.json",
-      "size_bytes": 1080,
-      "sha256": "f8867be8a35ef7ac59767272f0f30e6472f39b65583df8d96a845320b0ec0ddc"
+      "size_bytes": 1199,
+      "sha256": "41ff6463aac374341e714fdb4877de312bd250e0b7e2f09bb224d1c1206269ff"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/desert_grass.json",
-      "size_bytes": 1084,
-      "sha256": "a47ccfe88490d49d2a12fb415b6ac99b1a6e7367815e3bb8deecccb396449f48"
+      "size_bytes": 1205,
+      "sha256": "6b3e8e08924d9ae9678a171d7b634e37dbb68eae2ad3147b7fe4a1a185a7cf63"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/dune_grass.json",
-      "size_bytes": 1080,
-      "sha256": "c50cda5cdeb1f9326bc3682c60fdeb5655f4ac615de31c44440470f390e99b81"
+      "size_bytes": 1199,
+      "sha256": "ca0f93a51e897f9721451bd047b2d5cc3ef54a91c91e8e0877f7ce07a03212c6"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/flesh_tendons.json",
-      "size_bytes": 1086,
-      "sha256": "2c8c0a056ebc7c542c1881feb35df1dddf231d53d470ad670016391df39a4fdb"
+      "size_bytes": 1208,
+      "sha256": "c302714bc4878cff0823f64ba61bdccc3a63c9c10bcabc39a63d2b4da0c24568"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/flesh_tendons_strand.json",
-      "size_bytes": 1100,
-      "sha256": "9b9f43158c9c8e2f38e22d731cea39fba7b58104909cbf78f39b6b6b84f91e5c"
+      "size_bytes": 1229,
+      "sha256": "1a28639d76c25f0f9b361aa16fa5b963607446ac4e1c7914abbed6978bfc19d6"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/glowworm_silk.json",
-      "size_bytes": 1260,
-      "sha256": "13bf8be77d06dc2b3c547b14a143da5f7d69015892f4c3bdb64e2a5fd285c351"
+      "size_bytes": 1382,
+      "sha256": "3bfbb9c446bce3853ee8fdb27a16001fb799825457185326b3b7cae1457d1d5f"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/glowworm_silk_strand.json",
-      "size_bytes": 1274,
-      "sha256": "b2ab4583f134c762d84ee10774c8741381a3a6d55d86a9d8273522cc2726045f"
+      "size_bytes": 1403,
+      "sha256": "9ece440814e6165c08d02f727eb384f71d968b7507fcf04830becb21058f3793"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/hair.json",
-      "size_bytes": 1068,
-      "sha256": "3778ebcbe4ef9c38abeee8e5815d9c0176b78f4a9b1af2feecdda7f5e077d0da"
+      "size_bytes": 1181,
+      "sha256": "4e1214c3efe5ba00f87f6738a6c8b65216baa078973bc44b811c2a779d5b1362"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/hanging_cobweb.json",
-      "size_bytes": 1262,
-      "sha256": "c3020748bb849204810f309036cbb6c9b75c22f01f251532a16797f43f29f500"
+      "size_bytes": 1385,
+      "sha256": "fe381c5503fb5bd70821510ca783bcee8b903828c19fcfb7c483578c924eb18f"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/hanging_cobweb_strand.json",
-      "size_bytes": 1276,
-      "sha256": "450ba305d6fed110da95705e61890013b4746712647e61f5805179be0fddde2f"
+      "size_bytes": 1406,
+      "sha256": "e96ca9e139aa14305c22713c49b60c3747a38df65bf404a9d78de9cc6aec9336"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/high_grass.json",
-      "size_bytes": 1080,
-      "sha256": "9fcd930795a217d18ba85af01709d133b174abbfa18cc8ce46ce2d0e76c02162"
+      "size_bytes": 1199,
+      "sha256": "c9afebbee3c3287f88ff85ce79a6bd482d71cc30b7f3906b6511a309a97f3cd0"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/high_grass_plant.json",
-      "size_bytes": 1092,
-      "sha256": "6ca838bd21091128698a49fe256b92bf3fe28682ef4db7c2cb809913c739e7a0"
+      "size_bytes": 1217,
+      "sha256": "beabe613af56a03239b54e3e571ce62246e8a041f4ce3cbeaf2082617eebd2e2"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/reed.json",
-      "size_bytes": 1068,
-      "sha256": "2740d182b83905cd35fc22dbfb9c6c709a877434b75ca1544a41375e641d7d67"
+      "size_bytes": 1181,
+      "sha256": "33c50566add9331dafb704b0f10e7439b4c75fa2b5e44c7579e8a0fd90834758"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/sea_oats.json",
-      "size_bytes": 1076,
-      "sha256": "238c5fa3d33c01cd662e5e72eb01e349386ab80b0bf9c0bfee395d78ebb41ba5"
+      "size_bytes": 1193,
+      "sha256": "6a1cd6850a170612617cee6b9ffed73b9d0dca3eacd9c096745da0192c637ba3"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/tundra_shrub.json",
-      "size_bytes": 1084,
-      "sha256": "2745a86de6eb642d69b725a7ccb81dab37e3ade126be654b0ffa7a14e843d986"
+      "size_bytes": 1205,
+      "sha256": "2e14712eee83ac168daa072efee1369ff3817010d4b44a46530ae17913874876"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_modifiers/direct_harvest/webbing.json",
-      "size_bytes": 1248,
-      "sha256": "f7f327ccc526f139995e2c47c0031dd2984cd7122e730868573b9fb5bb2dcb2e"
+      "size_bytes": 1364,
+      "sha256": "ce890828266b69ab4ff4187857e026d2a9d7ba2bb4ad5d42be48f5302d973a6b"
     },
     {
       "path": "src/main/resources/data/immersive_bop_harvest/loot_table/direct_harvest/barley.json",
@@ -1026,8 +1054,8 @@
     },
     {
       "path": "src/main/templates/META-INF/neoforge.mods.toml",
-      "size_bytes": 1256,
-      "sha256": "827e5089c2426fb6c63258d72fa545e205339fd518820e0c37041c8c6fe21725"
+      "size_bytes": 1298,
+      "sha256": "50260b191339fc983acd46b4652c11464bde2bba0bc30d94161c14005315db5a"
     },
     {
       "path": "templates/en_us.json",
@@ -1046,13 +1074,13 @@
     },
     {
       "path": "templates/gradle.properties.example",
-      "size_bytes": 540,
-      "sha256": "ee064b27aaf5f394eddd9e47c543dd532d4953fb7460c21f25958fd9af42ecf9"
+      "size_bytes": 544,
+      "sha256": "5c428bf7fdc0dd484508e8848ebd6586e7cec64128bc00f2e9bad1c7ea014359"
     },
     {
       "path": "templates/neoforge.mods.toml.example",
-      "size_bytes": 554,
-      "sha256": "cccd354409d80d44484e96cb75db49949590f059c75c9ad7c8511861d4fbc437"
+      "size_bytes": 600,
+      "sha256": "1ad00a5aab8e190df67e9e22ccd9216399872bd1bead13e840d2269ef6da9d2d"
     },
     {
       "path": "templates/pack.mcmeta.example",

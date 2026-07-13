@@ -1,9 +1,13 @@
 # Immersive BOP_Harvest
 
-- **Status:** private Test play install verified / alpha.5 live-client smoke still pending
+<p align="center">
+  <img src="assets/branding/immersive_bop_harvest_logo.png" alt="Immersive BOP_Harvest logo" width="360">
+</p>
+
+- **Status:** alpha.9 technical gates passed / fresh Prism title-screen proof blocked by GUI interruption
 - **Target:** Minecraft 1.21.1, NeoForge
 - **Mod ID:** `immersive_bop_harvest`
-- **Current alpha:** `0.1.1-alpha.5`
+- **Current alpha:** `0.1.1-alpha.9`
 
 ## Purpose
 
@@ -43,10 +47,12 @@ It does **not** add new items, blocks, textures, magical drops, hemp from unrela
 ```powershell
 python scripts/validate_specs.py
 python scripts/generate_alpha_resources.py
+python scripts/refresh_project_manifest.py
 .\gradlew.bat --no-configuration-cache check
 .\gradlew.bat --no-configuration-cache clean build
 .\gradlew.bat --no-configuration-cache runGameTestServer
 .\gradlew.bat --no-configuration-cache runData
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\run_server_smoke.ps1
 ```
 
 ## Install to Prism Test play
@@ -69,7 +75,8 @@ values, metadata readback, dependency proof, and remaining-jar counts.
 ## Release gate
 
 The project must pass every item in `docs/QA_ACCEPTANCE.md`.  
-A software license must be selected before publication.
+The owner selected `All Rights Reserved`; see `LICENSE`. Redistribution and
+derivative use require prior written permission from the copyright holder.
 
 Current alpha proof is recorded in `docs/PLAYABLE_ALPHA_PROOF.md`.
 The current release audit is recorded in `docs/BETA_RELEASE_AUDIT.md`.
@@ -82,20 +89,21 @@ Run the release gate checker before any public beta upload:
 python scripts/check_beta_release_gate.py
 ```
 
-Public binary release remains blocked until the license decision is complete and
-the checker reports `BETA RELEASE GATE: PASS`.
+Public binary release requires the checker to report `BETA RELEASE GATE: PASS`.
 
-Current alpha.5 note: generated direct-harvest drops are covered by spec QA, GameTest,
-installed-JAR readback, and dedicated-server smoke. The fresh Prism CLI client smoke
-opened the Test play instance console but did not spawn a Minecraft JVM, so alpha.5
-client title-screen proof is not claimed.
+Current alpha.9 note: generated recipes, direct-harvest loot-table scoping,
+common tags, manifest tests, clean build, installed-JAR readback, GameTests,
+runData, license, packaged logo and dedicated-server smoke passed. Fresh alpha.9
+Prism title-screen proof is not claimed because GUI recovery was interrupted.
 
 ## Branding assets
 
-The package keeps the original vector project mark and branding guide. Raster
-PNG assets from the source pack were intentionally omitted from this repo pass.
+The repository includes the owner-provided project logo plus the original
+vector branding set and usage guide.
 
+- official 1024 x 1024 PNG project logo;
 - vector SVG logo;
+- vector SVG banner;
 - branding guide.
 
 See `docs/BRANDING_GUIDE.md`.

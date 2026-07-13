@@ -16,6 +16,333 @@
     "baseline": "No standalone Biomes O' Plenty root block is registered in the audited 1.21.1 baseline.",
     "instruction": "Do not invent root IDs. If the installed BOP version contains root blocks, list them in the compatibility matrix and add no recipe until a direct, non-magical vanilla/FD/IE analogue is verified."
   },
+  "wood_processing": [
+    {
+      "id": "biomesoplenty:fir_log",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "fir log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:fir_wood",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "fir wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:stripped_fir_log",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped fir log is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:stripped_fir_wood",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped fir wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:fir_planks",
+      "decision": "OUTPUT_ONLY_NO_EXTRA_RECIPE",
+      "reason": "fir planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1."
+    },
+    {
+      "id": "biomesoplenty:pine_log",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "pine log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:pine_wood",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "pine wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:stripped_pine_log",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped pine log is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:stripped_pine_wood",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped pine wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:pine_planks",
+      "decision": "OUTPUT_ONLY_NO_EXTRA_RECIPE",
+      "reason": "pine planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1."
+    },
+    {
+      "id": "biomesoplenty:maple_log",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "maple log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:maple_wood",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "maple wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:stripped_maple_log",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped maple log is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:stripped_maple_wood",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped maple wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:maple_planks",
+      "decision": "OUTPUT_ONLY_NO_EXTRA_RECIPE",
+      "reason": "maple planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1."
+    },
+    {
+      "id": "biomesoplenty:redwood_log",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "redwood log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:redwood_wood",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "redwood wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:stripped_redwood_log",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped redwood log is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:stripped_redwood_wood",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped redwood wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:redwood_planks",
+      "decision": "OUTPUT_ONLY_NO_EXTRA_RECIPE",
+      "reason": "redwood planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1."
+    },
+    {
+      "id": "biomesoplenty:mahogany_log",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "mahogany log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:mahogany_wood",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "mahogany wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:stripped_mahogany_log",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped mahogany log is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:stripped_mahogany_wood",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped mahogany wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:mahogany_planks",
+      "decision": "OUTPUT_ONLY_NO_EXTRA_RECIPE",
+      "reason": "mahogany planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1."
+    },
+    {
+      "id": "biomesoplenty:jacaranda_log",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "jacaranda log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:jacaranda_wood",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "jacaranda wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:stripped_jacaranda_log",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped jacaranda log is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:stripped_jacaranda_wood",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped jacaranda wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:jacaranda_planks",
+      "decision": "OUTPUT_ONLY_NO_EXTRA_RECIPE",
+      "reason": "jacaranda planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1."
+    },
+    {
+      "id": "biomesoplenty:palm_log",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "palm log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:palm_wood",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "palm wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:stripped_palm_log",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped palm log is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:stripped_palm_wood",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped palm wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:palm_planks",
+      "decision": "OUTPUT_ONLY_NO_EXTRA_RECIPE",
+      "reason": "palm planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1."
+    },
+    {
+      "id": "biomesoplenty:willow_log",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "willow log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:willow_wood",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "willow wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:stripped_willow_log",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped willow log is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:stripped_willow_wood",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped willow wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:willow_planks",
+      "decision": "OUTPUT_ONLY_NO_EXTRA_RECIPE",
+      "reason": "willow planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1."
+    },
+    {
+      "id": "biomesoplenty:dead_log",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "dead log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:dead_wood",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "dead wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:stripped_dead_log",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped dead log is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:stripped_dead_wood",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped dead wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:dead_planks",
+      "decision": "OUTPUT_ONLY_NO_EXTRA_RECIPE",
+      "reason": "dead planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1."
+    },
+    {
+      "id": "biomesoplenty:magic_log",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "magic log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:magic_wood",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "magic wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:stripped_magic_log",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped magic log is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:stripped_magic_wood",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped magic wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:magic_planks",
+      "decision": "OUTPUT_ONLY_NO_EXTRA_RECIPE",
+      "reason": "magic planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1."
+    },
+    {
+      "id": "biomesoplenty:umbran_log",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "umbran log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:umbran_wood",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "umbran wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:stripped_umbran_log",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped umbran log is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:stripped_umbran_wood",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped umbran wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:umbran_planks",
+      "decision": "OUTPUT_ONLY_NO_EXTRA_RECIPE",
+      "reason": "umbran planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1."
+    },
+    {
+      "id": "biomesoplenty:hellbark_log",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "hellbark log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:hellbark_wood",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "hellbark wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:stripped_hellbark_log",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped hellbark log is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:stripped_hellbark_wood",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped hellbark wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:hellbark_planks",
+      "decision": "OUTPUT_ONLY_NO_EXTRA_RECIPE",
+      "reason": "hellbark planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1."
+    },
+    {
+      "id": "biomesoplenty:empyreal_log",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "empyreal log strips to its BOP stripped log plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:empyreal_wood",
+      "decision": "CUTTING_AND_SAWMILL_STRIP_TO_MATCHING_WOOD",
+      "reason": "empyreal wood strips to its BOP stripped wood plus Farmer's Delight tree bark; IE sawmill yields six matching planks."
+    },
+    {
+      "id": "biomesoplenty:stripped_empyreal_log",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped empyreal log is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:stripped_empyreal_wood",
+      "decision": "SAWMILL_PLANK_OUTPUT_ONLY",
+      "reason": "Stripped empyreal wood is already stripped; IE sawmill yields six matching planks without bark or re-stripping."
+    },
+    {
+      "id": "biomesoplenty:empyreal_planks",
+      "decision": "OUTPUT_ONLY_NO_EXTRA_RECIPE",
+      "reason": "empyreal planks are recipe outputs only; no extra plank, slab, stair, fence, sign, or boat conversions are added in v1."
+    }
+  ],
   "flowers": [
     {
       "id": "biomesoplenty:rose",

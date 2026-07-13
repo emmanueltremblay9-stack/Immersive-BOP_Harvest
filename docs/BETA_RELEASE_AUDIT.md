@@ -1,81 +1,66 @@
 # Beta Release Audit
 
-Date: 2026-06-27
+Date: 2026-07-13
 Project: Immersive BOP_Harvest
-Version: `0.1.1-alpha.5`
+Version: `0.1.1-alpha.9`
 
 ## Current Result
 
-The project has complete generated drop coverage for the current spec and a
-hash-verified private Test play alpha.5 install. It is not ready for public beta
-release yet.
+Technical build, data, server and installation gates pass. The owner selected
+`All Rights Reserved`, the final JAR embeds that license, and the supplied PNG
+is used by the README and packaged as the NeoForge mod logo.
 
-Public binary release is blocked by the unresolved license decision and by the
-fresh alpha.5 client-smoke gap.
+Public release remains `BLOCKED` only because a fresh alpha.9 Prism client
+title-screen capture was interrupted by user input and could not be recovered
+reliably in this pass (`BLOCKED-BY-GUI-AUTOMATION-LIMIT`).
 
-## Proven Technical Gates
+## Proven Gates
 
 | Gate | Status | Evidence |
 |---|---|---|
-| Specification validation | Passed | `python scripts/validate_specs.py` |
-| Generated-resource QA | Passed | `python scripts/qa_alpha_resources.py` and `.\\gradlew.bat --no-configuration-cache check --stacktrace` |
-| Direct-harvest drop coverage | Passed | 19 spec block IDs, 19 modifiers, 19 loot tables, 0 missing |
-| Shears exclusion bug fix | Passed | installed JAR has 19 `#biomesoplenty:shears` references and 0 `#c:tools/shear` references |
-| Clean build | Passed | `.\\gradlew.bat --no-configuration-cache clean build --stacktrace` |
-| GameTests | Passed | `.\\gradlew.bat --no-configuration-cache runGameTestServer --stacktrace`, 3 required tests, all 103 generated recipe IDs checked |
-| Datagen/runtime dependency load | Passed | `.\\gradlew.bat --no-configuration-cache runData --stacktrace` |
-| Dedicated server smoke | Passed | bounded `runServer` smoke reached `Done` with alpha.5 loaded |
-| Test play install | Passed | source and installed SHA-256 matched |
-| Remaining installed jars | Passed | installer and checker find exactly 1 jar for `immersive_bop_harvest` |
-| Branding | Passed | original vector logo and vector banner are present |
-| Fresh alpha.5 client title-screen smoke | Open | Prism opened the Test play console but did not spawn a Minecraft JVM |
+| Specification validation | PASS | exit 0; 181 coverage IDs |
+| Generator determinism | PASS | identical binary diff after two successive generations |
+| Generated-resource QA | PASS | exit 0; 146 JSON files |
+| Release-checker regression tests | PASS | 3 unittest cases |
+| Clean build | PASS | `clean build`, exit 0 |
+| GameTests | PASS | 3 required tests; all 103 generated recipe IDs |
+| Datagen/runtime load | PASS | `runData`, exit 0 |
+| Dedicated server | PASS | alpha.9 loaded and fresh `Done (` marker observed |
+| License | PASS | `LICENSE`, Gradle property and installed metadata are `All Rights Reserved` |
+| Logo | PASS | packaged PNG SHA matches owner attachment SHA |
+| Prism install | PASS | source/install hashes match; exactly one project JAR remains |
+| Fresh alpha.9 client title screen | BLOCKED | GUI recovery error after user-input interruption |
 
-## Current Installed Artifact
+## Artifact Proof
 
-Installed jar:
+- Built: `build/libs/immersive_bop_harvest-0.1.1-alpha.9.jar`
+- Installed: `C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\mods\immersive_bop_harvest-0.1.1-alpha.9.jar`
+- Size: `1607220` bytes at source and destination
+- SHA-256: `20110892574faabf2fd2c47807ade1eca38ab0b2b248ac8187bdbf779c1c61cc`
+- Remaining JARs declaring `immersive_bop_harvest`: `1`
+- Logo SHA-256: `8f88fdedc1872f35814227472d5b84c157411d0e506c6cfb5c1d75af2dcda31a`
 
-```text
-C:\Users\Emmanuel Tremblay\AppData\Roaming\PrismLauncher\instances\1.21.1 TesT play\minecraft\mods\immersive_bop_harvest-0.1.1-alpha.5.jar
-```
+## Defects Fixed In This Release Candidate
 
-SHA-256:
+1. Stale generated common item tags could survive spec removal.
+2. Wood recipe-scope IDs were not required by the coverage inventory gate.
+3. Direct-harvest modifiers lacked a native BOP loot-table ID scope.
+4. A malformed manifest ledger entry crashed the release checker.
+5. Manifest ledger paths could resolve outside the project root.
+6. The owner logo existed only outside the runtime JAR/mod-list metadata.
 
-```text
-74c61d8965598afc6646c58d739e85f83e00dcf14a2e3b677368ea480a9120f8
-```
+## Known Non-Project Warnings
 
-The installed jar metadata currently reports version `0.1.1-alpha.5`.
+Runtime output includes NeoForge/BOP spawn-placement warnings and Mixin class
+version debug messages from the dependency stack. They do not originate in this
+mod and did not produce a nonzero GameTest or datagen exit.
 
-## Blocking Gates
+## Remaining Gate
 
-License is not selected.
+1. Retry the Prism `1.21.1 TesT play` launch without concurrent user input.
+2. Capture the `Minecraft NeoForge* 1.21.1` title window with alpha.9 in the log.
+3. Set the manifest client-smoke fields from that proof.
+4. Refresh the manifest ledger and require `BETA RELEASE GATE: PASS`.
 
-Evidence:
-- `gradle.properties` contains `mod_license=LICENSE_PENDING`.
-- `LICENSE_DECISION_REQUIRED.md` is still present.
-- No `LICENSE` file exists.
-- The installed alpha.5 jar was built with `license="LICENSE_PENDING"`.
-
-Fresh alpha.5 client smoke is not complete.
-
-Evidence:
-- Prism CLI identified `1.21.1 TesT play` and opened the instance console.
-- No new Minecraft JVM spawned for the alpha.5 client-smoke attempt.
-- The Test play `latest.log` was not updated by that attempt.
-- Crash report count stayed 19, so no new crash report was written.
-
-## Work Remaining For Public Beta Release
-
-1. Owner chooses a license.
-2. Add `LICENSE`.
-3. Update `mod_license`.
-4. Rebuild, reinstall, and hash-verify a new jar after the license change.
-5. Complete fresh client title-screen smoke on the rebuilt jar.
-6. Re-run `scripts/check_beta_release_gate.py`.
-7. Update Notion and release notes with the chosen license and final proof.
-8. Tag and publish only after the checker passes.
-
-## Known Residual Risk
-
-A full gameplay/world interaction smoke was not performed in this pass. That is
-separate from generated drop coverage, which is complete for the current spec.
+Full gameplay/world interaction smoke is useful but remains a separately
+reported residual risk rather than a title-screen release-gate substitute.

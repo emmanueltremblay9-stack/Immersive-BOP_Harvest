@@ -25,6 +25,9 @@ def write_json(path: Path, value) -> None:
 
 
 def clean_generated() -> None:
+    tag_spec = load("tag_integrations.json")
+    expected_tag_paths = {tag_path(row["tag"]) for row in tag_spec["integrations"]}
+
     targets = [
         DATA / MOD_ID / "recipe" / "cutting",
         DATA / MOD_ID / "recipe" / "sawmill",
@@ -35,16 +38,23 @@ def clean_generated() -> None:
     for target in targets:
         if target.exists():
             shutil.rmtree(target)
-    for tag in [
-        DATA / "c" / "tags" / "item" / "crops" / "grain.json",
-        DATA / "c" / "tags" / "item" / "mushrooms.json",
-    ]:
-        if tag.exists():
-            tag.unlink()
+
+    # Gradle declares data/c/tags/item as generated output; remove stale tags
+    # that are no longer declared by spec/tag_integrations.json.
+    common_tag_root = DATA / "c" / "tags" / "item"
+    if common_tag_root.exists():
+        for tag in common_tag_root.rglob("*.json"):
+            if tag not in expected_tag_paths:
+                tag.unlink()
 
 
 def path_name(identifier: str) -> str:
     return identifier.split(":", 1)[1].replace("/", "_")
+
+
+def tag_path(identifier: str) -> Path:
+    namespace, path = identifier.split(":", 1)
+    return DATA / namespace / "tags" / "item" / f"{path}.json"
 
 
 def item_result(item: str, count: int = 1) -> dict:
@@ -134,6 +144,13 @@ def match_tool(tag: str) -> dict:
     return {"condition": "minecraft:match_tool", "predicate": {"items": tag}}
 
 
+def loot_table_condition(block: str) -> dict:
+    return {
+        "condition": "neoforge:loot_table_id",
+        "loot_table_id": f"biomesoplenty:blocks/{path_name(block)}",
+    }
+
+
 def tool_condition(tools: list[str]) -> dict:
     terms = [match_tool(tool) for tool in tools]
     if len(terms) == 1:
@@ -181,6 +198,7 @@ def generate_direct_harvest() -> int:
                 conditions.append({"condition": "minecraft:random_chance", "chance": rule["chance"]})
             conditions.extend(
                 [
+                    loot_table_condition(block),
                     tool_condition(rule["tools_any"]),
                     not_condition(match_tool(BOP_SHEARS_TAG)),
                     not_condition(silk_touch_condition()),
@@ -206,8 +224,7 @@ def generate_direct_harvest() -> int:
 def generate_tags() -> int:
     tag_count = 0
     for integration in load("tag_integrations.json")["integrations"]:
-        namespace, path = integration["tag"].split(":", 1)
-        write_json(DATA / namespace / "tags" / "item" / f"{path}.json", {"replace": False, "values": integration["values"]})
+        write_json(tag_path(integration["tag"]), {"replace": False, "values": integration["values"]})
         tag_count += 1
     return tag_count
 

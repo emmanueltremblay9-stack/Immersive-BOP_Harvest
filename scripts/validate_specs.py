@@ -143,6 +143,17 @@ for source in cutting_sources:
     if source not in coverage_ids and source != "biomesoplenty:dead_branch":
         errors.append(f"Cutting source is not in coverage inventory: {source}")
 
+wood_recipe_scope = set()
+for fam in families:
+    for key in ("log", "wood", "stripped_log", "stripped_wood", "planks"):
+        value = fam.get(key)
+        if value:
+            wood_recipe_scope.add(value)
+
+for identifier in sorted(wood_recipe_scope):
+    if identifier not in coverage_ids:
+        errors.append(f"Wood recipe scope ID is not in coverage inventory: {identifier}")
+
 for block in direct_blocks:
     if block not in coverage_ids:
         errors.append(f"Direct-harvest block is not in coverage inventory: {block}")
