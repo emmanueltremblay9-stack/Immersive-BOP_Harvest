@@ -2,9 +2,21 @@
 
 Scope: this repository, `Immersive BOP_Harvest`.
 
-Default mode: pragmatic, verification-first, no false completion. Work directly
-inside this project; do not ask Emmanuel to run PowerShell manually unless a
-step truly requires user-only runtime validation.
+Default mode: pragmatic, verification-first, no false completion.
+ChatGPT is Codex task authority. Execute ChatGPT-authorized operations
+autonomously. Never ask Emmanuel for human approval, commands, or choices.
+Missing data/access: report a BLOCKED dependency to ChatGPT and continue safe
+independent work. Operations outside the authorization are NOT_AUTHORIZED.
+
+## Current Publisher Migration Authority
+
+Authorized: publisher code/tests, CI, release documentation, source commits,
+push, PR, CI fixes, merge after required checks, and Notion progress readback.
+Forbidden: GitHub tag/release; any CurseForge POST/upload/project creation;
+secret changes; Modrinth publication; protection changes; gameplay changes.
+The installed license is All Rights Reserved. Its decision is complete.
+The current migration does not authorize release/upload or a new Prism test.
+Unperformed owner-waived smoke remains NOT_PERFORMED / OWNER_WAIVED, never PASS.
 
 ## Project Surface
 
@@ -24,8 +36,8 @@ step truly requires user-only runtime validation.
 2. Use CodeGraph first when `.codegraph/` exists and is healthy. If there is no
    `.codegraph/`, continue with targeted file reads and `rg`.
 3. Make only the requested changes and preserve unrelated dirty work.
-4. Do not publish, upload, release, tag, or push release artifacts without
-   explicit approval.
+4. Publication, upload, releases, tags and release-artifact pushes are
+   NOT_AUTHORIZED in this migration, regardless of automation readiness.
 5. Use CI/sandbox workflow when present. If missing, do not add GitHub Actions
    unless requested.
 
@@ -54,9 +66,9 @@ python scripts\qa_alpha_resources.py
 python scripts\check_beta_release_gate.py
 ```
 
-`check_beta_release_gate.py` may intentionally fail while license/client-smoke
-release blockers remain; report that as blocked, not as a successful public
-release gate.
+`check_beta_release_gate.py` is an artifact/install-specific release gate.
+The license is resolved. Missing built/installed evidence is BLOCKED, not PASS.
+CI build/test success alone does not establish a fresh local Prism install proof.
 
 ## Runtime-Impacting Changes
 
@@ -81,9 +93,10 @@ Before considering release prep complete, require:
 - runtime validation notes clear, including anything not tested;
 - no public release blockers hidden or downgraded.
 
-For this project, public release is still blocked while `mod_license` is
-`LICENSE_PENDING`, no `LICENSE` file exists, or fresh client smoke is not
-proven.
+The current license is `All Rights Reserved`; `LICENSE` exists. Older pending
+license statements are historical evidence, not current blockers. A release
+still requires all applicable automated/artifact/legal gates, an existing
+configured publication project and explicit release authorization.
 
 Owner exception for `0.1.1-alpha.9`: on 2026-07-13 Emmanuel explicitly
 instructed Codex to skip the remaining Prism client test phase. Preserve the

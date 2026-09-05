@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "source": "Official CurseForge project/file IDs verified 2026-09-05; bytes read in this CI run",
+  "dependencies": [
+    {
+      "modId": "biomesoplenty",
+      "version": "21.1.0.14",
+      "projectId": 220318,
+      "fileId": 8288121,
+      "slug": "biomes-o-plenty",
+      "filename": "BiomesOPlenty-neoforge-1.21.1-21.1.0.14.jar",
+      "size": 22338157,
+      "sha256": "99e4edeacfd7c9b0992144988df4f190dcb7955a7cc1e7323715505b3579bc9b",
+      "url": "https://www.curseforge.com/api/v1/mods/220318/files/8288121/download"
+    },
+    {
+      "modId": "glitchcore",
+      "version": "2.1.0.2",
+      "projectId": 955399,
+      "fileId": 8109792,
+      "slug": "glitchcore",
+      "filename": "GlitchCore-neoforge-1.21.1-2.1.0.2.jar",
+      "size": 90717,
+      "sha256": "d9ea421e7449a35cf3adc41c9f740156342b7b17a08b1be843660608af7b60f9",
+      "url": "https://www.curseforge.com/api/v1/mods/955399/files/8109792/download"
+    },
+    {
+      "modId": "terrablender",
+      "version": "4.1.0.8",
+      "projectId": 940057,
+      "fileId": 6054947,
+      "slug": "terrablender-neoforge",
+      "filename": "TerraBlender-neoforge-1.21.1-4.1.0.8.jar",
+      "size": 120364,
+      "sha256": "edb34c388fe17ea88d0a7fd11174bbf8ae8f28a4c8ce886f1bf9a5cf0ebc36b8",
+      "url": "https://www.curseforge.com/api/v1/mods/940057/files/6054947/download"
+    },
+    {
+      "modId": "farmersdelight",
+      "version": "1.3.2",
+      "projectId": 398521,
+      "fileId": 8083481,
+      "slug": "farmers-delight",
+      "filename": "FarmersDelight-1.21.1-1.3.2.jar",
+      "size": 3163042,
+      "sha256": "8ff438d62e1fce61542945faae45975d823e04bd6e73a07a121ea05ce2f03de7",
+      "url": "https://www.curseforge.com/api/v1/mods/398521/files/8083481/download"
+    },
+    {
+      "modId": "immersiveengineering",
+      "version": "12.4.2-194",
+      "projectId": 231951,
+      "fileId": 6733669,
+      "slug": "immersive-engineering",
+      "filename": "ImmersiveEngineering-1.21.1-12.4.2-194.jar",
+      "size": 14232121,
+      "sha256": "45942985a4a4aebf265b8e22a0c54a96208637471f36f2532ff5d4911322debc",
+      "url": "https://www.curseforge.com/api/v1/mods/231951/files/6733669/download"
+    }
+  ]
+}

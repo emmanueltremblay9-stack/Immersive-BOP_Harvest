@@ -1,4 +1,0 @@
-READY: assemble migration-payload-1.b64 through migration-payload-4.b64.
-Approved decompressed payload SHA-256: 1ee22077a505b4b7a38af1adfc6902e7b944b5176f543426c766455bcbf96a6d
-The staging workflow validates exact reconstructed file hashes, runs non-production tests, and creates an unreferenced commit only.
-No tag, release, CurseForge POST or secret change is authorized.

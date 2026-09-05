@@ -63,6 +63,13 @@ tasks.register("qaAlphaResources", Exec) {
     commandLine pythonExecutable.get(), "scripts/qa_alpha_resources.py"
 }
 
+tasks.register("testCurseForgePublisher", Exec) {
+    group = "verification"
+    description = "Runs fail-closed CurseForge publisher regression tests without production requests."
+    inputs.files(fileTree("tools/release") { include("*.py") })
+    commandLine pythonExecutable.get(), "-W", "error::ResourceWarning", "-m", "unittest", "discover", "-s", "tools/release", "-p", "test_*.py", "-v"
+}
+
 tasks.register("testReleaseGate", Exec) {
     group = "verification"
     description = "Runs regression tests for the deterministic beta release checker."
@@ -242,6 +249,7 @@ tasks.named("check").configure {
     dependsOn tasks.named("validateSpecs")
     dependsOn tasks.named("qaAlphaResources")
     dependsOn tasks.named("testReleaseGate")
+    dependsOn tasks.named("testCurseForgePublisher")
 }
 ["writeDataLegacyClasspath", "writeClientLegacyClasspath", "writeServerLegacyClasspath", "writeGameTestServerLegacyClasspath",
  "runData", "runClient", "runServer", "runGameTestServer"].each { taskName ->

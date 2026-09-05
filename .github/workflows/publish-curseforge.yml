@@ -1,0 +1,262 @@
+name: Publish CurseForge
+run-name: "CurseForge ${{ inputs.tag }} :: ${{ inputs.dry_run && 'dry-run' || (inputs.resume_file_id != '' && 'resume' || 'publish') }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Reviewed GitHub release tag
+        required: true
+        type: string
+      manifest_path:
+        description: Reviewed repository-relative versioned manifest (not the template)
+        required: true
+        type: string
+      dry_run:
+        description: Validate all public inputs without uploading
+        required: true
+        type: boolean
+        default: true
+      resume_file_id:
+        description: Existing CurseForge file ID to poll without uploading again
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: curseforge-${{ inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Guarded CurseForge publication
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      RUN_KEY: ${{ github.run_id }}-${{ github.run_attempt }}
+      MANIFEST_PATH: ${{ inputs.manifest_path }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+
+      - name: Initialize separate ephemeral report paths
+        shell: bash
+        run: |
+          echo "PREPARE_REPORT_PATH=$RUNNER_TEMP/curseforge-upload-intent.json" >> "$GITHUB_ENV"
+          echo "RESULT_REPORT_PATH=$RUNNER_TEMP/curseforge-publication-result.json" >> "$GITHUB_ENV"
+
+      - name: Test publisher failure and idempotency paths
+        shell: bash
+        run: python -W error::ResourceWarning -m unittest discover -s tools/release -p 'test_*.py' -v
+
+      - name: Validate public inputs without a CurseForge secret
+        id: dry-run
+        if: ${{ inputs.dry_run }}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REQUESTED_TAG: ${{ inputs.tag }}
+        run: |
+          set +e
+          python tools/release/publish_curseforge.py \
+            --dry-run \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --manifest "$MANIFEST_PATH" \
+            --tag "$REQUESTED_TAG" \
+            --report "$RESULT_REPORT_PATH"
+          status=$?
+          set -e
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          exit "$status"
+
+      - name: Prepare exact upload intent without posting
+        id: prepare
+        if: ${{ !inputs.dry_run && inputs.resume_file_id == '' }}
+        shell: bash
+        env:
+          CURSEFORGE_API_TOKEN: ${{ secrets.CURSEFORGE_API_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+          REQUESTED_TAG: ${{ inputs.tag }}
+        run: |
+          python tools/release/publish_curseforge.py \
+            --prepare-publish \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --manifest "$MANIFEST_PATH" \
+            --tag "$REQUESTED_TAG" \
+            --run-key "$RUN_KEY" \
+            --report "$PREPARE_REPORT_PATH"
+          python - <<'PY'
+          import json
+          import os
+          import re
+          import sys
+          sys.path.insert(0, "tools/release")
+          from publish_curseforge import state_artifact_prefix
+          from pathlib import Path
+
+          prepare_path = Path(os.environ["PREPARE_REPORT_PATH"])
+          report = json.loads(prepare_path.read_text(encoding="utf-8"))
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as stream:
+              if report.get("status") == "UPLOAD_INTENT_READY" and report.get("postRequired") is True:
+                  artifact_name = (
+                      f"{state_artifact_prefix(report['tag'])}{report['runKey']}--intent--"
+                      f"{report['multipartSha256'][:12]}"
+                  )
+                  stream.write("post_required=true\n")
+                  stream.write(f"artifact_name={artifact_name}\n")
+              elif report.get("status") in {
+                  "ALREADY_PUBLISHED",
+                  "RESUMED_PUBLICATION_VERIFIED",
+              } and report.get("postRequired") is False:
+                  prepare_path.replace(Path(os.environ["RESULT_REPORT_PATH"]))
+                  stream.write("post_required=false\n")
+              else:
+                  raise SystemExit("publisher returned an unsupported prepare state")
+          PY
+
+      - name: Persist upload intent before any POST
+        id: persist-intent
+        if: ${{ !inputs.dry_run && inputs.resume_file_id == '' && steps.prepare.outputs.post_required == 'true' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ steps.prepare.outputs.artifact_name }}
+          path: ${{ env.PREPARE_REPORT_PATH }}
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Submit exact persisted request once
+        id: publish
+        if: ${{ !inputs.dry_run && inputs.resume_file_id == '' && steps.prepare.outputs.post_required == 'true' && steps.persist-intent.outcome == 'success' }}
+        shell: bash
+        env:
+          CURSEFORGE_API_TOKEN: ${{ secrets.CURSEFORGE_API_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+          INTENT_ARTIFACT_ID: ${{ steps.persist-intent.outputs.artifact-id }}
+          REQUESTED_TAG: ${{ inputs.tag }}
+        run: |
+          set +e
+          python tools/release/publish_curseforge.py \
+            --publish \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --manifest "$MANIFEST_PATH" \
+            --tag "$REQUESTED_TAG" \
+            --run-key "$RUN_KEY" \
+            --intent-report "$PREPARE_REPORT_PATH" \
+            --intent-artifact-id "$INTENT_ARTIFACT_ID" \
+            --report "$RESULT_REPORT_PATH"
+          status=$?
+          set -e
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          exit "$status"
+
+      - name: Resume an accepted file without a token or second POST
+        id: resume
+        if: ${{ !inputs.dry_run && inputs.resume_file_id != '' }}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REQUESTED_TAG: ${{ inputs.tag }}
+          RESUME_FILE_ID: ${{ inputs.resume_file_id }}
+        run: |
+          [[ "$RESUME_FILE_ID" =~ ^[1-9][0-9]*$ ]]
+          set +e
+          python tools/release/publish_curseforge.py \
+            --publish \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --manifest "$MANIFEST_PATH" \
+            --tag "$REQUESTED_TAG" \
+            --resume-file-id "$RESUME_FILE_ID" \
+            --report "$RESULT_REPORT_PATH"
+          status=$?
+          set -e
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          exit "$status"
+
+      - name: Prepare sanitized result artifact metadata
+        id: result-metadata
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import re
+          import sys
+          sys.path.insert(0, "tools/release")
+          from publish_curseforge import state_artifact_prefix
+          from pathlib import Path
+
+          report_path = Path(os.environ["RESULT_REPORT_PATH"])
+          if not report_path.is_file():
+              raise SystemExit(0)
+          report = json.loads(report_path.read_text(encoding="utf-8"))
+          status = str(report.get("status", "REPORT_INVALID"))
+          if status == "UPLOAD_INTENT_READY":
+              raise SystemExit("an upload intent cannot be persisted as a publication result")
+          if not re.fullmatch(r"[A-Z0-9_]+", status):
+              status = "REPORT_INVALID"
+          file_id = report.get("fileId", 0)
+          if not isinstance(file_id, int) or file_id < 0:
+              file_id = 0
+          artifact_name = (
+              f"{state_artifact_prefix(str(report.get('tag', 'unknown')))}{os.environ['RUN_KEY']}--result--{status}--{file_id}"
+          )
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as stream:
+              stream.write(f"artifact_name={artifact_name}\n")
+          PY
+
+      - name: Persist sanitized publication result
+        if: ${{ always() && steps.result-metadata.outputs.artifact_name != '' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ steps.result-metadata.outputs.artifact_name }}
+          path: ${{ env.RESULT_REPORT_PATH }}
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Record sanitized publication verdict
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          result_path = Path(os.environ["RESULT_REPORT_PATH"])
+          prepare_path = Path(os.environ["PREPARE_REPORT_PATH"])
+          report_path = result_path if result_path.is_file() else prepare_path
+          if not report_path.is_file():
+              summary = {"status": "REPORT_NOT_PRODUCED", "verdict": "FAIL"}
+          else:
+              report = json.loads(report_path.read_text(encoding="utf-8"))
+              summary = {
+                  key: report.get(key)
+                  for key in (
+                      "status",
+                      "verdict",
+                      "fileId",
+                      "publicHashMatch",
+                      "publicSha256",
+                      "exitCode",
+                  )
+                  if key in report
+              }
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as stream:
+              stream.write("### CurseForge publication\n\n")
+              stream.write("```json\n")
+              stream.write(json.dumps(summary, indent=2, sort_keys=True))
+              stream.write("\n```\n")
+          PY

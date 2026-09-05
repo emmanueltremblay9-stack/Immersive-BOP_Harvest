@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CurseForge publisher manifest version 2",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "repository",
+    "baseline",
+    "release",
+    "curseforge"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "repository": {
+      "type": "object",
+      "required": [
+        "owner",
+        "name"
+      ],
+      "properties": {
+        "owner": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,38}$"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "baseline": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "mode"
+          ],
+          "properties": {
+            "mode": {
+              "const": "firstPublication"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "mode",
+            "previousPublicFileId"
+          ],
+          "properties": {
+            "mode": {
+              "const": "previousPublicFile"
+            },
+            "previousPublicFileId": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "release": {
+      "type": "object",
+      "required": [
+        "tag",
+        "version",
+        "modId",
+        "assetName",
+        "assetSize",
+        "assetSha256",
+        "changelogPath",
+        "changelogSha256"
+      ],
+      "properties": {
+        "tag": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_./+-]{0,199}$"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "modId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,63}$"
+        },
+        "assetName": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.+-]*\\.jar$"
+        },
+        "assetSize": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "assetSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "changelogPath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "changelogSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "curseforge": {
+      "type": "object",
+      "required": [
+        "projectId",
+        "projectSlug",
+        "displayName",
+        "releaseType",
+        "isMarkedForManualRelease",
+        "gameVersionNames",
+        "gameVersionLookupNames",
+        "uploadRelations",
+        "expectedPublicRelations"
+      ],
+      "properties": {
+        "projectId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "projectSlug": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "releaseType": {
+          "enum": [
+            "alpha",
+            "beta",
+            "release"
+          ]
+        },
+        "isMarkedForManualRelease": {
+          "type": "boolean"
+        },
+        "gameVersionNames": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "gameVersionLookupNames": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "uploadRelations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "required": [
+              "projectID",
+              "slug",
+              "type"
+            ],
+            "properties": {
+              "projectID": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "slug": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9-]*$"
+              },
+              "type": {
+                "enum": [
+                  "embeddedLibrary",
+                  "incompatible",
+                  "optionalDependency",
+                  "requiredDependency",
+                  "tool"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "expectedPublicRelations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "required": [
+              "projectId",
+              "slug",
+              "type"
+            ],
+            "properties": {
+              "projectId": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "slug": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9-]*$"
+              },
+              "type": {
+                "enum": [
+                  "EmbeddedLibrary",
+                  "Incompatible",
+                  "OptionalDependency",
+                  "RequiredDependency",
+                  "Tool",
+                  "Include"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

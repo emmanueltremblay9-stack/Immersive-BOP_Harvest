@@ -109,3 +109,15 @@ vector branding set and usage guide.
 - branding guide.
 
 See `docs/BRANDING_GUIDE.md`.
+
+## Publisher source automation (2026-09-05)
+
+Generic fail-closed publisher code and regression tests are under `tools/release`.
+See [publisher protocol](docs/CURSEFORGE_RELEASE.md) and
+[dependency classification](docs/CURSEFORGE_DEPENDENCIES.md).
+The manual publication workflow defaults to a secret-free dry run. Its presence
+is not authorization to upload. Target publication remains
+`BLOCKED_BY_MISSING_CURSEFORGE_PROJECT_CONFIGURATION`; the audited baseline has
+no GitHub Release. No production upload, tag/release, or secret change occurred
+in the source migration. Current version/license and historical owner-waived
+client evidence are unchanged.

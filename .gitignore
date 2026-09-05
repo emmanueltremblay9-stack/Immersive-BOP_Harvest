@@ -19,3 +19,6 @@ __pycache__/
 .codebase-memory/
 .understand-anything/
 src/generated/resources/.cache/
+
+# Local fail-closed publication journal; never erase to retry an unknown POST.
+.cfpub-state/
