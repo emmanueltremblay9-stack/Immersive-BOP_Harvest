@@ -33,8 +33,9 @@ datapack reload, a saved board input and a redstone-paused in-flight sawmill.
 The complete final4 local packet now passes all seven phases and the strict
 independent Python validator, exit 0. Frozen harness SHA-256 is
 `eebbe989715f5e43450bb6abaa46a699f4b43f3734f9909f128e55830bc6a193`.
-The two clients completed actual FD, IE and harvest interactions, simultaneous
-board use, tool conservation/retrieval, reconnect and clean exits. Every process
+Client-one completed actual FD, IE and harvest interactions. Both clients
+completed simultaneous board use, tool conservation/retrieval, reconnect and
+clean exits. Every process
 exited 0 without timeout or abort. Canonical S5 CI/readback remains pending.
 The partial client run reached title, created a world and passed real FD, IE
 blade and knife-harvest interactions; its disconnect wait was a harness defect,

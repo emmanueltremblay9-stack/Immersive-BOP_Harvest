@@ -237,8 +237,8 @@
     },
     {
       "path": "docs/release/STABLE_RELEASE_AUDIT.md",
-      "size_bytes": 13010,
-      "sha256": "2ce483b619fe83a018d7a77c5b2bba49eaba421d4bd2f264991b74b4f0d36792"
+      "size_bytes": 13028,
+      "sha256": "d7504fc629580d16bf51f51ebb9ce91d5a3b4f474842c3cdf342d2bcf016868b"
     },
     {
       "path": "docs/release/STABLE_RELEASE_PLAN.md",
