@@ -92,8 +92,8 @@
     },
     {
       "path": "00_START_HERE.txt",
-      "size_bytes": 1422,
-      "sha256": "461d89542bf8213bfb1db7015795d60e10323867adfb85183f7d733505a565e0"
+      "size_bytes": 1566,
+      "sha256": "31d5ea4221b12ff651d0f8f7c39a535d00aef82e2f53adec650b926e9a209b93"
     },
     {
       "path": "01_CODEX_MASTER_PROMPT.txt",
@@ -117,8 +117,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 5209,
-      "sha256": "2ee38c6c9015557faf3968d31d91960e8e41266f3cc9a56a93bf4b9018269a66"
+      "size_bytes": 6818,
+      "sha256": "68f9d82073b9fe31057ad963707eea04a7ca33b323e0f2563ff21e082e470df9"
     },
     {
       "path": "VALIDATION_REPORT.txt",
@@ -272,8 +272,8 @@
     },
     {
       "path": "scripts/refresh_project_manifest.py",
-      "size_bytes": 2191,
-      "sha256": "98eb44049559297eac140d11e5afc908315ef9fd74e5a48f2f143d6f4a29f843"
+      "size_bytes": 5854,
+      "sha256": "12f1c5d1918f71d86b120961f5a0770eab11191344ec6846e34b2f1f0ac1820d"
     },
     {
       "path": "scripts/run_server_smoke.ps1",
@@ -1086,36 +1086,6 @@
       "sha256": "50260b191339fc983acd46b4652c11464bde2bba0bc30d94161c14005315db5a"
     },
     {
-      "path": "templates/en_us.json",
-      "size_bytes": 141,
-      "sha256": "16b53535bb840ea64efc73acd64019776ae6a62e7caad6444286b42282aa37ea"
-    },
-    {
-      "path": "templates/fr_fr.json",
-      "size_bytes": 146,
-      "sha256": "48dce788b6eca371150158f40a9358421cc43fea8176c66d041c9166900041a7"
-    },
-    {
-      "path": "templates/gitignore.example",
-      "size_bytes": 140,
-      "sha256": "1f57f4371625c46e9e0bf5c5e08e208d238756143760d2e4b147ecc82421a28f"
-    },
-    {
-      "path": "templates/gradle.properties.example",
-      "size_bytes": 544,
-      "sha256": "5c428bf7fdc0dd484508e8848ebd6586e7cec64128bc00f2e9bad1c7ea014359"
-    },
-    {
-      "path": "templates/neoforge.mods.toml.example",
-      "size_bytes": 600,
-      "sha256": "1ad00a5aab8e190df67e9e22ccd9216399872bd1bead13e840d2269ef6da9d2d"
-    },
-    {
-      "path": "templates/pack.mcmeta.example",
-      "size_bytes": 123,
-      "sha256": "a6afec8b05eca092bbabae9b4f31239a238c1ec46ee3f7294f7d22b3a6996a7d"
-    },
-    {
       "path": "tools/ci/prepare_runtime.py",
       "size_bytes": 5509,
       "sha256": "a5ca4082adb2b8ac049274bcdb9bea4f1d9d42e4b45c005fea77cc26c47df763"
@@ -1129,6 +1099,11 @@
       "path": "tools/ci/test_prepare_runtime.py",
       "size_bytes": 2276,
       "sha256": "325eee6d0c69b1865fe81eac34934fad8d6b30998cfce5499d9e30b2b2b473be"
+    },
+    {
+      "path": "tools/ci/test_source_archive.py",
+      "size_bytes": 5287,
+      "sha256": "3c3e22d990746ea18d70335f59f51d9bcd571029b7aba76a955e1b29fde1f725"
     },
     {
       "path": "tools/ci/test_workflow_contract.py",
