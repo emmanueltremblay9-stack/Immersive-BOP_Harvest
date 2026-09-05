@@ -77,8 +77,8 @@
     },
     {
       "path": ".github/workflows/build.yml",
-      "size_bytes": 5670,
-      "sha256": "d2614beb2e3b6b0057731795bc788a84fbd9e2f39f289e16b9c94043cf190a73"
+      "size_bytes": 6100,
+      "sha256": "3b6ff7d91fb7ea7a38c8134324ec1195ada33fe0cafbc082d2c3f6ee08f24de1"
     },
     {
       "path": ".github/workflows/publish-curseforge.yml",
@@ -232,18 +232,18 @@
     },
     {
       "path": "docs/release/STABLE_RELEASE_AUDIT.md",
-      "size_bytes": 5280,
-      "sha256": "8a05a2c8572b8d831ed5d83540962b342f9b984f09e8fffbccc756a18ec4a2c3"
+      "size_bytes": 5716,
+      "sha256": "471f2386286a45bc8f0c2b44cdcad1e205f7a53a3f0b396e0f3e0cfa5f3b5784"
     },
     {
       "path": "docs/release/STABLE_RELEASE_PLAN.md",
-      "size_bytes": 5675,
-      "sha256": "a19712ba3bb207559283bbeffbc6342980490c6c8d0190d30be1b6b34ca6c368"
+      "size_bytes": 8164,
+      "sha256": "f01c26b0ee7d867f8e3606ed621b0b6d9c54a4c9c2c7861e718d97a34557a75d"
     },
     {
       "path": "docs/release/STABLE_RELEASE_READINESS.json",
-      "size_bytes": 22934,
-      "sha256": "83c37ab0b4e0344601b4c34e85c628253f8c4d94ffb1024a2382669dbd13ca12"
+      "size_bytes": 25041,
+      "sha256": "2111076840f87bcb0b1b121bfd649fec3ee318b24f7a770d0874a8a06a3e192c"
     },
     {
       "path": "gradle.properties",
@@ -277,8 +277,8 @@
     },
     {
       "path": "scripts/check_stable_release_gate.py",
-      "size_bytes": 11673,
-      "sha256": "9cf6f3170fcbe8d78c3c14816b9020e55b25d9439763e29cb5da14dd089908b1"
+      "size_bytes": 12564,
+      "sha256": "eaceecfd507cc141a382ac1b7fce24164b909372b7f62dbe605fb3f4f0ddcb65"
     },
     {
       "path": "scripts/generate_alpha_resources.py",
@@ -317,8 +317,8 @@
     },
     {
       "path": "scripts/test_check_stable_release_gate.py",
-      "size_bytes": 10652,
-      "sha256": "a8616614b338771d47936dd3aea74f5951856f77abc8c98834180877c978aad5"
+      "size_bytes": 11800,
+      "sha256": "dc6bd8d89386a593807cad26d981084bf94455457b2edb8de7fb54e68168d148"
     },
     {
       "path": "scripts/validate_specs.py",
@@ -1116,6 +1116,11 @@
       "sha256": "50260b191339fc983acd46b4652c11464bde2bba0bc30d94161c14005315db5a"
     },
     {
+      "path": "tools/ci/candidate_evidence.py",
+      "size_bytes": 13887,
+      "sha256": "7bdc703c0dd8042750ac3ccaa52d2b85c7bf60d40100698d700467368fc22c19"
+    },
+    {
       "path": "tools/ci/prepare_runtime.py",
       "size_bytes": 5509,
       "sha256": "a5ca4082adb2b8ac049274bcdb9bea4f1d9d42e4b45c005fea77cc26c47df763"
@@ -1124,6 +1129,11 @@
       "path": "tools/ci/runtime-dependencies.lock.json",
       "size_bytes": 2210,
       "sha256": "14564b87c62bbcd00c645d324488e9ed0a88422b90669c313a5eb5adfec166c0"
+    },
+    {
+      "path": "tools/ci/test_candidate_evidence.py",
+      "size_bytes": 8525,
+      "sha256": "cb925242c742a063fdd77f1a495e6bd6f4e1fca41f14b2dc4994880dc0550e67"
     },
     {
       "path": "tools/ci/test_manifest_consumers.py",

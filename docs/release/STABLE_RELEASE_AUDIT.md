@@ -1,5 +1,12 @@
 # Stable readiness maintenance audit — 2026-09-05
 
+Historical snapshot: PR #3 subsequently merged as
+`37e6d8225819abdd079ec55e9317b53f5f235f1f`; its main CI run `33980036391`,
+attempt 1 passed. The owner then authorized S3-A -> S4 -> S5. Current execution
+is tracked in `STABLE_RELEASE_READINESS.json.current_qualification` and the
+current section of `STABLE_RELEASE_PLAN.md`. Statements below about unavailable
+runtime authority/local Gradle describe the preceding maintenance packet.
+
 This records the pre-integration maintenance source at baseline `afc9237294faa5c86d56d8228f64ac4e1bfbb2f1`.
 Final PR/head/CI/merge readback belongs to the task's final receipts and Notion
 entry; this committed report does not claim its own future final-head CI.

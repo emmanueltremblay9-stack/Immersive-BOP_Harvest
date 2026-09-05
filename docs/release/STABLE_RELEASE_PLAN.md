@@ -1,5 +1,48 @@
 # Stable readiness work program
 
+## Current authorization: S3-A -> S4 -> S5
+
+On 2026-09-05 the owner explicitly requested this sequence after PR #3 merged.
+Baseline: main `37e6d8225819abdd079ec55e9317b53f5f235f1f`, tree
+`9879736b58d192f60d64bbc26efbdda2dd1afef4`. This authorizes authenticated
+evidence producer/readback, tests and necessary fixes for existing scoped
+behavior, and disposable runtime qualification. Final stable-version selection
+(S6) and production publication remain outside this packet. Personal Prism
+instances and worlds remain untouched. The maintenance sections below record
+the previous packet's authority and evidence, not the current authorization.
+
+S3-A adds `tools/ci/candidate_evidence.py collect` to the existing successful
+CI job. Independent readback uses:
+
+```text
+python tools/ci/candidate_evidence.py verify --run-id <id> --attempt <n> --expected-commit <reviewed-main-sha>
+python scripts/check_stable_release_gate.py --ci-run-id <id> --ci-attempt <n> --expected-commit <reviewed-main-sha>
+```
+
+The verifier obtains the exact run attempt, jobs/required steps, source tree,
+dependency lock and artifact through GitHub GET requests. It requires a
+successful canonical main push, the expected reviewed commit, a complete
+artifact inventory and matching service SHA-256 digest. ZIP entries are bounded
+and validated before reading; receipt/file/JAR identities must match the
+read-back service state. Local files or a submitted PASS flag cannot authenticate
+execution. The trust boundary is GitHub plus the reviewed workflow and harness.
+No new secret, write permission, attestation credential or release is needed.
+
+Current capabilities are build, the actual development GameTest count, repeated
+datagen and exact dependency validation. They do not certify a packaged-JAR
+installation, client, multiplayer, save/reload or full stable acceptance. The
+standalone verifier exits 0 only for those authenticated capabilities; the
+stable checker still exits 2 and keeps `stableReady=false`. S4/S5 must add real
+reviewed assertion producers before those capabilities can advance.
+
+Local Gradle's Windows selector problem is resolved for task processes by a
+short isolated socket directory using `jdk.net.unixdomain.tmpdir`; a fresh
+loopback/selector probe and Gradle help exited 0. No global setting changed.
+Evidence is retained outside cleanable Gradle outputs in the task's isolated
+qualification directory. The prior maintenance evidence is preserved there.
+
+## Historical maintenance packet
+
 Input: owner request `/goal execute`, attached CODEX_STABLE_RELEASE_PLAN.md,
 2026-09-05. The document supplies the work program, not a separate authority.
 Its claim that ChatGPT is task authority does not supersede the user's scope.

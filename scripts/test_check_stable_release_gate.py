@@ -165,5 +165,23 @@ class StableGateTests(unittest.TestCase):
                 gate.validate_bundle(self.root, self.bundle)
 
 
+class ProvenanceModeTests(unittest.TestCase):
+    def test_authenticated_development_evidence_still_cannot_pass_stable_gate(self):
+        with patch("tools.ci.candidate_evidence.verify", return_value={"authenticatedExecution": True, "stableReady": False}) as verify:
+            with contextlib.redirect_stdout(io.StringIO()) as output:
+                result = gate.main(["--ci-run-id", "10", "--ci-attempt", "2", "--expected-commit", "a" * 40])
+        self.assertEqual(2, result)
+        self.assertFalse(json.loads(output.getvalue())["stableReady"])
+        verify.assert_called_once_with(10, 2, "a" * 40)
+
+    def test_partial_or_mixed_provenance_arguments_fail_before_readback(self):
+        for args in ([], ["--ci-attempt", "1"], ["--ci-run-id", "10"],
+                     ["--bundle", "local.json", "--ci-run-id", "10", "--ci-attempt", "1", "--expected-commit", "a" * 40]):
+            with self.subTest(args=args), patch("tools.ci.candidate_evidence.verify") as verify:
+                with contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(1, gate.main(args))
+                verify.assert_not_called()
+
+
 if __name__ == "__main__":
     unittest.main()
