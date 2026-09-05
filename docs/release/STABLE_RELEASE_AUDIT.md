@@ -1,5 +1,65 @@
 # Stable readiness maintenance audit — 2026-09-05
 
+## Current S3-A/S4 follow-up
+
+S3-A PR #4 merged at `ee525b9d9406b030e17d87249219c007f97af47c`.
+Main run `33982279621` attempt 1 and archive digest were independently read
+back by the implemented verifier, exit 0. Stable CLI still returned exit 2.
+
+The S4 pre-integration alpha.10 harness has 302 scoped runtime cases plus the
+three existing GameTests. Clean compile/resources/test/build, all 305 GameTests,
+two datagen passes and 44 CI Python regressions passed locally. The final report
+contains 4,488 recorded assertions. The initial harness
+return-type mistake and independent-review findings were corrected without
+changing gameplay: copy emissions each tick, observe natural scheduled
+cascades with a sufficient capture margin, and reject omitted state/tool/tag
+assertions. Final source review passed. Final-head CI, independent merge verdict
+and raw report readback remain subsequent gates.
+
+S4 checks the actual FD board and IE process logic. Formed sawmill ports,
+installed production-loader execution, client, multiplayer and world continuity
+remain S5 obligations. No public upload, tag/Release or publisher dispatch.
+The separate harness has been verified absent from the built production JAR.
+The old alpha.9 waiver is unchanged and does not apply to alpha.10.
+
+Local S4 commands (all exit 0):
+
+```text
+gradlew.bat --no-configuration-cache clean compileJava processResources test build -PbopHarvestIsolatedDependencies=<isolated locked-dependencies> --stacktrace
+gradlew.bat --no-configuration-cache qualificationJar runGameTestServer runData -x syncRuntimeDeps -PbopHarvestIsolatedDependencies=<isolated locked-dependencies> -PbopHarvestQualificationGameDir=<disposable game directory> --stacktrace
+gradlew.bat --no-configuration-cache runData -x syncRuntimeDeps -PbopHarvestIsolatedDependencies=<isolated locked-dependencies> --stacktrace
+python -W error::ResourceWarning -m unittest discover -s tools/ci -p test_*.py -v
+git diff --exit-code -- src/main/resources src/generated/resources
+git diff --check
+```
+
+Raw commands, exits and log hashes are retained in `s4-commands.json` in the
+isolated qualification evidence directory. The session used only an isolated
+`jdk.net.unixdomain.tmpdir` property for the previously reproduced Java selector
+failure. The clean build took 2m 6s; the combined final runtime/datagen task 40s;
+the repeated datagen 15s. Java `test` was NO-SOURCE; the 305 runtime GameTests
+are a separate executed gate. The build also ran 69 publisher and 21 release
+checker regressions. No new test replaces a failed acceptance requirement.
+
+Local production JAR: `immersive_bop_harvest-0.1.1-alpha.10.jar`, 1,607,221 bytes,
+SHA-256 `ec303db83243d71eb478a61204a66fd90e4d03eb1141218aeb3d4f340e406944`.
+This is a pre-integration Windows build; it is not claimed byte-identical to a
+future CI build. The qualification classes and copied specs are excluded.
+
+```text
+AUTOMATION_ROUTE: compatibility QA -> Code Reviewer -> Reality Checker
+AGENTS_ACTUALLY_USED: s3a_review (Code Reviewer); stable_gate_design (Software Architect); baseline_review (Evidence Collector); reality_check (S3-A)
+FALLBACKS_OR_NO_DELEGATION: existing Codebase Memory plus affected source/log/report reads
+SINGLE_WRITE_OWNER: root
+EVIDENCE_GATE: PASS for local development execution; canonical S4 CI pending
+REVIEW_GATE: PASS for final S4 implementation and actual report
+REALITY_CHECK_GATE: S3-A PASS; S4 merge verdict pending
+UNRESOLVED_GAPS: canonical S4 CI/readback; S5 packaged runtime/client/server/multiplayer/save; S6 final stable version
+FINAL_VERDICT: PASS-WITH-GAPS
+```
+
+## Historical maintenance evidence
+
 Historical snapshot: PR #3 subsequently merged as
 `37e6d8225819abdd079ec55e9317b53f5f235f1f`; its main CI run `33980036391`,
 attempt 1 passed. The owner then authorized S3-A -> S4 -> S5. Current execution

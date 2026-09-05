@@ -7,7 +7,7 @@
 - **Status:** source automation validated; historical alpha.9 client smoke remains `NOT_PERFORMED / OWNER_WAIVED`
 - **Target:** Minecraft 1.21.1, NeoForge
 - **Mod ID:** `immersive_bop_harvest`
-- **Current alpha:** `0.1.1-alpha.9`
+- **Current qualification alpha:** `0.1.1-alpha.10` (unpublished)
 
 ## Stable readiness maintenance
 
@@ -17,6 +17,24 @@ See [work program](docs/release/STABLE_RELEASE_PLAN.md),
 [audit](docs/release/STABLE_RELEASE_AUDIT.md). This maintenance does not qualify
 a stable release. `python scripts/check_stable_release_gate.py --bundle <candidate.json>`
 validates bundle integrity but blocks unauthenticated runtime receipts.
+
+The owner-authorized S3-A -> S4 -> S5 follow-up adds independent CI readback
+and a separate qualification harness. The pinned dependency combination is the
+tested baseline; broader metadata ranges are not a claim that future dependency
+versions are qualified. The historical alpha.9 client waiver is preserved and
+does not apply to alpha.10.
+
+Run isolated source compatibility tests with:
+
+```text
+python tools/ci/prepare_runtime.py
+gradlew.bat --no-configuration-cache runGameTestServer -x syncRuntimeDeps --stacktrace
+```
+
+The harness is compiled from `src/qualification` and is excluded from the
+production mod JAR. Its report is `build/ci-evidence/qualification-gametests.json`.
+It verifies real Cutting Board operations and sawmill process logic; formed
+sawmill ports and packaged client/server qualification remain separate S5 gates.
 
 ## Purpose
 

@@ -2,6 +2,31 @@
 
 ## Current authorization: S3-A -> S4 -> S5
 
+S3-A execution is verified: PR #4 merged as
+`ee525b9d9406b030e17d87249219c007f97af47c`, tree
+`d2554e12f732ee13496246823afe78f156d2fd2b`. Canonical main CI run
+`33982279621`, attempt 1 passed. Independent verifier returned exit 0 and
+`AUTHENTICATED_DEVELOPMENT_EXECUTION`; the stable CLI returned exit 2 with
+`stableReady=false`. Candidate archive `9974143257` matched the service digest
+`7a31f7e00f9e0d467e812df70ee54d563987f8e4369737879b672d63c375fc0d`.
+
+S4 uses alpha.10 and a separate `src/qualification` harness. Its 302 cases cover
+64 actual Cutting Board operations, 52 sawmill inputs with per-tick emission
+and NBT-reload checks, 19 harvest tool/state/foreign-table/explosion matrices,
+162 native-loot cases, four scheduled plant cascades, and common tags. The
+three existing GameTests remain mandatory. The report validator requires exact
+case inventory and actual interaction assertions; CI readback fetches the six
+source specifications at the independently expected commit. Development mode
+and untested formed-machine ports remain explicit. The test harness is excluded
+from the production addon JAR.
+
+Observed local S4 results are pre-integration evidence. Final-head CI/review and
+main readback remain necessary; S5 must qualify installed production-loader
+bytes, real client/world behavior, multiplayer and clean save/restart. Tests of
+process logic do not establish a formed sawmill's output ports. The current
+exact five-mod lock is the qualified dependency baseline; untested future
+versions within broad metadata ranges are not implied to be supported by QA.
+
 On 2026-09-05 the owner explicitly requested this sequence after PR #3 merged.
 Baseline: main `37e6d8225819abdd079ec55e9317b53f5f235f1f`, tree
 `9879736b58d192f60d64bbc26efbdda2dd1afef4`. This authorizes authenticated

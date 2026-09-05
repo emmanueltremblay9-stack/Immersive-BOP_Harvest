@@ -3,7 +3,7 @@
   "mod_id": "immersive_bop_harvest",
   "package_type": "NeoForge playable alpha source project",
   "design_profile": "conservative_realistic_with_owner_supplied_branding",
-  "version": "0.1.1-alpha.9",
+  "version": "0.1.1-alpha.10",
   "validation": "spec-check-gametest-runData-server-install-license-logo-manifest-ledger-release-gate-pass-client-smoke-owner-waived",
   "asset_summary": {
     "vector_logos": 1,
@@ -107,8 +107,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "size_bytes": 14017,
-      "sha256": "daf5dc553b9c9d7f3619cf1015fb92f92b07edde4aba0665f534904cf0e8a65b"
+      "size_bytes": 14513,
+      "sha256": "c8fa6abe1117fb9332a341773df4d6cbd6a6d65634ce5994637375b6a39dae61"
     },
     {
       "path": "LICENSE",
@@ -117,8 +117,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 7492,
-      "sha256": "54e59d412784c5492d8b38222d259614e1a95823e62b88f62e77c32a6c4a1362"
+      "size_bytes": 8362,
+      "sha256": "b086a861b3a0b3bd5bf1b48d3d6817c041c0d8a433042e2fb1d758244df05f08"
     },
     {
       "path": "VALIDATION_REPORT.txt",
@@ -152,8 +152,8 @@
     },
     {
       "path": "build.gradle",
-      "size_bytes": 12426,
-      "sha256": "42982f1309085e7eaae68e0eb9977c1393dc81cda2daadfe85fd0e87eefe8365"
+      "size_bytes": 13571,
+      "sha256": "b27b0efe42c331f4cc661a0abd698199daf343da001e0b363b616021af0920b2"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -227,28 +227,28 @@
     },
     {
       "path": "docs/release/STABLE_ACCEPTANCE_MATRIX.md",
-      "size_bytes": 36694,
-      "sha256": "820ecad6ff76db5c35bc683c3f55eda28b6ee03d5d3a9c75f8f6e499d19b3507"
+      "size_bytes": 37529,
+      "sha256": "0bf4f1ca072fdfe1674dfc6b016587604b0a6c27a568dd853ac554b2fbef8caa"
     },
     {
       "path": "docs/release/STABLE_RELEASE_AUDIT.md",
-      "size_bytes": 5716,
-      "sha256": "471f2386286a45bc8f0c2b44cdcad1e205f7a53a3f0b396e0f3e0cfa5f3b5784"
+      "size_bytes": 9334,
+      "sha256": "6fe8f440cefe4ecde433a1e07828894dbc869214130f5b700bde8dd37ac572a8"
     },
     {
       "path": "docs/release/STABLE_RELEASE_PLAN.md",
-      "size_bytes": 8164,
-      "sha256": "f01c26b0ee7d867f8e3606ed621b0b6d9c54a4c9c2c7861e718d97a34557a75d"
+      "size_bytes": 9743,
+      "sha256": "1146650fdb78b57c28e29917f5e6b33dfe0b9866f71646a55e815657e37297eb"
     },
     {
       "path": "docs/release/STABLE_RELEASE_READINESS.json",
-      "size_bytes": 25041,
-      "sha256": "2111076840f87bcb0b1b121bfd649fec3ee318b24f7a770d0874a8a06a3e192c"
+      "size_bytes": 27582,
+      "sha256": "00a157581632fcacce6181804ab14390022b3019ef65ed88a0505aa576d04c98"
     },
     {
       "path": "gradle.properties",
-      "size_bytes": 774,
-      "sha256": "f9afbb1afbd03b67802379574129ba6ed01af11920eeffdfd6d5a69638cdd097"
+      "size_bytes": 775,
+      "sha256": "dd6d0bd30f6428744e270ecc584c0500c320f50cf2afb174284ff1e22c0eaa40"
     },
     {
       "path": "gradle/wrapper/gradle-wrapper.jar",
@@ -1116,14 +1116,39 @@
       "sha256": "50260b191339fc983acd46b4652c11464bde2bba0bc30d94161c14005315db5a"
     },
     {
+      "path": "src/qualification/java/com/oblixorprime/immersivebopharvest/qa/QualificationChecks.java",
+      "size_bytes": 27945,
+      "sha256": "74a9e6fe23938bf7b01d9e204fa2f4626ac629d9033d814dbad896aa8fff9b84"
+    },
+    {
+      "path": "src/qualification/java/com/oblixorprime/immersivebopharvest/qa/QualificationGameTests.java",
+      "size_bytes": 1141,
+      "sha256": "b37f0417714f97aa00503f101044c88dc1626b028d99a7255729f9e2316644af"
+    },
+    {
+      "path": "src/qualification/java/com/oblixorprime/immersivebopharvest/qa/QualificationMod.java",
+      "size_bytes": 2672,
+      "sha256": "eeefdb3e10606a8d44fe4358cb19040bd2b4aabb9c4122cd789d150b2c234bd6"
+    },
+    {
+      "path": "src/qualification/resources/META-INF/neoforge.mods.toml",
+      "size_bytes": 314,
+      "sha256": "966ffe9456ee350ef51cf504c8ce6b1a34143f6075b6c9b16a7445a091d8fa46"
+    },
+    {
       "path": "tools/ci/candidate_evidence.py",
-      "size_bytes": 13887,
-      "sha256": "7bdc703c0dd8042750ac3ccaa52d2b85c7bf60d40100698d700467368fc22c19"
+      "size_bytes": 14758,
+      "sha256": "8e0a61ecf04b54d5238492d8b53d51eddd9c5c57afca5527b857eaf5ff8a722a"
     },
     {
       "path": "tools/ci/prepare_runtime.py",
-      "size_bytes": 5509,
-      "sha256": "a5ca4082adb2b8ac049274bcdb9bea4f1d9d42e4b45c005fea77cc26c47df763"
+      "size_bytes": 5725,
+      "sha256": "9ffb559a2c3db733dc6fe67016d72d63617ec5014468ff223b76bff24b017dfd"
+    },
+    {
+      "path": "tools/ci/qualification_report.py",
+      "size_bytes": 5987,
+      "sha256": "67f13067249a564f2d7cabf4e110a7327ef5ffe87a94029dd57ef4a5c106e16f"
     },
     {
       "path": "tools/ci/runtime-dependencies.lock.json",
@@ -1144,6 +1169,11 @@
       "path": "tools/ci/test_prepare_runtime.py",
       "size_bytes": 2276,
       "sha256": "325eee6d0c69b1865fe81eac34934fad8d6b30998cfce5499d9e30b2b2b473be"
+    },
+    {
+      "path": "tools/ci/test_qualification_report.py",
+      "size_bytes": 5088,
+      "sha256": "58a2850c30fb4401615e58ec1f419062bf9b1cff6f3839e65f571f1e73f0d8f3"
     },
     {
       "path": "tools/ci/test_source_archive.py",

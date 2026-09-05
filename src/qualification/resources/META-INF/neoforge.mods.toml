@@ -1,0 +1,13 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="All Rights Reserved"
+[[mods]]
+modId="bop_harvest_qa"
+version="1"
+displayName="BOP Harvest Qualification Harness (test only)"
+[[dependencies.bop_harvest_qa]]
+modId="immersive_bop_harvest"
+type="required"
+versionRange="[0.1.1-alpha.9,)"
+ordering="AFTER"
+side="BOTH"

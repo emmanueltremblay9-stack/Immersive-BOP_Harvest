@@ -207,7 +207,7 @@ dependencies {
     // Example project dependency using a sister or child project:
     // implementation project(":myproject")
 
-    localRuntime files(fileTree("build/runtime-deps") { include("*.jar") })
+    localRuntime files(fileTree(providers.gradleProperty('bopHarvestIsolatedDependencies').orElse('build/runtime-deps').get()) { include("*.jar") })
 
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
@@ -287,4 +287,29 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+
+// Explicit qualification harness; never included in the production addon JAR.
+sourceSets { qualification }
+neoForge.addModdingDependenciesTo(sourceSets.qualification)
+configurations.qualificationCompileOnly.extendsFrom(configurations.localRuntime)
+tasks.named('processQualificationResources').configure {
+    from('spec') { into 'bop_qa/spec' }
+}
+tasks.register('qualificationJar', Jar) {
+    archiveBaseName = 'bop-harvest-qualification-harness'
+    archiveVersion = '1'
+    destinationDirectory = layout.buildDirectory.dir('qualification-harness')
+    from sourceSets.qualification.output
+}
+neoForge.mods {
+    bop_harvest_qa { sourceSet(sourceSets.qualification) }
+}
+neoForge.runs.configureEach {
+    loadedMods.set([neoForge.mods[project.mod_id]])
+}
+neoForge.runs.gameTestServer {
+    loadedMods.add(neoForge.mods.bop_harvest_qa)
+    gameDirectory = file(providers.gradleProperty('bopHarvestQualificationGameDir').orElse('build/qualification-gametest').get())
+    systemProperty 'bop.qa.report', file('build/ci-evidence/qualification-gametests.json').absolutePath
 }

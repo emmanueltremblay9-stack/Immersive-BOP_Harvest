@@ -80,10 +80,12 @@ def validate_bytes(item: dict, raw: bytes) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check-only', action='store_true')
+    parser.add_argument('--output-dir', type=Path, default=ROOT/'build/runtime-deps')
+    parser.add_argument('--evidence-dir', type=Path, default=ROOT/'build/ci-evidence')
     args = parser.parse_args()
     lock = json.loads((ROOT/'tools/ci/runtime-dependencies.lock.json').read_text())
     rows = validate_lock(lock, properties(ROOT/'gradle.properties'))
-    output = ROOT/'build/runtime-deps'; output.mkdir(parents=True, exist_ok=True)
+    output = args.output_dir.resolve(); output.mkdir(parents=True, exist_ok=True)
     expected = {row['filename'] for row in rows}
     if {p.name for p in output.glob('*.jar')} - expected:
         raise ValueError('Unexpected JARs exist in the isolated CI runtime directory')
@@ -99,10 +101,11 @@ def main() -> int:
             with urllib.request.urlopen(request, timeout=90) as response:
                 raw = response.read(MAX_BYTES+1)
         reports.append(validate_bytes(row,raw))
-        temporary = destination.with_suffix('.tmp')
-        temporary.write_bytes(raw); temporary.replace(destination)
+        if not args.check_only:
+            temporary = destination.with_suffix('.tmp')
+            temporary.write_bytes(raw); temporary.replace(destination)
         print('VERIFIED', row['modId'], row['version'], row['sha256'])
-    evidence = ROOT/'build/ci-evidence'; evidence.mkdir(parents=True, exist_ok=True)
+    evidence = args.evidence_dir.resolve(); evidence.mkdir(parents=True, exist_ok=True)
     (evidence/'runtime-dependencies.json').write_text(json.dumps({'status':'PASS','scope':'isolated CI runtime, not a Prism install','dependencies':reports},indent=2)+'\n')
     return 0
 

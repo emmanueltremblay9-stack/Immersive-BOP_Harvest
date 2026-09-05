@@ -1,5 +1,18 @@
 # Stable acceptance matrix
 
+Current qualification follow-up: S4 adds 302 runtime cases in the separate
+qualification harness for alpha.10; see `tools/ci/qualification_report.py` for
+the exact source-derived case inventory and required observed assertions.
+Cases map Cutting Board inputs, every wood form, direct-harvest blocks and
+the native-only coverage inventory directly to the corresponding spec IDs.
+Four plant-cascade tests wait for scheduled destruction. S3-A authenticates
+the CI execution and report against the expected source commit.
+
+The rows below retain their future **final stable candidate** meaning; alpha.10
+development tests do not satisfy packaged client/server/multiplayer, formed
+sawmill ports, save/reload or final-version obligations. The previous text about
+missing runtime authority is historical: the owner now authorized S3-A/S4/S5.
+
 Maintenance baseline: afc9237294faa5c86d56d8228f64ac4e1bfbb2f1.
 This is a requirement-to-evidence map, not a runtime result. Every row below is
 NOT_PERFORMED for a future stable candidate. Static generators/checks exist in
