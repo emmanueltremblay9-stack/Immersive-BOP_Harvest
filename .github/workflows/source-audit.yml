@@ -1,0 +1,46 @@
+name: Pinned source audit export
+on:
+  push:
+    branches: [codex/curseforge-publisher-migration]
+    paths: [.github/workflows/source-audit.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: pinned-source-audit
+  cancel-in-progress: false
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Read pinned target source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: be5390c1a1c7d2765a4bf9c2121223e18be291e5
+          path: target
+          persist-credentials: false
+      - name: Read pinned reference source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: emmanueltremblay9-stack/Immersive-Engineer-Decor-Controls-Tool-Reforged
+          ref: de97f77ccc65351f13b325ef7939e1878ad681f8
+          path: reference
+          persist-credentials: false
+      - name: Archive tracked source only without credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C target rev-parse HEAD)" = be5390c1a1c7d2765a4bf9c2121223e18be291e5
+          test "$(git -C reference rev-parse HEAD)" = de97f77ccc65351f13b325ef7939e1878ad681f8
+          mkdir source-export
+          git -C target archive --format=zip HEAD > source-export/target-source.zip
+          git -C reference archive --format=zip HEAD > source-export/reference-source.zip
+          (cd source-export && sha256sum target-source.zip reference-source.zip > source-hashes.txt)
+      - name: Retain source inputs for migration audit
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: source-audit-be5390c-de97f77
+          path: source-export/
+          if-no-files-found: error
+          retention-days: 7
