@@ -611,5 +611,63 @@
   "required_relations": 5,
   "project_endpoint_readback": "403; exact file ID/project verified by file endpoint",
   "secret_presence": "NOT_VERIFIED",
-  "control_channel": "This Codex task; separate ChatGPT dispatch NOT_PERFORMED / BLOCKED_BY_MISSING_CODEX_REPORT_CHANNEL"
+  "control_channel": "This Codex task; separate ChatGPT dispatch NOT_PERFORMED / BLOCKED_BY_MISSING_CODEX_REPORT_CHANNEL",
+  "record_scope": "Historical maintenance packet; current follow-up is current_qualification below",
+  "current_qualification": {
+    "packet": "qualification-20260905",
+    "baseline": "37e6d8225819abdd079ec55e9317b53f5f235f1f",
+    "tree": "9879736b58d192f60d64bbc26efbdda2dd1afef4",
+    "authority": "Owner: The correct next Codex action is now S3-A -> S4 -> S5",
+    "version": "0.1.1-alpha.9",
+    "single_write_owner": "root",
+    "tasks": {
+      "S3-A": {
+        "status": "IN_PROGRESS",
+        "scope": "Authenticated producer/readback; canonical main CI required",
+        "evidence": "tools/ci/candidate_evidence.py",
+        "blocker": null
+      },
+      "S4": {
+        "status": "PLANNED",
+        "scope": "Existing spec behavior tests and necessary fixes",
+        "depends_on": [
+          "S3-A"
+        ]
+      },
+      "S5": {
+        "status": "PLANNED",
+        "scope": "Disposable exact-JAR client/server/multiplayer/save qualification",
+        "depends_on": [
+          "S4"
+        ]
+      },
+      "S6": {
+        "status": "NOT_AUTHORIZED",
+        "scope": "Final stable version selection"
+      },
+      "S8": {
+        "status": "NOT_AUTHORIZED",
+        "scope": "Production publication"
+      }
+    },
+    "local_gradle": "Session-local isolated socket directory: selector probe and Gradle help exit 0",
+    "four_readiness": {
+      "SOURCE_READY": "BLOCKED",
+      "RUNTIME_READY": "BLOCKED",
+      "ARTIFACT_READY": "BLOCKED",
+      "PUBLICATION_READY": "BLOCKED"
+    },
+    "historical_alpha9_client": "NOT_PERFORMED / OWNER_WAIVED",
+    "production_upload_count": 0,
+    "local_validation": {
+      "publisher_tests": 69,
+      "ci_tests": 40,
+      "beta_and_stable_tests": 21,
+      "spec_and_resource_checks": "PASS; two deterministic generations; resource diff and whitespace exit 0",
+      "manifest": "226 files verified; refreshed after intentional staging",
+      "final_head_ci": "PENDING",
+      "remote_producer_readback": "PENDING",
+      "local_command_ledger": "s3a-commands.json; s3a-reviewed-tests.log in isolated qualification evidence"
+    }
+  }
 }

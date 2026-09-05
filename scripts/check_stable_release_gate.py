@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Validate a candidate bundle read-only; unauthenticated runtime remains blocked.
 
-This maintenance implementation has no trusted runtime producer. It deliberately
-cannot certify stable readiness from local JSON or log markers, even when all
-bundle integrity checks pass. No production or runtime operation is performed.
+Local bundle integrity cannot certify execution. CI mode independently reads
+GitHub provenance for the reviewed development capabilities, while still keeping
+stable readiness false. No production write or Minecraft launch is performed.
 """
 from __future__ import annotations
 
@@ -191,9 +191,22 @@ def validate_bundle(root: Path, bundle: dict) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--bundle", type=Path, required=True)
+    parser.add_argument("--bundle", type=Path)
+    parser.add_argument("--ci-run-id", type=int)
+    parser.add_argument("--ci-attempt", type=int)
+    parser.add_argument("--expected-commit")
     args = parser.parse_args(argv)
     try:
+        if args.ci_run_id is not None:
+            require(args.bundle is None and args.ci_attempt is not None and args.expected_commit is not None,
+                    "CI provenance mode requires run/attempt/expected commit and no local bundle")
+            if str(ROOT) not in sys.path:
+                sys.path.insert(0, str(ROOT))
+            from tools.ci.candidate_evidence import verify
+            print(json.dumps(verify(args.ci_run_id, args.ci_attempt, args.expected_commit), indent=2))
+            return 2  # Authenticated capabilities are not a final stable candidate.
+        require(args.bundle is not None and args.ci_attempt is None and args.expected_commit is None,
+                "Supply a bundle or the complete independent CI run identity")
         validate_bundle(ROOT, read_json(args.bundle))
     except (OSError, ValueError, KeyError, TypeError, zipfile.BadZipFile, subprocess.SubprocessError) as exc:
         print(json.dumps({"bundleIntegrity": "FAIL", "stableReady": False, "status": "BLOCKED_INVALID_OR_MISSING_CANDIDATE_EVIDENCE", "reason": str(exc)}))
