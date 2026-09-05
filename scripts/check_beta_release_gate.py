@@ -7,6 +7,12 @@ import json
 import re
 import sys
 import zipfile
+import subprocess
+
+if __package__:
+    from .refresh_project_manifest import check_file_ledger, reject_duplicate_keys
+else:
+    from refresh_project_manifest import check_file_ledger, reject_duplicate_keys
 from pathlib import Path
 
 
@@ -72,70 +78,13 @@ def installed_jars_for_mod(mods_dir: Path, mod_id: str) -> list[Path]:
     return matches
 
 
-def resolve_manifest_file_path(rel_path: str) -> Path | None:
-    path = Path(rel_path)
-    if path.is_absolute():
-        return None
-
-    root = ROOT.resolve()
-    candidate = (root / path).resolve()
-    try:
-        candidate.relative_to(root)
-    except ValueError:
-        return None
-    return candidate
-
-
 def validate_manifest_file_ledger(manifest: dict, failures: list[str]) -> None:
-    entries = manifest.get("files")
-    if not isinstance(entries, list):
-        check(False, "PROJECT_MANIFEST.json has a file ledger", "PROJECT_MANIFEST.json files ledger is missing or invalid", failures)
-        return
-
-    seen_paths: set[str] = set()
-    ledger_failures: list[str] = []
-    for index, entry in enumerate(entries):
-        if not isinstance(entry, dict):
-            ledger_failures.append(f"manifest file entry {index} is not an object")
-            continue
-
-        rel_path = entry.get("path")
-        if not isinstance(rel_path, str) or not rel_path:
-            ledger_failures.append("manifest file entry is missing a path")
-            continue
-        if rel_path == "PROJECT_MANIFEST.json":
-            ledger_failures.append("PROJECT_MANIFEST.json must not list itself in its own files ledger")
-            continue
-        if rel_path in seen_paths:
-            ledger_failures.append(f"manifest file path appears more than once: {rel_path}")
-            continue
-        seen_paths.add(rel_path)
-
-        file_path = resolve_manifest_file_path(rel_path)
-        if file_path is None:
-            ledger_failures.append(f"manifest file path escapes project root: {rel_path}")
-            continue
-        if not file_path.is_file():
-            ledger_failures.append(f"manifest file is missing: {rel_path}")
-            continue
-
-        expected_size = entry.get("size_bytes")
-        actual_size = file_path.stat().st_size
-        if expected_size != actual_size:
-            ledger_failures.append(f"{rel_path} size does not match manifest")
-
-        expected_sha = entry.get("sha256")
-        actual_sha = sha256_file(file_path)
-        if expected_sha != actual_sha:
-            ledger_failures.append(f"{rel_path} SHA-256 does not match manifest")
-
-    if ledger_failures:
-        print("BLOCKER: PROJECT_MANIFEST.json file ledger has mismatches")
-        for failure in ledger_failures:
-            print(f"  - {failure}")
-        failures.extend(ledger_failures)
+    try:
+        count = check_file_ledger(manifest, ROOT)
+    except (OSError, UnicodeError, ValueError, subprocess.SubprocessError) as exc:
+        check(False, "source ledger matches", str(exc), failures)
     else:
-        print(f"PASS: PROJECT_MANIFEST.json file ledger matches current files ({len(entries)} entries)")
+        print(f"PASS: PROJECT_MANIFEST.json canonical source ledger matches ({count} entries)")
 
 
 def validate_live_client_gate(build: dict, failures: list[str]) -> None:
@@ -186,7 +135,7 @@ def main() -> int:
     props_path = ROOT / "gradle.properties"
     manifest_path = ROOT / "PROJECT_MANIFEST.json"
     props = read_properties(props_path)
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"), object_pairs_hook=reject_duplicate_keys)
     build = manifest["build_summary"]
 
     mod_id = manifest.get("mod_id", "")

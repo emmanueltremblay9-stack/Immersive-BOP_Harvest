@@ -1,0 +1,615 @@
+{
+  "schemaVersion": 1,
+  "packet": "maintenance-20260905",
+  "baseline": "afc9237294faa5c86d56d8228f64ac4e1bfbb2f1",
+  "version": "0.1.1-alpha.9",
+  "four_readiness": {
+    "SOURCE_READY": "BLOCKED",
+    "RUNTIME_READY": "BLOCKED",
+    "ARTIFACT_READY": "BLOCKED",
+    "PUBLICATION_READY": "BLOCKED"
+  },
+  "scope": "Maintenance implementation only, not a stable candidate",
+  "tasks": [
+    {
+      "id": "S0",
+      "title": "Baseline and acceptance inventory",
+      "scope_authority": "Maintenance publisher/CI/evidence/docs only",
+      "dependencies": [],
+      "owner": "root",
+      "input_commit": "afc9237294faa5c86d56d8228f64ac4e1bfbb2f1",
+      "input_tree": "108b2887df3a4dbe3f1267d3ed5a5335130479e4",
+      "candidate_jar_sha256": null,
+      "dependency_lock_sha256": "14564b87c62bbcd00c645d324488e9ed0a88422b90669c313a5eb5adfec166c0",
+      "commands": [],
+      "evidence": "build/release-evidence/maintenance-20260905/commands.json",
+      "review": "Independent Code Reviewer: identity issue corrected; duplicate Gradle test arguments corrected; final CI pending",
+      "status": "PASS",
+      "blocker": null,
+      "next_action": "Preserve baseline and historical waiver"
+    },
+    {
+      "id": "S1",
+      "title": "Shared canonical ledger",
+      "scope_authority": "Maintenance publisher/CI/evidence/docs only",
+      "dependencies": [
+        "S0"
+      ],
+      "owner": "root",
+      "input_commit": "afc9237294faa5c86d56d8228f64ac4e1bfbb2f1",
+      "input_tree": "108b2887df3a4dbe3f1267d3ed5a5335130479e4",
+      "candidate_jar_sha256": null,
+      "dependency_lock_sha256": "14564b87c62bbcd00c645d324488e9ed0a88422b90669c313a5eb5adfec166c0",
+      "commands": [
+        {
+          "command": [
+            "python",
+            "-W",
+            "error::ResourceWarning",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tools/release",
+            "-p",
+            "test_*.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:56:36.633800+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-00.log",
+          "sha256": "8de63099f7de0fd734e067aa52e3938557604ba2da19eff7c62042b1e4d3f97a"
+        },
+        {
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tools/ci",
+            "-p",
+            "test_*.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:15.941250+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-01.log",
+          "sha256": "4310b7dcf35057b3cf8979624835362d6393e147cf222d86fba7454de7edc38f"
+        },
+        {
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "scripts/test_check_beta_release_gate.py",
+            "scripts/test_check_stable_release_gate.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:20.433404+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-02.log",
+          "sha256": "f31f4cef835f3ef08536dbdaa2766e79b17d45f241d0f3ab7443757ff390e7ba"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/validate_specs.py"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:36.677063+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-03.log",
+          "sha256": "3580e7accc11d2e3088e5ab99b5849f128d69a396658b788cc1d4ab66a12ac95"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/generate_alpha_resources.py"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:36.783912+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-04.log",
+          "sha256": "089d8a004713fb1e1c2223cdf38a76195e474d01d359d5f678d4df1b3cfcf438"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/generate_alpha_resources.py"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:37.018323+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-05.log",
+          "sha256": "089d8a004713fb1e1c2223cdf38a76195e474d01d359d5f678d4df1b3cfcf438"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/qa_alpha_resources.py"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:37.246006+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-06.log",
+          "sha256": "722d00137c3a2e824dde7b99b0c7bc930bf9f12b291825f5c8e9ba0880a24ccc"
+        },
+        {
+          "command": [
+            "git",
+            "diff",
+            "--exit-code",
+            "--",
+            "src/main/resources",
+            "src/generated/resources"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:37.721025+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-07.log",
+          "sha256": "2c2e4d11c4c201042a0ba4aee31e1e543845a7f2af70603fd9a237d45b22668d"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/check_stable_release_gate.py",
+            "--bundle",
+            "build/release-evidence/maintenance-20260905/candidate-not-created.json"
+          ],
+          "exit_code": 1,
+          "started": "2026-09-05T16:57:37.812488+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-08.log",
+          "sha256": "1daf10e119ee1a6e844fb7e6c97b06ba933518c13eff04f1cfd8722ac9430866"
+        },
+        {
+          "command": [
+            "git",
+            "diff",
+            "--check"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:37.981675+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-09.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "evidence": "build/release-evidence/maintenance-20260905/commands.json",
+      "review": "Independent Code Reviewer: identity issue corrected; duplicate Gradle test arguments corrected; final CI pending",
+      "status": "PASS",
+      "blocker": null,
+      "next_action": "Verify Windows and Linux final-head CI"
+    },
+    {
+      "id": "S2",
+      "title": "Explicit publisher transition",
+      "scope_authority": "Maintenance publisher/CI/evidence/docs only",
+      "dependencies": [
+        "S0"
+      ],
+      "owner": "root",
+      "input_commit": "afc9237294faa5c86d56d8228f64ac4e1bfbb2f1",
+      "input_tree": "108b2887df3a4dbe3f1267d3ed5a5335130479e4",
+      "candidate_jar_sha256": null,
+      "dependency_lock_sha256": "14564b87c62bbcd00c645d324488e9ed0a88422b90669c313a5eb5adfec166c0",
+      "commands": [
+        {
+          "command": [
+            "python",
+            "-W",
+            "error::ResourceWarning",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tools/release",
+            "-p",
+            "test_*.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:56:36.633800+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-00.log",
+          "sha256": "8de63099f7de0fd734e067aa52e3938557604ba2da19eff7c62042b1e4d3f97a"
+        },
+        {
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tools/ci",
+            "-p",
+            "test_*.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:15.941250+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-01.log",
+          "sha256": "4310b7dcf35057b3cf8979624835362d6393e147cf222d86fba7454de7edc38f"
+        },
+        {
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "scripts/test_check_beta_release_gate.py",
+            "scripts/test_check_stable_release_gate.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:20.433404+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-02.log",
+          "sha256": "f31f4cef835f3ef08536dbdaa2766e79b17d45f241d0f3ab7443757ff390e7ba"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/validate_specs.py"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:36.677063+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-03.log",
+          "sha256": "3580e7accc11d2e3088e5ab99b5849f128d69a396658b788cc1d4ab66a12ac95"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/generate_alpha_resources.py"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:36.783912+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-04.log",
+          "sha256": "089d8a004713fb1e1c2223cdf38a76195e474d01d359d5f678d4df1b3cfcf438"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/generate_alpha_resources.py"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:37.018323+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-05.log",
+          "sha256": "089d8a004713fb1e1c2223cdf38a76195e474d01d359d5f678d4df1b3cfcf438"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/qa_alpha_resources.py"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:37.246006+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-06.log",
+          "sha256": "722d00137c3a2e824dde7b99b0c7bc930bf9f12b291825f5c8e9ba0880a24ccc"
+        },
+        {
+          "command": [
+            "git",
+            "diff",
+            "--exit-code",
+            "--",
+            "src/main/resources",
+            "src/generated/resources"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:37.721025+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-07.log",
+          "sha256": "2c2e4d11c4c201042a0ba4aee31e1e543845a7f2af70603fd9a237d45b22668d"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/check_stable_release_gate.py",
+            "--bundle",
+            "build/release-evidence/maintenance-20260905/candidate-not-created.json"
+          ],
+          "exit_code": 1,
+          "started": "2026-09-05T16:57:37.812488+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-08.log",
+          "sha256": "1daf10e119ee1a6e844fb7e6c97b06ba933518c13eff04f1cfd8722ac9430866"
+        },
+        {
+          "command": [
+            "git",
+            "diff",
+            "--check"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:37.981675+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-09.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "evidence": "build/release-evidence/maintenance-20260905/commands.json",
+      "review": "Independent Code Reviewer: identity issue corrected; duplicate Gradle test arguments corrected; final CI pending",
+      "status": "PASS",
+      "blocker": null,
+      "next_action": "Verify final-head offline safety tests"
+    },
+    {
+      "id": "S3",
+      "title": "Stable bundle integrity",
+      "scope_authority": "Maintenance publisher/CI/evidence/docs only",
+      "dependencies": [
+        "S0"
+      ],
+      "owner": "root",
+      "input_commit": "afc9237294faa5c86d56d8228f64ac4e1bfbb2f1",
+      "input_tree": "108b2887df3a4dbe3f1267d3ed5a5335130479e4",
+      "candidate_jar_sha256": null,
+      "dependency_lock_sha256": "14564b87c62bbcd00c645d324488e9ed0a88422b90669c313a5eb5adfec166c0",
+      "commands": [
+        {
+          "command": [
+            "python",
+            "-W",
+            "error::ResourceWarning",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tools/release",
+            "-p",
+            "test_*.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:56:36.633800+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-00.log",
+          "sha256": "8de63099f7de0fd734e067aa52e3938557604ba2da19eff7c62042b1e4d3f97a"
+        },
+        {
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tools/ci",
+            "-p",
+            "test_*.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:15.941250+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-01.log",
+          "sha256": "4310b7dcf35057b3cf8979624835362d6393e147cf222d86fba7454de7edc38f"
+        },
+        {
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "scripts/test_check_beta_release_gate.py",
+            "scripts/test_check_stable_release_gate.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:20.433404+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-02.log",
+          "sha256": "f31f4cef835f3ef08536dbdaa2766e79b17d45f241d0f3ab7443757ff390e7ba"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/validate_specs.py"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:36.677063+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-03.log",
+          "sha256": "3580e7accc11d2e3088e5ab99b5849f128d69a396658b788cc1d4ab66a12ac95"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/generate_alpha_resources.py"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:36.783912+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-04.log",
+          "sha256": "089d8a004713fb1e1c2223cdf38a76195e474d01d359d5f678d4df1b3cfcf438"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/generate_alpha_resources.py"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:37.018323+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-05.log",
+          "sha256": "089d8a004713fb1e1c2223cdf38a76195e474d01d359d5f678d4df1b3cfcf438"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/qa_alpha_resources.py"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:37.246006+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-06.log",
+          "sha256": "722d00137c3a2e824dde7b99b0c7bc930bf9f12b291825f5c8e9ba0880a24ccc"
+        },
+        {
+          "command": [
+            "git",
+            "diff",
+            "--exit-code",
+            "--",
+            "src/main/resources",
+            "src/generated/resources"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:37.721025+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-07.log",
+          "sha256": "2c2e4d11c4c201042a0ba4aee31e1e543845a7f2af70603fd9a237d45b22668d"
+        },
+        {
+          "command": [
+            "python",
+            "scripts/check_stable_release_gate.py",
+            "--bundle",
+            "build/release-evidence/maintenance-20260905/candidate-not-created.json"
+          ],
+          "exit_code": 1,
+          "started": "2026-09-05T16:57:37.812488+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-08.log",
+          "sha256": "1daf10e119ee1a6e844fb7e6c97b06ba933518c13eff04f1cfd8722ac9430866"
+        },
+        {
+          "command": [
+            "git",
+            "diff",
+            "--check"
+          ],
+          "exit_code": 0,
+          "started": "2026-09-05T16:57:37.981675+00:00",
+          "log": "build/release-evidence/maintenance-20260905/check-09.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "evidence": "build/release-evidence/maintenance-20260905/commands.json",
+      "review": "Independent Code Reviewer: identity issue corrected; duplicate Gradle test arguments corrected; final CI pending",
+      "status": "PASS",
+      "blocker": null,
+      "next_action": "Keep stableReady false without authenticated producer"
+    },
+    {
+      "id": "S3-A",
+      "title": "Authenticated runtime provenance",
+      "scope_authority": "Expanded scope not granted",
+      "dependencies": [
+        "S3"
+      ],
+      "owner": "root",
+      "input_commit": "afc9237294faa5c86d56d8228f64ac4e1bfbb2f1",
+      "input_tree": "108b2887df3a4dbe3f1267d3ed5a5335130479e4",
+      "candidate_jar_sha256": null,
+      "dependency_lock_sha256": "14564b87c62bbcd00c645d324488e9ed0a88422b90669c313a5eb5adfec166c0",
+      "commands": [],
+      "evidence": "build/release-evidence/maintenance-20260905/commands.json",
+      "review": "Independent Code Reviewer: identity issue corrected; duplicate Gradle test arguments corrected; final CI pending",
+      "status": "BLOCKED",
+      "blocker": "BLOCKED_UNTRUSTED_RUNTIME_PROVENANCE",
+      "next_action": "Design and qualify authorized trusted runtime producer/readback"
+    },
+    {
+      "id": "S4",
+      "title": "Full compatibility QA",
+      "scope_authority": "Expanded scope not granted",
+      "dependencies": [
+        "S3-A"
+      ],
+      "owner": "root",
+      "input_commit": "afc9237294faa5c86d56d8228f64ac4e1bfbb2f1",
+      "input_tree": "108b2887df3a4dbe3f1267d3ed5a5335130479e4",
+      "candidate_jar_sha256": null,
+      "dependency_lock_sha256": "14564b87c62bbcd00c645d324488e9ed0a88422b90669c313a5eb5adfec166c0",
+      "commands": [],
+      "evidence": "build/release-evidence/maintenance-20260905/commands.json",
+      "review": "Independent Code Reviewer: identity issue corrected; duplicate Gradle test arguments corrected; final CI pending",
+      "status": "NOT_AUTHORIZED",
+      "blocker": "BLOCKED_MISSING_EXPANDED_GAMEPLAY_AUTHORITY",
+      "next_action": "Authorize scoped semantic tests and necessary fixes"
+    },
+    {
+      "id": "S5",
+      "title": "Disposable runtime qualification",
+      "scope_authority": "Expanded scope not granted",
+      "dependencies": [
+        "S4"
+      ],
+      "owner": "root",
+      "input_commit": "afc9237294faa5c86d56d8228f64ac4e1bfbb2f1",
+      "input_tree": "108b2887df3a4dbe3f1267d3ed5a5335130479e4",
+      "candidate_jar_sha256": null,
+      "dependency_lock_sha256": "14564b87c62bbcd00c645d324488e9ed0a88422b90669c313a5eb5adfec166c0",
+      "commands": [],
+      "evidence": "build/release-evidence/maintenance-20260905/commands.json",
+      "review": "Independent Code Reviewer: identity issue corrected; duplicate Gradle test arguments corrected; final CI pending",
+      "status": "NOT_AUTHORIZED",
+      "blocker": "BLOCKED_MISSING_EXPANDED_RUNTIME_AUTHORITY",
+      "next_action": "Authorize isolated exact-JAR client/server/multiplayer/save tests"
+    },
+    {
+      "id": "S6",
+      "title": "Final version candidate",
+      "scope_authority": "Expanded scope not granted",
+      "dependencies": [
+        "S4",
+        "S5"
+      ],
+      "owner": "root",
+      "input_commit": "afc9237294faa5c86d56d8228f64ac4e1bfbb2f1",
+      "input_tree": "108b2887df3a4dbe3f1267d3ed5a5335130479e4",
+      "candidate_jar_sha256": null,
+      "dependency_lock_sha256": "14564b87c62bbcd00c645d324488e9ed0a88422b90669c313a5eb5adfec166c0",
+      "commands": [],
+      "evidence": "build/release-evidence/maintenance-20260905/commands.json",
+      "review": "Independent Code Reviewer: identity issue corrected; duplicate Gradle test arguments corrected; final CI pending",
+      "status": "NOT_AUTHORIZED",
+      "blocker": "BLOCKED_MISSING_CANDIDATE_VERSION_AUTHORITY",
+      "next_action": "Resolve stable version and build exact qualified candidate"
+    },
+    {
+      "id": "S7",
+      "title": "Source review and integration",
+      "scope_authority": "Maintenance publisher/CI/evidence/docs only",
+      "dependencies": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "owner": "root",
+      "input_commit": "afc9237294faa5c86d56d8228f64ac4e1bfbb2f1",
+      "input_tree": "108b2887df3a4dbe3f1267d3ed5a5335130479e4",
+      "candidate_jar_sha256": null,
+      "dependency_lock_sha256": "14564b87c62bbcd00c645d324488e9ed0a88422b90669c313a5eb5adfec166c0",
+      "commands": [],
+      "evidence": "build/release-evidence/maintenance-20260905/commands.json",
+      "review": "Independent Code Reviewer: identity issue corrected; duplicate Gradle test arguments corrected; final CI pending",
+      "status": "IN_PROGRESS",
+      "blocker": null,
+      "next_action": "Final-head CI then gate-controlled merge and readback"
+    },
+    {
+      "id": "S8",
+      "title": "Production publication",
+      "scope_authority": "Expanded scope not granted",
+      "dependencies": [
+        "S6"
+      ],
+      "owner": "root",
+      "input_commit": "afc9237294faa5c86d56d8228f64ac4e1bfbb2f1",
+      "input_tree": "108b2887df3a4dbe3f1267d3ed5a5335130479e4",
+      "candidate_jar_sha256": null,
+      "dependency_lock_sha256": "14564b87c62bbcd00c645d324488e9ed0a88422b90669c313a5eb5adfec166c0",
+      "commands": [],
+      "evidence": "build/release-evidence/maintenance-20260905/commands.json",
+      "review": "Independent Code Reviewer: identity issue corrected; duplicate Gradle test arguments corrected; final CI pending",
+      "status": "NOT_AUTHORIZED",
+      "blocker": "BLOCKED_MISSING_PUBLICATION_AUTHORITY_AND_PREREQUISITES",
+      "next_action": "Separate authority, canonical Release and reviewed publication manifest; exact relations"
+    }
+  ],
+  "local_tests": {
+    "publisher": 69,
+    "ci": 29,
+    "beta_and_stable": 19
+  },
+  "local_gradle": {
+    "command": [
+      ".\\gradlew.bat",
+      "--no-configuration-cache",
+      "help",
+      "--stacktrace"
+    ],
+    "exit_code": 1,
+    "status": "BLOCKED_LOCAL_GRADLE_LOOPBACK",
+    "log": "build/release-evidence/maintenance-20260905/gradle-help.log"
+  },
+  "historical_client_smoke": "NOT_PERFORMED / OWNER_WAIVED",
+  "production_upload_count": 0,
+  "publication_workflow_dispatch_count": 0,
+  "curseforge_project_configuration": "RESOLVED",
+  "current_public_relations": 0,
+  "required_relations": 5,
+  "project_endpoint_readback": "403; exact file ID/project verified by file endpoint",
+  "secret_presence": "NOT_VERIFIED",
+  "control_channel": "This Codex task; separate ChatGPT dispatch NOT_PERFORMED / BLOCKED_BY_MISSING_CODEX_REPORT_CHANNEL"
+}

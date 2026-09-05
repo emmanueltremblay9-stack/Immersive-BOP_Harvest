@@ -9,6 +9,15 @@
 - **Mod ID:** `immersive_bop_harvest`
 - **Current alpha:** `0.1.1-alpha.9`
 
+## Stable readiness maintenance
+
+See [work program](docs/release/STABLE_RELEASE_PLAN.md),
+[acceptance matrix](docs/release/STABLE_ACCEPTANCE_MATRIX.md),
+[readiness ledger](docs/release/STABLE_RELEASE_READINESS.json) and
+[audit](docs/release/STABLE_RELEASE_AUDIT.md). This maintenance does not qualify
+a stable release. `python scripts/check_stable_release_gate.py --bundle <candidate.json>`
+validates bundle integrity but blocks unauthenticated runtime receipts.
+
 ## Purpose
 
 A conservative compatibility addon connecting Biomes O' Plenty vegetation and wood to Farmer's Delight and Immersive Engineering.

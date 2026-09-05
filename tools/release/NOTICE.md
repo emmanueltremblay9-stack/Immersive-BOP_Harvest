@@ -15,3 +15,6 @@ Changes: generic identity, strict manifest schema 2, first-publication mode,
 explicit zero relations, collision-resistant tag state, same-run POST journal,
 accepted-file checkpoint, strict TOML identity, redirect safety and regressions.
 PR #14 exact-tag history isolation and PR #6 token-free resume are retained.
+
+Maintenance addition: schema 3 explicit historical release type/game labels,
+with unchanged legacy and target relation gates.
