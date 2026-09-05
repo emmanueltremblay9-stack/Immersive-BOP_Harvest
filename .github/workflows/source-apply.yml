@@ -39,7 +39,10 @@ jobs:
           mkdir evidence
           python - <<'PY'
           import base64,gzip,hashlib,json,pathlib,subprocess
-          raw=gzip.decompress(base64.b64decode(pathlib.Path('inputs/migration-payload.json.gz.b64').read_text(),validate=False))
+          parts=[pathlib.Path(f'inputs/migration-payload-{i}.b64').read_text().strip() for i in range(1,5)]
+          # Repair one identified transfer transcription; the approved payload hash below remains mandatory.
+          parts[1]=parts[1].replace('W4dtlqG1','W4dtLqG1')
+          raw=gzip.decompress(base64.b64decode(''.join(parts),validate=True))
           assert len(raw)<1000000
           assert hashlib.sha256(raw).hexdigest()=='1ee22077a505b4b7a38af1adfc6902e7b944b5176f543426c766455bcbf96a6d', 'unreviewed migration input'
           payload=json.loads(raw)
