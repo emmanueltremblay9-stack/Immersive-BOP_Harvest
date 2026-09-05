@@ -11,6 +11,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "PROJECT_MANIFEST.json"
+BINARY_SUFFIXES = frozenset({".jar", ".png", ".nbt"})
 
 
 def read_properties(path: Path) -> dict[str, str]:
@@ -67,8 +68,17 @@ def tracked_paths() -> list[Path]:
     return sorted(paths, key=lambda path: path.as_posix())
 
 
-def file_entry(relative: Path) -> dict[str, str | int]:
+def canonical_source_bytes(relative: Path) -> bytes:
     raw = source_path(relative.as_posix()).read_bytes()
+    if relative.suffix.lower() in BINARY_SUFFIXES or b"\x00" in raw:
+        return raw
+    # Match .gitattributes text=eol=lf so the ledger is portable across
+    # Windows worktrees and LF-normalized CI/source archives.
+    return raw.replace(b"\r\n", b"\n")
+
+
+def file_entry(relative: Path) -> dict[str, str | int]:
+    raw = canonical_source_bytes(relative)
     return {"path": relative.as_posix(), "size_bytes": len(raw),
             "sha256": hashlib.sha256(raw).hexdigest()}
 

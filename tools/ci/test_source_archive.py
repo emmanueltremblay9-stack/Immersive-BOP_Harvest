@@ -19,8 +19,8 @@ class SourceArchiveTests(unittest.TestCase):
         self.root = Path(self.directory.name)
         (self.root / "scripts").mkdir()
         shutil.copyfile(ROOT / SCRIPT, self.root / SCRIPT)
-        (self.root / "gradle.properties").write_text("mod_version=1.0\nmod_id=test_mod\n", encoding="utf-8")
-        (self.root / "source.txt").write_text("original source\n", encoding="utf-8")
+        (self.root / "gradle.properties").write_bytes(b"mod_version=1.0\nmod_id=test_mod\n")
+        (self.root / "source.txt").write_bytes(b"original source\n")
         self.manifest = {"version": "1.0", "mod_id": "test_mod",
                          "build_summary": {"live_client_smoke_tested": False,
                                            "live_client_smoke_waived_by_owner": True},
@@ -57,6 +57,18 @@ class SourceArchiveTests(unittest.TestCase):
         self.assertEqual(1, self.run_check("--check").returncode)
         (self.root / "source.txt").unlink()
         self.assertEqual(1, self.run_check("--check").returncode)
+
+    def test_text_line_endings_are_canonicalized(self):
+        (self.root / "source.txt").write_bytes(b"original source\r\n")
+        canonical = b"original source\n"
+        self.manifest["files"][-1] = {
+            "path": "source.txt",
+            "size_bytes": len(canonical),
+            "sha256": hashlib.sha256(canonical).hexdigest(),
+        }
+        self.save()
+        result = self.run_check("--check")
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
 
     def test_unsafe_and_self_referencing_paths_are_rejected(self):
         for path in ("../outside", "/etc/passwd", "C:/outside", "a\\b", "a//b", "PROJECT_MANIFEST.json"):
