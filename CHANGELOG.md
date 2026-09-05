@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.1-alpha.10] - qualification in progress
+
+- Use a fresh alpha version for the authorized S4/S5 qualification passes.
+- Add a separate test harness for decoded recipes, actual Cutting Board
+  processing, sawmill process/save state, harvest tools and native loot.
+- Authenticate CI candidate evidence against the exact GitHub run and archive.
+- Runtime results remain pending the recorded execution and review gates.
+  The historical alpha.9 client waiver does not apply to this candidate.
+
 ## [Unreleased automation] - 2026-09-05
 
 - Share LF-canonical source-ledger checks across refresh and beta validation.

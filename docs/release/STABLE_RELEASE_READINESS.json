@@ -618,21 +618,76 @@
     "baseline": "37e6d8225819abdd079ec55e9317b53f5f235f1f",
     "tree": "9879736b58d192f60d64bbc26efbdda2dd1afef4",
     "authority": "Owner: The correct next Codex action is now S3-A -> S4 -> S5",
-    "version": "0.1.1-alpha.9",
+    "version": "0.1.1-alpha.10",
     "single_write_owner": "root",
     "tasks": {
       "S3-A": {
-        "status": "IN_PROGRESS",
+        "status": "PASS",
         "scope": "Authenticated producer/readback; canonical main CI required",
         "evidence": "tools/ci/candidate_evidence.py",
-        "blocker": null
+        "blocker": null,
+        "input_commit": "5b4ec4182c633d3b8263e046e0515f66681d2935",
+        "merge_commit": "ee525b9d9406b030e17d87249219c007f97af47c",
+        "run_id": 33982279621,
+        "attempt": 1,
+        "verifier_exit_code": 0,
+        "stable_gate_exit_code": 2,
+        "review": "Code Reviewer and Reality Checker PASS",
+        "readback": {
+          "authenticatedExecution": true,
+          "stableReady": false,
+          "status": "AUTHENTICATED_DEVELOPMENT_EXECUTION",
+          "runId": 33982279621,
+          "runAttempt": 1,
+          "sourceCommit": "ee525b9d9406b030e17d87249219c007f97af47c",
+          "sourceTree": "d2554e12f732ee13496246823afe78f156d2fd2b",
+          "artifactId": 9974143257,
+          "archiveSha256": "7a31f7e00f9e0d467e812df70ee54d563987f8e4369737879b672d63c375fc0d",
+          "candidate": {
+            "modId": "immersive_bop_harvest",
+            "version": "0.1.1-alpha.9",
+            "license": "All Rights Reserved",
+            "name": "immersive_bop_harvest-0.1.1-alpha.9.jar",
+            "size": 1606580,
+            "sha256": "4cd1dff23f5528248e80cbc733ff408348b880b7a9913d771af389f21684ba86"
+          },
+          "capabilities": {
+            "sourceBuild": true,
+            "developmentGameTests": 3,
+            "repeatedDatagen": true,
+            "packagedRuntime": false,
+            "client": false,
+            "multiplayer": false,
+            "saveReload": false
+          },
+          "remaining": [
+            "packaged-runtime",
+            "client",
+            "multiplayer",
+            "save-reload",
+            "full-acceptance",
+            "final-stable-version"
+          ]
+        }
       },
       "S4": {
-        "status": "PLANNED",
+        "status": "IN_PROGRESS",
         "scope": "Existing spec behavior tests and necessary fixes",
         "depends_on": [
           "S3-A"
-        ]
+        ],
+        "input_commit": "ee525b9d9406b030e17d87249219c007f97af47c",
+        "input_tree": "d2554e12f732ee13496246823afe78f156d2fd2b",
+        "local_tests": {
+          "gametests": 305,
+          "scoped_cases": 302,
+          "ci_python": 44,
+          "clean_build": "PASS",
+          "assertions": 4488,
+          "repeated_datagen": "PASS; zero source drift"
+        },
+        "review": "Code Reviewer PASS; canonical CI and Reality Checker merge verdict pending",
+        "next_action": "Final-head CI, review, merge and independent main report readback"
       },
       "S5": {
         "status": "PLANNED",
@@ -661,13 +716,21 @@
     "production_upload_count": 0,
     "local_validation": {
       "publisher_tests": 69,
-      "ci_tests": 40,
+      "ci_tests": 44,
       "beta_and_stable_tests": 21,
       "spec_and_resource_checks": "PASS; two deterministic generations; resource diff and whitespace exit 0",
-      "manifest": "226 files verified; refreshed after intentional staging",
+      "manifest": "Refresh after intentional S4 staging",
       "final_head_ci": "PENDING",
-      "remote_producer_readback": "PENDING",
-      "local_command_ledger": "s3a-commands.json; s3a-reviewed-tests.log in isolated qualification evidence"
-    }
+      "remote_producer_readback": "S3-A canonical main verified; S4 pending",
+      "local_command_ledger": "s3a-commands.json; s4-commands.json in isolated qualification evidence"
+    },
+    "qualification_only_harness": "Separate JAR; excluded from distributed addon",
+    "remaining_runtime_gaps": [
+      "production-loader packaged bytes",
+      "formed sawmill ports",
+      "clean client and world",
+      "multiplayer and reconnect/concurrency",
+      "world save/restart/alpha9 upgrade"
+    ]
   }
 }

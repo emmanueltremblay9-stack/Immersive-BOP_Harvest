@@ -15,6 +15,8 @@ import tomllib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 REPOSITORY = "emmanueltremblay9-stack/Immersive-BOP_Harvest"
 WORKFLOW = ".github/workflows/build.yml"
 ARTIFACT_PREFIX = "candidate-evidence-"
@@ -79,7 +81,7 @@ def contents(archive: bytes) -> dict[str, bytes]:
     return output
 
 
-def report_capabilities(files: dict[str, bytes]) -> dict:
+def report_capabilities(files: dict[str, bytes], *, specs: dict | None = None) -> dict:
     """Derive limited capabilities from captured outputs, never submitted PASS lists."""
     runtime = files["runtime.log"].decode("utf-8")
     matches = re.findall(r"All (\d+) required tests passed", runtime)
@@ -90,8 +92,12 @@ def report_capabilities(files: dict[str, bytes]) -> dict:
     require(dependencies.get("status") == "PASS" and len(dependencies.get("dependencies", [])) == 5, "Missing locked dependency proof")
     result = {"sourceBuild": True, "developmentGameTests": int(matches[0]), "repeatedDatagen": True,
               "packagedRuntime": False, "client": False, "multiplayer": False, "saveReload": False}
-    # S4/S5 add reviewed structured producers here; test counts cannot imply
-    # capabilities that this version of the verifier does not implement.
+    if "qualification-gametests.json" in files:
+        require(specs is not None, "Qualification requires the exact source specification")
+        from tools.ci.qualification_report import validate
+        qualified = validate(files["qualification-gametests.json"], specs, jar_identity(files["candidate.jar"])["version"])
+        require(int(matches[0]) == qualified["cases"] + 3, "GameTest log/report count mismatch")
+        result["scopedCompatibility"] = qualified
     return result
 
 
@@ -112,9 +118,10 @@ def collect() -> None:
     identity = jar_identity(jar)
     require(identity["version"] == version, "JAR/source version mismatch")
     files = {"candidate.jar": jar}
-    for filename in ("runtime.log", "gradle-build.log", "datagen-repeat.log", "runtime-dependencies.json"):
+    for filename in ("runtime.log", "gradle-build.log", "datagen-repeat.log", "runtime-dependencies.json", "qualification-gametests.json"):
         files[filename] = (ROOT / "build/ci-evidence" / filename).read_bytes()
-    capabilities = report_capabilities(files)
+    from tools.ci.qualification_report import load_specs
+    capabilities = report_capabilities(files, specs=load_specs(ROOT))
     check_dependency_receipt(files["runtime-dependencies.json"], (ROOT / "tools/ci/runtime-dependencies.lock.json").read_bytes())
     receipt = {"schemaVersion": 1, "repository": REPOSITORY, "workflowPath": WORKFLOW,
                "workflowRef": os.environ["GITHUB_WORKFLOW_REF"], "workflowSha": os.environ["GITHUB_WORKFLOW_SHA"],
@@ -206,7 +213,14 @@ def verify(run_id: int, attempt: int, expected_commit: str, *, api: GitHub | Non
     candidate = receipt["candidate"]
     raw = files["candidate.jar"]
     require(candidate == {**jar_identity(raw), "name": f"immersive_bop_harvest-{jar_identity(raw)['version']}.jar", "size": len(raw), "sha256": sha(raw)}, "Candidate raw/TOML identity mismatch")
-    capabilities = report_capabilities(files)
+    specs = None
+    if "qualification-gametests.json" in files:
+        from tools.ci.qualification_report import SPEC_FILES
+        specs = {}
+        for name in SPEC_FILES:
+            source = api.get(f"contents/spec/{name}.json?ref={expected_commit}")
+            specs[name] = read_json(base64.b64decode(source["content"]))
+    capabilities = report_capabilities(files, specs=specs)
     require(receipt["capabilities"] == capabilities, "Unsupported capability claim")
     return {"authenticatedExecution": True, "stableReady": False, "status": "AUTHENTICATED_DEVELOPMENT_EXECUTION",
             "runId": run_id, "runAttempt": attempt, "sourceCommit": expected_commit, "sourceTree": receipt["sourceTree"],
