@@ -72,12 +72,15 @@ tasks.register("testCurseForgePublisher", Exec) {
 
 tasks.register("testReleaseGate", Exec) {
     group = "verification"
-    description = "Runs regression tests for the deterministic beta release checker."
+    description = "Runs regressions for beta compatibility and strict stable evidence integrity."
     inputs.files(
             "scripts/check_beta_release_gate.py",
-            "scripts/test_check_beta_release_gate.py"
+            "scripts/test_check_beta_release_gate.py",
+            "scripts/refresh_project_manifest.py",
+            "scripts/check_stable_release_gate.py",
+            "scripts/test_check_stable_release_gate.py"
     )
-    commandLine pythonExecutable.get(), "-m", "unittest", "scripts/test_check_beta_release_gate.py"
+    commandLine pythonExecutable.get(), "-m", "unittest", "scripts/test_check_beta_release_gate.py", "scripts/test_check_stable_release_gate.py"
 }
 
 tasks.register("syncRuntimeDeps", Exec) {

@@ -15,7 +15,7 @@ class ManifestFileLedgerTests(unittest.TestCase):
 
         gate.validate_manifest_file_ledger({"files": ["not-an-object"]}, failures)
 
-        self.assertEqual(["manifest file entry 0 is not an object"], failures)
+        self.assertEqual(["Malformed source ledger entry"], failures)
 
     def test_rejects_path_outside_project_root(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -26,14 +26,14 @@ class ManifestFileLedgerTests(unittest.TestCase):
                     failures,
                 )
 
-        self.assertEqual(["manifest file path escapes project root: ../outside.txt"], failures)
+        self.assertEqual(["Unsafe or self-referencing source ledger path"], failures)
 
     def test_accepts_matching_file_inside_project_root(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             file_path = root / "docs" / "proof.txt"
             file_path.parent.mkdir(parents=True)
-            file_path.write_text("verified\n", encoding="utf-8")
+            file_path.write_bytes(b"verified\n")
             failures: list[str] = []
 
             with patch.object(gate, "ROOT", root):

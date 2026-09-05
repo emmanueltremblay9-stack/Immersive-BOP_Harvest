@@ -77,8 +77,8 @@
     },
     {
       "path": ".github/workflows/build.yml",
-      "size_bytes": 3443,
-      "sha256": "9ecc3c36113a3e4a959d6213b5efeb99e34a0e1883ba8419b55a1895ffee51b1"
+      "size_bytes": 5670,
+      "sha256": "d2614beb2e3b6b0057731795bc788a84fbd9e2f39f289e16b9c94043cf190a73"
     },
     {
       "path": ".github/workflows/publish-curseforge.yml",
@@ -107,8 +107,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "size_bytes": 13744,
-      "sha256": "5e39ed90ad1a66c52e447d35c4e05bf322ad3a90ee37f6e554bc6b9de9cb8896"
+      "size_bytes": 14017,
+      "sha256": "daf5dc553b9c9d7f3619cf1015fb92f92b07edde4aba0665f534904cf0e8a65b"
     },
     {
       "path": "LICENSE",
@@ -117,8 +117,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 7028,
-      "sha256": "fe65139d9d7ebe6a14357ec4b1f8a0313a4dbab59d7f368ee88f9d032f197616"
+      "size_bytes": 7492,
+      "sha256": "54e59d412784c5492d8b38222d259614e1a95823e62b88f62e77c32a6c4a1362"
     },
     {
       "path": "VALIDATION_REPORT.txt",
@@ -152,8 +152,8 @@
     },
     {
       "path": "build.gradle",
-      "size_bytes": 12209,
-      "sha256": "6e6e75f924a68473d3772f0cdf449a770b704a21606ce5cd420aa8779a21e84f"
+      "size_bytes": 12426,
+      "sha256": "42982f1309085e7eaae68e0eb9977c1393dc81cda2daadfe85fd0e87eefe8365"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -187,8 +187,8 @@
     },
     {
       "path": "docs/CURSEFORGE_RELEASE.md",
-      "size_bytes": 8040,
-      "sha256": "f429eebc13374e0caafb341fcb39b16f9de9d2609e8153e14c45bb443a81144f"
+      "size_bytes": 9307,
+      "sha256": "118e191c4f23024dc67fef9bb24444fb6ca7f543d9e59369c2ee634f6f6e116c"
     },
     {
       "path": "docs/LEGAL_REUSE_INVENTORY.md",
@@ -226,6 +226,26 @@
       "sha256": "cbdf9f026acd6439f7494d85a17c3de35b29d25726d0e3b6b072efb167399a9e"
     },
     {
+      "path": "docs/release/STABLE_ACCEPTANCE_MATRIX.md",
+      "size_bytes": 36694,
+      "sha256": "820ecad6ff76db5c35bc683c3f55eda28b6ee03d5d3a9c75f8f6e499d19b3507"
+    },
+    {
+      "path": "docs/release/STABLE_RELEASE_AUDIT.md",
+      "size_bytes": 5280,
+      "sha256": "8a05a2c8572b8d831ed5d83540962b342f9b984f09e8fffbccc756a18ec4a2c3"
+    },
+    {
+      "path": "docs/release/STABLE_RELEASE_PLAN.md",
+      "size_bytes": 5675,
+      "sha256": "a19712ba3bb207559283bbeffbc6342980490c6c8d0190d30be1b6b34ca6c368"
+    },
+    {
+      "path": "docs/release/STABLE_RELEASE_READINESS.json",
+      "size_bytes": 22934,
+      "sha256": "83c37ab0b4e0344601b4c34e85c628253f8c4d94ffb1024a2382669dbd13ca12"
+    },
+    {
       "path": "gradle.properties",
       "size_bytes": 774,
       "sha256": "f9afbb1afbd03b67802379574129ba6ed01af11920eeffdfd6d5a69638cdd097"
@@ -252,8 +272,13 @@
     },
     {
       "path": "scripts/check_beta_release_gate.py",
-      "size_bytes": 11090,
-      "sha256": "060b2914b701bb0fd82b97e9a8a85a32a99bf75b67e563b19b79ec557dd85b84"
+      "size_bytes": 9217,
+      "sha256": "8830d5d3e1bbab4d352b44613080ff9123a00376c4d5b47580c53c4255103ea8"
+    },
+    {
+      "path": "scripts/check_stable_release_gate.py",
+      "size_bytes": 11673,
+      "sha256": "9cf6f3170fcbe8d78c3c14816b9020e55b25d9439763e29cb5da14dd089908b1"
     },
     {
       "path": "scripts/generate_alpha_resources.py",
@@ -272,8 +297,8 @@
     },
     {
       "path": "scripts/refresh_project_manifest.py",
-      "size_bytes": 6267,
-      "sha256": "09096933198402b0416b7e34e8de0a894c565966c75535b912e6e3708abb1fe3"
+      "size_bytes": 6723,
+      "sha256": "303afa2f4d978e56bc5a633e9bb3fe64ff68e71f8b5224379d1cd3ec27756aac"
     },
     {
       "path": "scripts/run_server_smoke.ps1",
@@ -287,8 +312,13 @@
     },
     {
       "path": "scripts/test_check_beta_release_gate.py",
-      "size_bytes": 3928,
-      "sha256": "187c3797a38cefac9b1f825ce3404522a07ee768393fd87cd6aaf30da6ab564d"
+      "size_bytes": 3893,
+      "sha256": "86009ae3b97798a7336fb7c4f380f97e5f86de42458144e8fcf768b707849298"
+    },
+    {
+      "path": "scripts/test_check_stable_release_gate.py",
+      "size_bytes": 10652,
+      "sha256": "a8616614b338771d47936dd3aea74f5951856f77abc8c98834180877c978aad5"
     },
     {
       "path": "scripts/validate_specs.py",
@@ -1096,6 +1126,11 @@
       "sha256": "14564b87c62bbcd00c645d324488e9ed0a88422b90669c313a5eb5adfec166c0"
     },
     {
+      "path": "tools/ci/test_manifest_consumers.py",
+      "size_bytes": 3320,
+      "sha256": "2dcd50f700908923960e455cf452c7e5006a11f69374bf9c5b7d8ddb0f698490"
+    },
+    {
       "path": "tools/ci/test_prepare_runtime.py",
       "size_bytes": 2276,
       "sha256": "325eee6d0c69b1865fe81eac34934fad8d6b30998cfce5499d9e30b2b2b473be"
@@ -1117,8 +1152,8 @@
     },
     {
       "path": "tools/release/NOTICE.md",
-      "size_bytes": 971,
-      "sha256": "f370295e40300a433ab4ffd1f559a630c4d15b84b8add0fdfbd66aefefa8c1d3"
+      "size_bytes": 1098,
+      "sha256": "10d5a17c8990c560ee03718007a16facf01ff74c759afdfbc1f2ec96c24a761a"
     },
     {
       "path": "tools/release/curseforge_release.schema.json",
@@ -1131,9 +1166,14 @@
       "sha256": "d3a967af062506c2add3509b51ab373057e75602e3662c6532d0446ae3d79882"
     },
     {
+      "path": "tools/release/curseforge_release_v3.schema.json",
+      "size_bytes": 6111,
+      "sha256": "6dc8047b2d7b9ccad8204e9f20ac1b2904369d99437d00fa5b865c918fa959b8"
+    },
+    {
       "path": "tools/release/publish_curseforge.py",
-      "size_bytes": 78852,
-      "sha256": "521f17d7853f76f4df32252c4b3effe1abdef0e533f90984cd1c295973865a23"
+      "size_bytes": 79804,
+      "sha256": "d04ffd0fb21065caf9c67136b0808bbc8e34044c2452a23b141c1626a0273c7c"
     },
     {
       "path": "tools/release/test_publish_curseforge.py",
@@ -1144,6 +1184,11 @@
       "path": "tools/release/test_publisher_portability.py",
       "size_bytes": 15300,
       "sha256": "646fd4ab0d6d14a8ceb6c3dbe0dfc3847e930ac71886d2555089d4c375b9a22b"
+    },
+    {
+      "path": "tools/release/test_publisher_transition.py",
+      "size_bytes": 5493,
+      "sha256": "76943e6496f6c434ff009f701cd1e41b31d16839285d9033b0664b908fe1c42d"
     }
   ]
 }

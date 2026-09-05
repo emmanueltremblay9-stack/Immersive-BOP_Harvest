@@ -2,6 +2,10 @@
 
 ## [Unreleased automation] - 2026-09-05
 
+- Share LF-canonical source-ledger checks across refresh and beta validation.
+- Add explicit historical metadata in publisher schema 3 for guarded type transitions.
+- Add strict stable-candidate bundle checks and Windows regression CI; stable runtime remains unqualified.
+
 - Add a reusable fail-closed CurseForge publisher and inherited/portability regressions.
 - Add schema 2 first-publication and previous-public-file manifests, explicit empty relations, exact-tag durable state, and non-production CI.
 - Correct current handoff authority and resolved-license wording without changing gameplay or version.

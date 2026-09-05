@@ -269,16 +269,16 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
     if manifest.get("template") is True:
         raise PublicationError("TEMPLATE_NOT_PUBLISHABLE", "Release template is not an approved publication manifest", EXIT_CONFLICT)
     schema = manifest.get("schemaVersion")
-    if type(schema) is not int or schema not in {1, 2}:
-        raise PublicationError("MANIFEST_SCHEMA_UNSUPPORTED", "Expected schemaVersion 1 or 2")
-    if schema == 2:
+    if type(schema) is not int or schema not in {1, 2, 3}:
+        raise PublicationError("MANIFEST_SCHEMA_UNSUPPORTED", "Expected schemaVersion 1, 2 or 3")
+    if schema in {2, 3}:
         if set(manifest) != {"schemaVersion", "repository", "release", "curseforge", "baseline"}:
             invalid("Schema 2 has missing or unrecognized root fields")
     for section in ("repository", "release", "curseforge"):
         if not isinstance(manifest.get(section), dict):
             invalid(f"Missing manifest section: {section}")
     repository, release, cf = (manifest[k] for k in ("repository", "release", "curseforge"))
-    if schema == 2:
+    if schema in {2, 3}:
         expected_fields = {
             "repository": {"owner", "name"},
             "release": {"tag", "version", "modId", "assetName", "assetSize", "assetSha256", "changelogPath", "changelogSha256"},
@@ -334,7 +334,7 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
             invalid(f"curseforge.{field} must be an explicit array, including [] when empty")
         seen = set()
         for relation in values:
-            if not isinstance(relation, dict) or (schema == 2 and set(relation) != {id_key, "slug", "type"}):
+            if not isinstance(relation, dict) or (schema in {2, 3} and set(relation) != {id_key, "slug", "type"}):
                 invalid(f"curseforge.{field} contains a non-object relation")
             if not isinstance(relation.get("type"), str) or relation["type"] not in allowed:
                 raise PublicationError("MANIFEST_UNSUPPORTED_UPLOAD_RELATION" if field == "uploadRelations" else "MANIFEST_INVALID",
@@ -360,8 +360,20 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
         if baseline["mode"] == "firstPublication":
             if set(baseline) != {"mode"}:
                 invalid("firstPublication must not contain a previous or synthetic file ID")
-        elif set(baseline) != {"mode", "previousPublicFileId"} or not is_positive_int(baseline.get("previousPublicFileId")):
-            invalid("previousPublicFile requires a real positive previousPublicFileId")
+        else:
+            fields = {"mode", "previousPublicFileId"}
+            if schema == 3:
+                fields |= {"releaseType", "gameVersionNames"}
+            if set(baseline) != fields or not is_positive_int(baseline.get("previousPublicFileId")):
+                invalid("previousPublicFile requires an exact versioned baseline and real positive file ID")
+            if schema == 3:
+                if not isinstance(baseline["releaseType"], str) or baseline["releaseType"] not in RELEASE_TYPE_NUMERIC:
+                    invalid("baseline.releaseType must explicitly describe the historical file")
+                labels = baseline["gameVersionNames"]
+                if (not isinstance(labels, list) or not labels
+                        or not all(isinstance(x, str) and x and all(ord(c) >= 32 for c in x) for x in labels)
+                        or len(set(labels)) != len(labels)):
+                    invalid("baseline.gameVersionNames must be explicit unique historical labels")
     return manifest
 
 
@@ -634,7 +646,7 @@ class Publisher:
         self, *, validate_project_relations: bool = True
     ) -> dict[str, Any]:
         baseline_config = self.manifest.get("baseline", {"mode": "previousPublicFile"})
-        if self.manifest["schemaVersion"] == 2:
+        if self.manifest["schemaVersion"] in {2, 3}:
             result = self.http.get_json(f"{self.public_api}/mods/{self.cf['projectId']}",
                                        label="CurseForge configured project identity")
             project = result.get("data") if isinstance(result, dict) else None
@@ -653,13 +665,14 @@ class Publisher:
         previous = self._public_file(previous_id)
         if (previous.get("id") != previous_id or previous.get("projectId") != self.cf["projectId"] or previous.get("status") != 4):
             raise PublicationError("CURSEFORGE_BASELINE_IDENTITY_MISMATCH", "Previous public file identity or approval mismatch")
-        if not exact_game_versions(previous.get("gameVersions"), self.cf["gameVersionNames"]):
+        historical = baseline_config if self.manifest["schemaVersion"] == 3 else self.cf
+        if not exact_game_versions(previous.get("gameVersions"), historical["gameVersionNames"]):
             raise PublicationError(
                 "CURSEFORGE_BASELINE_GAME_VERSIONS_DRIFTED",
                 "Previous public file game-version metadata drifted",
             )
-        expected_release_type = RELEASE_TYPE_NUMERIC[self.cf["releaseType"]]
-        if previous.get("releaseType") != expected_release_type:
+        expected_release_type = RELEASE_TYPE_NUMERIC[historical["releaseType"]]
+        if type(previous.get("releaseType")) is not int or previous["releaseType"] != expected_release_type:
             raise PublicationError(
                 "CURSEFORGE_BASELINE_RELEASE_TYPE_DRIFTED",
                 "Previous public file release type drifted",

@@ -44,7 +44,7 @@ and does not require the inventory to remain empty.
 Both relation arrays are explicit. `[]` is valid; a missing array is invalid.
 An expected empty public relation list rejects any additional public relation.
 Legacy schema 1 remains supported with its real `curseforge.previousPublicFileId`.
-New configuration should use schema 2. The schema is not a claim that inputs
+Schema 2 remains the non-publishable template contract. Intentional type/label transitions use schema 3. The schema is not a claim that inputs
 have been reviewed; the Python validator also checks path confinement,
 duplicate JSON keys, lookup-name subsets and the exact repository/tag.
 
@@ -144,3 +144,21 @@ files whose Git blobs are LF. The authoritative refresh now records the actual
 tracked-source bytes. `.gitattributes` fixes text to LF across operating systems
 and explicitly preserves binary JAR, PNG and NBT bytes. This changes ledger
 hashes, not gameplay behavior; original evidence remains historical.
+
+## Explicit historical metadata transitions (schema 3)
+
+`curseforge_release_v3.schema.json` is additive; schema 1/2 semantics and the
+schema 2 template remain unchanged. In schema 3, `previousPublicFile` requires
+`previousPublicFileId`, `releaseType` and `gameVersionNames` in `baseline`.
+Those fields describe the expected approved historical file. The desired new
+file still uses `curseforge.releaseType` and `curseforge.gameVersionNames`.
+For an intentional Alpha-to-Release transition, historical `releaseType` is
+`alpha` and target `releaseType` is `release`. Both label sets are explicit.
+Missing fields, unknown fields, incorrect historical identity/status/type/labels
+and target public readback mismatches fail closed. The complete manifest is
+bound into upload intent; changing historical expectations invalidates intent.
+The five required relation gates are unchanged. Schema 3 cannot repair the
+known public dependency mismatch. `firstPublication` still has no parent or
+transition fields and requires an empty inventory before a new upload.
+No schema 3 production manifest, tag, Release, dispatch or upload is created
+by this maintenance packet. Tests exercise a local HTTP fixture only.

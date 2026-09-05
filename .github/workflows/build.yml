@@ -29,6 +29,9 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+      - name: Clean Gradle outputs before collecting evidence
+        shell: bash
+        run: bash gradlew --no-configuration-cache clean --stacktrace > "$RUNNER_TEMP/bop-clean.log" 2>&1
       - name: Test publisher safety first
         shell: bash
         run: |
@@ -44,7 +47,7 @@ jobs:
           python scripts/generate_alpha_resources.py
           python scripts/generate_alpha_resources.py
           python scripts/qa_alpha_resources.py
-          python -m unittest scripts/test_check_beta_release_gate.py -v
+          python -m unittest scripts/test_check_beta_release_gate.py scripts/test_check_stable_release_gate.py -v
           git diff --exit-code -- src/main/resources
       - name: Check authoritative manifest ledger
         shell: bash
@@ -72,6 +75,8 @@ jobs:
           # No gameplay, GameTest, metadata or specification gate is skipped.
           bash gradlew --no-configuration-cache runGameTestServer runData -x syncRuntimeDeps --stacktrace 2>&1 | tee build/ci-evidence/runtime.log
           git diff --exit-code -- src/main/resources src/generated/resources
+          bash gradlew --no-configuration-cache runData -x syncRuntimeDeps --stacktrace 2>&1 | tee build/ci-evidence/datagen-repeat.log
+          git diff --exit-code -- src/main/resources src/generated/resources
           git diff --check
       - name: Retain non-production validation evidence
         if: always()
@@ -81,5 +86,42 @@ jobs:
           path: |
             build/ci-evidence/
             build/reports/
+            ${{ runner.temp }}/bop-clean.log
+          if-no-files-found: error
+          retention-days: 30
+  windows-manifest:
+    name: Windows manifest regressions
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.13'
+      - name: Test publisher safety first
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force build/ci-evidence | Out-Null
+          python -W error::ResourceWarning -m unittest discover -s tools/release -p 'test_*.py' -v *> build/ci-evidence/publisher-tests.log
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Test source consumers and strict stable evidence
+        shell: pwsh
+        run: |
+          python -m unittest discover -s tools/ci -p 'test_*.py' -v *> build/ci-evidence/manifest-tests.log
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m unittest scripts/test_check_beta_release_gate.py scripts/test_check_stable_release_gate.py -v *> build/ci-evidence/release-gate-tests.log
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python scripts/refresh_project_manifest.py --check
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Retain Windows regression evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: windows-validation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: build/ci-evidence/
           if-no-files-found: error
           retention-days: 30
