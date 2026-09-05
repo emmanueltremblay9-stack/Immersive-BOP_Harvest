@@ -4,10 +4,21 @@
 
 Version remains `0.1.1-alpha.9`; license remains **All Rights Reserved**.
 Production CurseForge upload in this task: **NO**.
-Publication: `BLOCKED_BY_MISSING_CURSEFORGE_PROJECT_CONFIGURATION`.
-No authoritative existing target project ID/slug has been supplied or verified.
-No GitHub Release exists at the audited baseline. Creating a project, tag,
-release, secret or uploading is not authorized by this migration.
+CurseForge project configuration: **RESOLVED**.
+The verified target is project ID `1609013`, slug `immersive-bop-harvest`,
+with existing public file ID `8426397` for
+`immersive_bop_harvest-0.1.1-alpha.9.jar`.
+Publication remains gated because no canonical GitHub Release or approved
+versioned publication manifest exists. Creating a project, tag, release,
+secret or uploading is not authorized by this migration.
+The live target Relations page currently reports zero dependencies, while the
+approved local contract retains five required dependency relations. This
+external metadata mismatch is a publication blocker and is not changed here.
+
+Discovery evidence read 2026-09-05: [target project](https://www.curseforge.com/minecraft/mc-mods/immersive-bop-harvest),
+[existing public file](https://www.curseforge.com/minecraft/mc-mods/immersive-bop-harvest/files/8426397),
+[public relations](https://www.curseforge.com/minecraft/mc-mods/immersive-bop-harvest/relations/dependencies),
+and [repository releases](https://github.com/emmanueltremblay9-stack/Immersive-BOP_Harvest/releases).
 
 The publisher is source code, not proof of publication. An offline fixture
 passing, a CI passing, and a live secret-free dry run are distinct evidence.
@@ -37,12 +48,14 @@ New configuration should use schema 2. The schema is not a claim that inputs
 have been reviewed; the Python validator also checks path confinement,
 duplicate JSON keys, lookup-name subsets and the exact repository/tag.
 
-The TEMPLATE is deliberately marked `template: true`, contains null unknowns,
-and fails with `TEMPLATE_NOT_PUBLISHABLE` before network use. Its firstPublication
-mode is an example, not a finding that a target project exists. An approved
-versioned file may be made only after every real value and artifact is verified;
-remove the template marker in that separately reviewed file. No alpha.9 approved
-manifest was created during this task.
+The TEMPLATE is deliberately marked `template: true` and fails with
+`TEMPLATE_NOT_PUBLISHABLE` before network use. It now contains the verified
+target ID/slug and real previous public file baseline, but its release
+artifact/changelog fields remain null. An approved versioned file may be made
+only after every real value and artifact is verified; remove the template
+marker in that separately reviewed file. No alpha.9 approved manifest was
+created during this task because the repository has no canonical GitHub
+Release.
 
 Pin exact JAR basename, bytes, SHA-256, mod ID and version. Pin an immutable
 release-note path and SHA-256. The alpha.9 CurseForge release type is `alpha`.

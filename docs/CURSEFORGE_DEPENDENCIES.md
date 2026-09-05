@@ -27,5 +27,12 @@ Official file/project identity sources (read 2026-09-05):
 
 The TerraBlender project is specifically the NeoForge project, not the distinct
 Forge project. File IDs here identify dependencies, not the target publication.
-No exact-name target project configuration was established; absence of a search
-result is not proof that no private/unindexed target project can exist.
+The target project identity is PROVEN by the official project page and its
+public file chain: project ID `1609013`, slug `immersive-bop-harvest`, owner
+`DirtStudYo`, and public alpha.9 file ID `8426397`. The official public
+[project page](https://www.curseforge.com/minecraft/mc-mods/immersive-bop-harvest),
+[file page](https://www.curseforge.com/minecraft/mc-mods/immersive-bop-harvest/files/8426397),
+and [relations page](https://www.curseforge.com/minecraft/mc-mods/immersive-bop-harvest/relations/dependencies)
+were read on 2026-09-05. The public relations page currently reports zero
+dependencies; the five relations above remain the approved local upload/public
+contract and are intentionally not reduced to match that external mismatch.

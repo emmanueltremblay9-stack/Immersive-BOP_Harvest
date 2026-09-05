@@ -142,7 +142,10 @@ See [publisher protocol](docs/CURSEFORGE_RELEASE.md) and
 [dependency classification](docs/CURSEFORGE_DEPENDENCIES.md).
 The manual publication workflow defaults to a secret-free dry run. Its presence
 is not authorization to upload. Target publication remains
-`BLOCKED_BY_MISSING_CURSEFORGE_PROJECT_CONFIGURATION`; the audited baseline has
-no GitHub Release. No production upload, tag/release, or secret change occurred
-in the source migration. Current version/license and historical owner-waived
-client evidence are unchanged.
+gated after the verified target configuration was integrated: project ID
+`1609013`, slug `immersive-bop-harvest`, and previous public file ID `8426397`.
+The audited baseline has no GitHub Release or approved versioned manifest, and
+the live project Relations page reports zero dependencies against the five
+required local relations. No production upload, tag/release, or secret change
+occurred. Current version/license and historical owner-waived client evidence
+are unchanged.

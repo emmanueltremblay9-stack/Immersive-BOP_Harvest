@@ -92,23 +92,23 @@
     },
     {
       "path": "00_START_HERE.txt",
-      "size_bytes": 1566,
-      "sha256": "31d5ea4221b12ff651d0f8f7c39a535d00aef82e2f53adec650b926e9a209b93"
+      "size_bytes": 1776,
+      "sha256": "611b1935914008f14547613556a08a9abb9b1cf5c9dc44b0679d38165118ea5e"
     },
     {
       "path": "01_CODEX_MASTER_PROMPT.txt",
-      "size_bytes": 13454,
-      "sha256": "fb333d0109b4bde4852bee342943418a76f05aadef16d7ade6c86450db5a94e3"
+      "size_bytes": 13593,
+      "sha256": "de708a90d174f5c4f5288e2f68e883dee56cc66e3320f5301334bbc688e869d3"
     },
     {
       "path": "AGENTS.md",
-      "size_bytes": 5506,
-      "sha256": "11e2bec2d6ef3961aeba12af53064f43ae8d0e60fdcb464bc6a2e43cdf8db486"
+      "size_bytes": 5730,
+      "sha256": "0bb91543bf3893916f96893242e713f4f24abbb562a3da422f7e419482f38730"
     },
     {
       "path": "CHANGELOG.md",
-      "size_bytes": 13533,
-      "sha256": "1dbc5be5418d853233ddaa5dcb68458798cd6bee1185ac355d3b1d80dec00a13"
+      "size_bytes": 13744,
+      "sha256": "5e39ed90ad1a66c52e447d35c4e05bf322ad3a90ee37f6e554bc6b9de9cb8896"
     },
     {
       "path": "LICENSE",
@@ -117,8 +117,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 6818,
-      "sha256": "68f9d82073b9fe31057ad963707eea04a7ca33b323e0f2563ff21e082e470df9"
+      "size_bytes": 7028,
+      "sha256": "fe65139d9d7ebe6a14357ec4b1f8a0313a4dbab59d7f368ee88f9d032f197616"
     },
     {
       "path": "VALIDATION_REPORT.txt",
@@ -182,13 +182,13 @@
     },
     {
       "path": "docs/CURSEFORGE_DEPENDENCIES.md",
-      "size_bytes": 2260,
-      "sha256": "460b7f594be2b58c339b0c5aa220a88812924d75e3545194ecd091ba574b8dd3"
+      "size_bytes": 2852,
+      "sha256": "28256cfd4ddea42b562d7cb8be235b7c3adffb8af2abf8eae7b019951dd54d6c"
     },
     {
       "path": "docs/CURSEFORGE_RELEASE.md",
-      "size_bytes": 7162,
-      "sha256": "6feb4d9ea44baa6e6cb4be696233584ee17b4ed3b192ac9b614343a5e43a5030"
+      "size_bytes": 8040,
+      "sha256": "f429eebc13374e0caafb341fcb39b16f9de9d2609e8153e14c45bb443a81144f"
     },
     {
       "path": "docs/LEGAL_REUSE_INVENTORY.md",
@@ -272,8 +272,8 @@
     },
     {
       "path": "scripts/refresh_project_manifest.py",
-      "size_bytes": 5854,
-      "sha256": "12f1c5d1918f71d86b120961f5a0770eab11191344ec6846e34b2f1f0ac1820d"
+      "size_bytes": 6267,
+      "sha256": "09096933198402b0416b7e34e8de0a894c565966c75535b912e6e3708abb1fe3"
     },
     {
       "path": "scripts/run_server_smoke.ps1",
@@ -1102,8 +1102,8 @@
     },
     {
       "path": "tools/ci/test_source_archive.py",
-      "size_bytes": 5287,
-      "sha256": "3c3e22d990746ea18d70335f59f51d9bcd571029b7aba76a955e1b29fde1f725"
+      "size_bytes": 5751,
+      "sha256": "161fdff18d2f8316c8330de36e463ab93d5fd8583804a75dbffa39821fecc762"
     },
     {
       "path": "tools/ci/test_workflow_contract.py",
@@ -1127,8 +1127,8 @@
     },
     {
       "path": "tools/release/curseforge_release_TEMPLATE.json",
-      "size_bytes": 2093,
-      "sha256": "29ab7f7aa779dae4848dd25e2ae6a17cf8f53a085b5e37d6a60d70295668475f"
+      "size_bytes": 2154,
+      "sha256": "d3a967af062506c2add3509b51ab373057e75602e3662c6532d0446ae3d79882"
     },
     {
       "path": "tools/release/publish_curseforge.py",

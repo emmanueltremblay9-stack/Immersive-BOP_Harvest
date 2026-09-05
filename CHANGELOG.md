@@ -5,7 +5,7 @@
 - Add a reusable fail-closed CurseForge publisher and inherited/portability regressions.
 - Add schema 2 first-publication and previous-public-file manifests, explicit empty relations, exact-tag durable state, and non-production CI.
 - Correct current handoff authority and resolved-license wording without changing gameplay or version.
-- Publication is blocked by missing verified target project configuration; no GitHub tag/release or CurseForge upload is authorized in this change.
+- Integrate the verified CurseForge target project ID `1609013`, slug `immersive-bop-harvest`, and existing public file baseline `8426397`; no GitHub tag/release or CurseForge upload is authorized in this change. Publication remains gated because no canonical GitHub Release/approved versioned manifest exists and the public relation readback is still empty.
 
 
 ## [0.1.1-alpha.9] - 2026-07-13
