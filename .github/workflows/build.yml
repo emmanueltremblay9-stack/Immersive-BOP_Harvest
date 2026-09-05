@@ -112,6 +112,7 @@ jobs:
             build/reports/
             build/production-runtime/receipts/
             build/production-runtime/preparation.json
+            build/production-runtime/asset-preparation.json
             build/production-runtime/installer-*.log
             build/production-runtime/client-one/bop-qa-*.json
             build/production-runtime/client-two/bop-qa-*.json

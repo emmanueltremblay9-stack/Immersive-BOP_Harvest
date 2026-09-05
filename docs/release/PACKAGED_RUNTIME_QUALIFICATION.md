@@ -20,9 +20,16 @@ Git on `PATH`. The client launcher supports Windows x64 and Linux x64. Linux
 rendering requires a working display; CI supplies Xvfb and software OpenGL.
 Prepare the exact five dependencies from
 [`runtime-dependencies.lock.json`](../../tools/ci/runtime-dependencies.lock.json)
-and a complete Minecraft asset directory containing the verified asset index
-`17`. The existing ModDev runtime preparation records its asset directory in
+and a Minecraft asset cache. The existing ModDev runtime preparation records its asset directory in
 `build/moddev/minecraft_assets.properties` as `assets_root`.
+The orchestrator treats `--assets` as a read-only cache and prepares
+`<NEW_RUNTIME_ROOT>/assets` from the pinned production parent metadata before
+starting any phase. Index ID `17` alone is not an immutable identity: Gradle
+may cache a different revision. Only size/hash-matching cached bytes are copied;
+missing or mismatched bytes are downloaded from the pinned official index and
+object URLs. Eight workers, object/count/aggregate budgets and atomic writes
+bound preparation. `asset-preparation.json` records the verified inventory.
+Both clients use this owned directory; the shared cache remains unchanged.
 
 Choose a new runtime root outside personal Prism instances and worlds, such as
 a fresh directory below `C:\AI-Work`. Each attempt owns only `server`,

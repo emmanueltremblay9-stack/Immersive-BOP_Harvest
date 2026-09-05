@@ -77,8 +77,8 @@
     },
     {
       "path": ".github/workflows/build.yml",
-      "size_bytes": 7300,
-      "sha256": "a0559042887e80fb082991560776867e3bf2cf6d21c3bf285edeb209185905f0"
+      "size_bytes": 7360,
+      "sha256": "4110f08e79c76e7920e1bbd8aa323f3fd2054a164b5585e0957ecbaf87ea3aad"
     },
     {
       "path": ".github/workflows/publish-curseforge.yml",
@@ -227,8 +227,8 @@
     },
     {
       "path": "docs/release/PACKAGED_RUNTIME_QUALIFICATION.md",
-      "size_bytes": 13694,
-      "sha256": "7604d2543dcf05cb89555c4b05e5d0d55ab59539b92fa1430988a9612bbdbbfb"
+      "size_bytes": 14251,
+      "sha256": "508145adb1b3f8f73059c2a797732d29c68bd2e8639464bb64ff751ad69d1dcb"
     },
     {
       "path": "docs/release/STABLE_ACCEPTANCE_MATRIX.md",
@@ -237,8 +237,8 @@
     },
     {
       "path": "docs/release/STABLE_RELEASE_AUDIT.md",
-      "size_bytes": 13028,
-      "sha256": "d7504fc629580d16bf51f51ebb9ce91d5a3b4f474842c3cdf342d2bcf016868b"
+      "size_bytes": 14040,
+      "sha256": "7600000f5740ff53837784f8ff72455967a04013da76c7c8875dbc86a1183145"
     },
     {
       "path": "docs/release/STABLE_RELEASE_PLAN.md",
@@ -247,8 +247,8 @@
     },
     {
       "path": "docs/release/STABLE_RELEASE_READINESS.json",
-      "size_bytes": 32590,
-      "sha256": "f425dc5d241bd1752e4ed119c7308250ad5d68423e9855e61bd6781631445395"
+      "size_bytes": 33233,
+      "sha256": "f3e4dd1eb92c11544b9e2fd0670713d7a16f70ac90b451f3be67e7b77917b49d"
     },
     {
       "path": "gradle.properties",
@@ -1171,6 +1171,11 @@
       "sha256": "22964437ef5db8f38d8244ac48b8619249465e0288eaf1720ee3dae31d67818f"
     },
     {
+      "path": "tools/ci/prepare_production_assets.py",
+      "size_bytes": 4357,
+      "sha256": "261cdeca30591844752db9f4a1517cb337d2f86e74cf797f6fe1012367f9cf48"
+    },
+    {
       "path": "tools/ci/prepare_production_runtime.py",
       "size_bytes": 4129,
       "sha256": "9d961615085c4ef23c0d02024f216b3a76e35f5125f822038db7be901f31c8a3"
@@ -1197,8 +1202,8 @@
     },
     {
       "path": "tools/ci/qualify_packaged_runtime.py",
-      "size_bytes": 4865,
-      "sha256": "d2dbb37cee8ac4963fd1985d929f82cd3b00f1cd7e24e6bfe87f680d1eb186c7"
+      "size_bytes": 4975,
+      "sha256": "6481860afa0b711dcf538007a1da8eb2c5ca1b43da12be44ad89b1f0c95faaff"
     },
     {
       "path": "tools/ci/run_packaged_qualification.py",
@@ -1234,6 +1239,11 @@
       "path": "tools/ci/test_prepare_runtime.py",
       "size_bytes": 2276,
       "sha256": "325eee6d0c69b1865fe81eac34934fad8d6b30998cfce5499d9e30b2b2b473be"
+    },
+    {
+      "path": "tools/ci/test_production_assets.py",
+      "size_bytes": 4397,
+      "sha256": "714d1498b33fa02c5c154bf411cc1b5a0c7909657c3e7c87f49fb43814c80c05"
     },
     {
       "path": "tools/ci/test_production_evidence.py",

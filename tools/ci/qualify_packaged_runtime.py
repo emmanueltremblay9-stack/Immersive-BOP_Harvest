@@ -4,6 +4,7 @@ import argparse,json,shutil,subprocess,sys,time
 ROOT=Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:sys.path.insert(0,str(ROOT))
 from tools.ci.run_packaged_qualification import guarded_directory,digest
+from tools.ci.prepare_production_assets import prepare_assets
 
 def backup_world(home,root):
     source=guarded_directory(home/'world');target=root/'alpha9-world-backup'
@@ -20,6 +21,7 @@ def main():
     for name in ['root','assets','dependencies','baseline','candidate','harness']:parser.add_argument('--'+name,type=Path,required=True)
     parser.add_argument('--hide-windows',action='store_true')
     args=parser.parse_args();root=guarded_directory(args.root);home=root/'server';evidence=root/'receipts';evidence.mkdir(exist_ok=False)
+    assets=prepare_assets(root/'client',args.assets.resolve())
     shared=['--dependencies',str(args.dependencies.resolve()),'--harness',str(args.harness.resolve()),'--evidence',str(evidence)]
     ledger=[]
     def server_command(phase,candidate,previous=None,backup=None):
@@ -44,7 +46,7 @@ def main():
                 plan=json.loads(plan_path.read_text())
                 (instance/('.bop-qa-cancel-'+plan['nonce'])).write_text(reason+'\n')
     for phase in ['client-one','client-two']:
-        command=[sys.executable,str(ROOT/'tools/ci/production_client.py'),'--launcher',str(root/'client'),'--home',str(root/phase),'--assets',str(args.assets.resolve()),'--phase',phase,'--candidate',str(args.candidate.resolve())]+shared
+        command=[sys.executable,str(ROOT/'tools/ci/production_client.py'),'--launcher',str(root/'client'),'--home',str(root/phase),'--assets',str(assets),'--phase',phase,'--candidate',str(args.candidate.resolve())]+shared
         if args.hide_windows:command.append('--hide-window')
         commands.append(command)
     try:

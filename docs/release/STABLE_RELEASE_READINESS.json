@@ -799,6 +799,15 @@
             103.511
           ],
           "screenshot_limitations": "Initial world and board-result images do not frame their named fixtures; observed server state proves exact quantities"
+        },
+        "initial_pr_ci": {
+          "run_id": 33989511906,
+          "attempt": 1,
+          "head": "358fb690f2f1960142a0e2ad0c631ba01265f6c5",
+          "result": "FAIL: clients rejected different cached revision of official index17 before launch",
+          "passed": "Windows regressions; Linux lint/build/305 GameTests/repeated datagen; four packaged server phases",
+          "correction": "Owned assets prepared from pinned parent; shared cache readonly; strict client hash retained",
+          "regressions": "19 affected tests PASS, one existing Windows privilege skip; actual preparation and reread of 3887 objects PASS"
         }
       },
       "S6": {
@@ -824,7 +833,7 @@
       "ci_tests": 85,
       "beta_and_stable_tests": 21,
       "spec_and_resource_checks": "PASS; two deterministic generations; resource diff and whitespace exit 0",
-      "manifest": "Refresh after intentional S5 staging; 246 tracked files",
+      "manifest": "Refresh after intentional S5 staging; 248 tracked files",
       "final_head_ci": "S4 canonical run 33984397632 attempt1 PASS; S5 pending",
       "remote_producer_readback": "S3-A and S4 independently verified; S5 pending",
       "local_command_ledger": "s3a-commands.json; s4-commands.json; s5-local-final4/orchestration.json; s5-*.log in isolated qualification evidence",

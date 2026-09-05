@@ -76,6 +76,21 @@ Local actionlint was NOT_PERFORMED because Go/actionlint is unavailable; the
 existing CI lint step remains mandatory. Source/parser review independently
 revalidated the actual frozen packet and passed. Final canonical CI is pending.
 
+Initial S5 PR run `33989511906`, attempt 1 passed Windows regressions and Linux
+lint/build/GameTests/datagen. Its four production server phases passed, but
+both clients correctly rejected Gradle's different asset-index revision before
+launch. Gradle fetched index `17` at SHA-1
+`6ae5eb70fe411facbb5c6c66003475c07a251a76`; the pinned production metadata
+requires `1531e69bbb5c7aff208154558a13230915beba00`.
+The failed run and cancelled multiplayer phase remain failure evidence.
+Production assets are now prepared once in the owned runtime directory, using
+only verified cache bytes or pinned official downloads. The strict client
+hash check is retained; no shared cache or gameplay source is changed.
+Five new asset regressions and the existing 14 launcher/runner tests passed
+locally (one existing Windows privilege skip). The corrected CI run is pending.
+An actual asset preparation copied 3,887 unique objects (819,263,427 bytes)
+and independently reread their hashes, with the shared cache index unchanged.
+
 Local S4 commands (all exit 0):
 
 ```text
