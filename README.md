@@ -4,7 +4,7 @@
   <img src="assets/branding/immersive_bop_harvest_logo.png" alt="Immersive BOP_Harvest logo" width="360">
 </p>
 
-- **Status:** alpha.9 release gate passes with the fresh Prism title-screen smoke explicitly waived by the owner
+- **Status:** source automation validated; historical alpha.9 client smoke remains `NOT_PERFORMED / OWNER_WAIVED`
 - **Target:** Minecraft 1.21.1, NeoForge
 - **Mod ID:** `immersive_bop_harvest`
 - **Current alpha:** `0.1.1-alpha.9`
@@ -33,7 +33,6 @@ It does **not** add new items, blocks, textures, magical drops, hemp from unrela
 - `src/main/resources/` — generated playable-alpha data resources
 - `src/main/templates/` — NeoForge metadata template
 - `src/main/java/` — minimal NeoForge entrypoint
-- `templates/` — neutral metadata templates
 - `scripts/validate_specs.py` — specification validator
 - `scripts/generate_alpha_resources.py` — source-to-resource generator
 - `scripts/qa_alpha_resources.py` — generated-resource QA gate
@@ -42,18 +41,44 @@ It does **not** add new items, blocks, textures, magical drops, hemp from unrela
 - `scripts/check_beta_release_gate.py` — public beta release gate checker with built/installed jar hash and duplicate install checks
 - Gradle wrapper and NeoForge build files
 
-## Build and validate
+## Build and validate from a source ZIP
 
-```powershell
+Use Java 21 and Python 3.11 or newer. Extract the project before running commands.
+The archive includes the Gradle wrapper; external Gradle/Minecraft dependencies
+require network access or an already populated cache. No personal Prism folder
+is needed for the isolated build and GameTests below.
+
+```bash
+python scripts/refresh_project_manifest.py --check
 python scripts/validate_specs.py
 python scripts/generate_alpha_resources.py
-python scripts/refresh_project_manifest.py
-.\gradlew.bat --no-configuration-cache check
-.\gradlew.bat --no-configuration-cache clean build
-.\gradlew.bat --no-configuration-cache runGameTestServer
-.\gradlew.bat --no-configuration-cache runData
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\run_server_smoke.ps1
+python scripts/qa_alpha_resources.py
+python -m unittest discover -s tools/ci -p 'test_*.py' -v
+bash gradlew --no-configuration-cache check build --stacktrace
+python tools/ci/prepare_runtime.py
+python tools/ci/prepare_runtime.py --check-only
+bash gradlew --no-configuration-cache runGameTestServer runData -x syncRuntimeDeps --stacktrace
 ```
+
+On Windows PowerShell, replace `bash gradlew` with `.\gradlew.bat`.
+`check` includes all publisher safety tests and release-checker regressions.
+The runtime preparation validates locked dependency size, SHA-256, mod ID and
+version before the Windows/Prism copy task is bypassed. No runtime test is skipped.
+The resulting development JAR is `build/libs/immersive_bop_harvest-0.1.1-alpha.9.jar`.
+It is not an approved public release artifact.
+
+`--check` validates the source ledger read-only and works without `.git`.
+It does not validate a local installation, a client smoke test or publication.
+The refresh mode without `--check` is for a Git checkout after intentionally
+staging source changes; it preserves the historical validation/waiver fields.
+Obsolete bootstrap examples were removed; `gradle.properties` and
+`src/main/templates/META-INF/neoforge.mods.toml` are the active configuration.
+
+The source ZIP contains only this project's tracked sources, resources,
+configuration, tests, required licenses and project documentation. It excludes
+Git history, build outputs, logs, third-party mod JARs, Knowledge Pack exports,
+reference repositories and temporary transfer files. The wrapper JAR and the
+runtime logo/NBT resources remain included because the project requires them.
 
 ## Install to Prism Test play
 

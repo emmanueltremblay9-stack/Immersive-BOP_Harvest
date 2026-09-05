@@ -10,7 +10,10 @@ License decision complete: All Rights Reserved; see LICENSE.
 3. Preserve unrelated dirty work; inspect actual repository state before editing.
 4. For operations outside the current authorization, report NOT_AUTHORIZED to
    ChatGPT. Missing external data/access is a BLOCKED dependency, not a guess.
-5. Run the discovered checks documented in README.md and docs/CURSEFORGE_RELEASE.md.
+5. From an extracted source ZIP, start with:
+   python scripts/refresh_project_manifest.py --check
+   Follow the portable build/GameTest instructions in README.md.
+   A source check is not a binary release or Prism-install pass.
 6. The publisher migration authorizes source/workflows/tests/docs and GitHub
    integration, but NO GitHub tag/release and NO CurseForge POST/upload.
 7. Fresh alpha.9 Prism client smoke remains NOT_PERFORMED / OWNER_WAIVED.
