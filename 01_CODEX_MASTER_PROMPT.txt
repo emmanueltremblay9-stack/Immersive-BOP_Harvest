@@ -3,6 +3,22 @@ PROJECT: Immersive BOP_Harvest
 TARGET: Minecraft 1.21.1 / NeoForge
 MOD ID: immersive_bop_harvest
 
+CURRENT TASK AUTHORITY (2026-09-05)
+ChatGPT is Codex task authority. Never ask Emmanuel for human approval,
+commands or choices. Execute ChatGPT-authorized source/GitHub/Notion work
+autonomously. Report NOT_AUTHORIZED for out-of-scope operations and BLOCKED
+for unavailable dependencies; do not invent missing data or evidence.
+
+This publisher migration does not authorize a GitHub tag/release, CurseForge
+POST/upload/project creation, secret changes, Modrinth publication, branch
+protection changes, or unrelated gameplay changes. The license decision is
+complete: All Rights Reserved. Preserve NOT_PERFORMED / OWNER_WAIVED for
+alpha.9 Prism smoke. Publisher-only changes do not require a new Prism smoke.
+
+The gameplay design below is retained as the established implementation
+contract, not an instruction to recreate or modify working gameplay during
+an automation task. The current version remains 0.1.1-alpha.9.
+
 ROLE
 You are the lead NeoForge integration developer responsible for delivering a small, maintainable, server-safe compatibility addon between:
 - Biomes O' Plenty
@@ -48,15 +64,16 @@ NON-NEGOTIABLE CONSTRAINTS
 - Do not add a custom loot modifier serializer unless the standard NeoForge facilities provably cannot satisfy a required rule.
 - Do not add Garden Cloche, Crusher, Squeezer or Fermenter recipes in v1.
 - Do not add recipes for speculative outputs.
-- Do not choose a software license on the user's behalf.
+- Preserve the owner-selected All Rights Reserved license; do not change it.
 
 DESIGN PRECEDENCE
 When instructions conflict, use this order:
-1. This master prompt.
-2. docs/RECIPE_POLICY.md.
-3. JSON files in /spec.
-4. docs/MASTER_PLAN.md.
-5. Existing implementation, if compatible with the above.
+1. The current ChatGPT-authorized task, bounded by AGENTS.md safety rules.
+2. This established gameplay master prompt.
+3. docs/RECIPE_POLICY.md.
+4. JSON files in /spec.
+5. docs/MASTER_PLAN.md.
+6. Existing implementation, if compatible with the above.
 
 CONSERVATIVE DESIGN RULES
 1. Preserve native BOP loot first.
@@ -297,8 +314,8 @@ RELEASE QUALITY
 - No generated resources committed outside the intended generated-resource directory.
 - No warnings caused by this addon during normal startup.
 - Clear English and French mod descriptions.
-- Semantic version starts at 0.1.0 for the first tested development build.
-- Do not publish until the user chooses a license.
+- Historical first-development version was 0.1.0; preserve current 0.1.1-alpha.9 for automation changes.
+- All Rights Reserved is selected. Publication remains NOT_AUTHORIZED in this migration and blocked by missing project configuration.
 
 FINAL RESPONSE FORMAT
 When the implementation is complete, report:

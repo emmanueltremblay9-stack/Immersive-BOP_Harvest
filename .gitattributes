@@ -1,5 +1,8 @@
-# Disable autocrlf on generated files, they always generate with LF
-# Add any extra files or paths here to make git stop saying they
-# are changed when only line endings change.
+# Canonical source bytes keep the manifest ledger stable on Windows and Linux.
+* text=auto eol=lf
+*.jar -text
+*.png -text
+*.nbt -text
+# These generated resources are already canonical LF.
 src/generated/**/.cache/* text eol=lf
 src/generated/**/*.json text eol=lf

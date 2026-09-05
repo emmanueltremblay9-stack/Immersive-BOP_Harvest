@@ -1,13 +1,26 @@
-IMMERSIVE BOP_HARVEST — START HERE
+IMMERSIVE BOP_HARVEST — CURRENT SOURCE HANDOFF
 
-1. Extract this archive into a clean working directory.
-2. Open 01_CODEX_MASTER_PROMPT.txt.
-3. Give that file and the complete extracted folder to Codex.
-4. If a NeoForge 1.21.1 repository already exists, place this pack at its root before starting Codex.
-5. If no repository exists, Codex must bootstrap from the official NeoForge 1.21.1 MDK and use the exact dependency versions available to the target modpack.
-6. Run:
-   python scripts/validate_specs.py
-7. Do not publish until LICENSE_DECISION_REQUIRED.md has been resolved.
-8. Use docs/QA_ACCEPTANCE.md as the release gate.
+Current source: Minecraft 1.21.1 / NeoForge 21.1.233 / Java 21.
+Version: 0.1.1-alpha.9. Mod ID: immersive_bop_harvest.
+License decision complete: All Rights Reserved; see LICENSE.
 
-The /spec directory is machine-readable and is intended to prevent Codex from improvising unbalanced recipes.
+1. Read AGENTS.md, then 01_CODEX_MASTER_PROMPT.txt and README.md.
+2. ChatGPT is Codex task authority. Execute ChatGPT-authorized operations
+   autonomously. Never ask Emmanuel for human approval, commands or choices.
+3. Preserve unrelated dirty work; inspect actual repository state before editing.
+4. For operations outside the current authorization, report NOT_AUTHORIZED to
+   ChatGPT. Missing external data/access is a BLOCKED dependency, not a guess.
+5. From an extracted source ZIP, start with:
+   python scripts/refresh_project_manifest.py --check
+   Follow the portable build/GameTest instructions in README.md.
+   A source check is not a binary release or Prism-install pass.
+6. The publisher migration authorizes source/workflows/tests/docs and GitHub
+   integration, but NO GitHub tag/release and NO CurseForge POST/upload.
+7. Fresh alpha.9 Prism client smoke remains NOT_PERFORMED / OWNER_WAIVED.
+   Full gameplay/world smoke was not performed. Neither is a new PASS.
+8. The /spec directory remains the gameplay design source. Do not change it to
+   work around an automation or environment failure.
+
+CurseForge publication is BLOCKED_BY_MISSING_CURSEFORGE_PROJECT_CONFIGURATION.
+The template is deliberately not publishable. Do not invent an ID or create a
+project, release, secret, or version-specific approved manifest.

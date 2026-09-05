@@ -1,0 +1,85 @@
+name: Build and validate
+on:
+  push:
+    branches: [main, codex/curseforge-publisher-migration]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    name: Gradle validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.13'
+      - name: Set up Java
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Test publisher safety first
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/ci-evidence
+          python -W error::ResourceWarning -m unittest discover -s tools/release -p 'test_*.py' -v 2>&1 | tee build/ci-evidence/publisher-tests.log
+          python -m unittest discover -s tools/ci -p 'test_*.py' -v 2>&1 | tee build/ci-evidence/runtime-lock-tests.log
+      - name: Validate specification and deterministic resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_specs.py
+          python scripts/generate_alpha_resources.py
+          python scripts/generate_alpha_resources.py
+          python scripts/qa_alpha_resources.py
+          python -m unittest scripts/test_check_beta_release_gate.py -v
+          git diff --exit-code -- src/main/resources
+      - name: Check authoritative manifest ledger
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/refresh_project_manifest.py
+          git diff --exit-code -- PROJECT_MANIFEST.json
+      - name: Lint GitHub Actions workflows
+        shell: bash
+        run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12
+      - name: Gradle check and build
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash gradlew --no-configuration-cache check build --stacktrace 2>&1 | tee build/ci-evidence/gradle-build.log
+      - name: Supply exact isolated runtime dependencies without Prism
+        shell: bash
+        run: python tools/ci/prepare_runtime.py
+      - name: Required GameTests and datagen
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/ci/prepare_runtime.py --check-only
+          # Skip only the Windows/Prism copy task: exact locked bytes were validated above.
+          # No gameplay, GameTest, metadata or specification gate is skipped.
+          bash gradlew --no-configuration-cache runGameTestServer runData -x syncRuntimeDeps --stacktrace 2>&1 | tee build/ci-evidence/runtime.log
+          git diff --exit-code -- src/main/resources src/generated/resources
+          git diff --check
+      - name: Retain non-production validation evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: source-validation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            build/ci-evidence/
+            build/reports/
+          if-no-files-found: error
+          retention-days: 30

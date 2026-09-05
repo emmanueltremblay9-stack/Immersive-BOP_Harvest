@@ -1,0 +1,91 @@
+{
+  "template": true,
+  "schemaVersion": 2,
+  "repository": {
+    "owner": "emmanueltremblay9-stack",
+    "name": "Immersive-BOP_Harvest"
+  },
+  "baseline": {
+    "mode": "firstPublication"
+  },
+  "release": {
+    "tag": "v0.1.1-alpha.9",
+    "version": "0.1.1-alpha.9",
+    "modId": "immersive_bop_harvest",
+    "assetName": "immersive_bop_harvest-0.1.1-alpha.9.jar",
+    "assetSize": null,
+    "assetSha256": null,
+    "changelogPath": null,
+    "changelogSha256": null
+  },
+  "curseforge": {
+    "projectId": null,
+    "projectSlug": null,
+    "displayName": "immersive_bop_harvest-0.1.1-alpha.9.jar",
+    "releaseType": "alpha",
+    "isMarkedForManualRelease": false,
+    "gameVersionNames": [
+      "Client",
+      "Server",
+      "1.21.1",
+      "NeoForge"
+    ],
+    "gameVersionLookupNames": [
+      "1.21.1"
+    ],
+    "uploadRelations": [
+      {
+        "projectID": 220318,
+        "slug": "biomes-o-plenty",
+        "type": "requiredDependency"
+      },
+      {
+        "projectID": 955399,
+        "slug": "glitchcore",
+        "type": "requiredDependency"
+      },
+      {
+        "projectID": 940057,
+        "slug": "terrablender-neoforge",
+        "type": "requiredDependency"
+      },
+      {
+        "projectID": 398521,
+        "slug": "farmers-delight",
+        "type": "requiredDependency"
+      },
+      {
+        "projectID": 231951,
+        "slug": "immersive-engineering",
+        "type": "requiredDependency"
+      }
+    ],
+    "expectedPublicRelations": [
+      {
+        "projectId": 220318,
+        "slug": "biomes-o-plenty",
+        "type": "RequiredDependency"
+      },
+      {
+        "projectId": 955399,
+        "slug": "glitchcore",
+        "type": "RequiredDependency"
+      },
+      {
+        "projectId": 940057,
+        "slug": "terrablender-neoforge",
+        "type": "RequiredDependency"
+      },
+      {
+        "projectId": 398521,
+        "slug": "farmers-delight",
+        "type": "RequiredDependency"
+      },
+      {
+        "projectId": 231951,
+        "slug": "immersive-engineering",
+        "type": "RequiredDependency"
+      }
+    ]
+  }
+}

@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased automation] - 2026-09-05
+
+- Add a reusable fail-closed CurseForge publisher and inherited/portability regressions.
+- Add schema 2 first-publication and previous-public-file manifests, explicit empty relations, exact-tag durable state, and non-production CI.
+- Correct current handoff authority and resolved-license wording without changing gameplay or version.
+- Publication is blocked by missing verified target project configuration; no GitHub tag/release or CurseForge upload is authorized in this change.
+
+
 ## [0.1.1-alpha.9] - 2026-07-13
 
 ### Fixed
