@@ -315,7 +315,7 @@ RELEASE QUALITY
 - No warnings caused by this addon during normal startup.
 - Clear English and French mod descriptions.
 - Historical first-development version was 0.1.0; preserve current 0.1.1-alpha.9 for automation changes.
-- All Rights Reserved is selected. Publication remains NOT_AUTHORIZED in this migration and blocked by missing project configuration.
+- All Rights Reserved is selected. The verified CurseForge project configuration is integrated, but publication remains NOT_AUTHORIZED in this migration and gated by the missing canonical reviewed GitHub Release/immutable manifest and the current public relation mismatch.
 
 FINAL RESPONSE FORMAT
 When the implementation is complete, report:

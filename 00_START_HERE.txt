@@ -21,6 +21,9 @@ License decision complete: All Rights Reserved; see LICENSE.
 8. The /spec directory remains the gameplay design source. Do not change it to
    work around an automation or environment failure.
 
-CurseForge publication is BLOCKED_BY_MISSING_CURSEFORGE_PROJECT_CONFIGURATION.
-The template is deliberately not publishable. Do not invent an ID or create a
-project, release, secret, or version-specific approved manifest.
+CurseForge project configuration is RESOLVED: project ID 1609013, slug
+immersive-bop-harvest, and existing public file ID 8426397 are recorded in the
+template. Publication remains gated by the missing canonical GitHub Release,
+approved versioned manifest, and current public dependency-relation mismatch.
+The template is deliberately not publishable. Do not create a project,
+release, secret, or version-specific approved manifest.

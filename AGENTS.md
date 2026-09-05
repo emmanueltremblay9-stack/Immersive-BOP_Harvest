@@ -56,6 +56,10 @@ Run tests when tests exist or Java logic changed:
 .\gradlew.bat test --stacktrace
 ```
 
+If Gradle aborts before the task graph with `Unable to establish loopback
+connection`, classify it as a runner/environment failure. Preserve production
+code, capture the stacktrace, and use CI for independent Gradle proof.
+
 Use the existing project QA gates when the changed surface touches specs,
 generated data, release proof, or manifest state:
 
