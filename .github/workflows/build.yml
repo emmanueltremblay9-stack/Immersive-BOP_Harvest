@@ -14,7 +14,7 @@ jobs:
   validate:
     name: Gradle validation
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 55
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -78,6 +78,21 @@ jobs:
           bash gradlew --no-configuration-cache runData -x syncRuntimeDeps --stacktrace 2>&1 | tee build/ci-evidence/datagen-repeat.log
           git diff --exit-code -- src/main/resources src/generated/resources
           git diff --check
+      - name: Build isolated production harness and historical baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash gradlew --no-configuration-cache qualificationJar -x syncRuntimeDeps --stacktrace 2>&1 | tee build/ci-evidence/qualification-harness-build.log
+          python tools/ci/build_qualification_baseline.py --output build/qualification-baseline
+          bash gradlew --stop
+      - name: Qualify exact packaged client server multiplayer and save continuity
+        shell: bash
+        env:
+          LIBGL_ALWAYS_SOFTWARE: 'true'
+        run: |
+          set -euo pipefail
+          command -v Xvfb xvfb-run xauth | tee build/ci-evidence/renderer-preflight.log
+          xvfb-run -a -s '-screen 0 1280x720x24 -nolisten tcp' python tools/ci/run_production_ci.py 2>&1 | tee build/ci-evidence/production-orchestration.log
       - name: Collect candidate evidence
         run: python tools/ci/candidate_evidence.py collect
       - name: Retain candidate evidence
@@ -95,6 +110,13 @@ jobs:
           path: |
             build/ci-evidence/
             build/reports/
+            build/production-runtime/receipts/
+            build/production-runtime/preparation.json
+            build/production-runtime/asset-preparation.json
+            build/production-runtime/installer-*.log
+            build/production-runtime/client-one/bop-qa-*.json
+            build/production-runtime/client-two/bop-qa-*.json
+            build/qualification-baseline/baseline-build.*
             ${{ runner.temp }}/bop-clean.log
           if-no-files-found: error
           retention-days: 30

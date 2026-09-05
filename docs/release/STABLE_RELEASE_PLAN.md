@@ -20,10 +20,15 @@ source specifications at the independently expected commit. Development mode
 and untested formed-machine ports remain explicit. The test harness is excluded
 from the production addon JAR.
 
-Observed local S4 results are pre-integration evidence. Final-head CI/review and
-main readback remain necessary; S5 must qualify installed production-loader
-bytes, real client/world behavior, multiplayer and clean save/restart. Tests of
-process logic do not establish a formed sawmill's output ports. The current
+S4 is integrated through PR #5, merge `1b84049fe53d59b1b263ee11942be304c441cab6`.
+Canonical main run `33984397632`, attempt 1 and its artifact were authenticated
+by the verifier, exit 0; Code Reviewer and Reality Checker passed.
+S5 implements and validates installed production-loader bytes, actual client
+interactions, 52 formed sawmill ports, multiplayer and clean save/restart.
+All seven local phases passed with the frozen canonical S4 candidate, including
+clean exits and the strict evidence validator. S5 CI must qualify its own built
+JAR; that execution and canonical readback remain pending in this source snapshot.
+See [packaged qualification](PACKAGED_RUNTIME_QUALIFICATION.md). The current
 exact five-mod lock is the qualified dependency baseline; untested future
 versions within broad metadata ranges are not implied to be supported by QA.
 
@@ -53,11 +58,13 @@ read-back service state. Local files or a submitted PASS flag cannot authenticat
 execution. The trust boundary is GitHub plus the reviewed workflow and harness.
 No new secret, write permission, attestation credential or release is needed.
 
-Current capabilities are build, the actual development GameTest count, repeated
-datagen and exact dependency validation. They do not certify a packaged-JAR
-installation, client, multiplayer, save/reload or full stable acceptance. The
-standalone verifier exits 0 only for those authenticated capabilities; the
-stable checker still exits 2 and keeps `stableReady=false`. S4/S5 must add real
+S4 authenticated capabilities are build, 305 development GameTests, repeated
+datagen and exact dependency validation. S5 adds separate production receipts,
+screenshots and observed state transitions. The verifier accepts these only
+when their required CI execution steps and complete bytes validate against
+the canonical run. The stable checker still exits 2 and keeps
+`stableReady=false`; final stable-version selection is a separate gate. Earlier
+maintenance planning required S4/S5 to add real
 reviewed assertion producers before those capabilities can advance.
 
 Local Gradle's Windows selector problem is resolved for task processes by a

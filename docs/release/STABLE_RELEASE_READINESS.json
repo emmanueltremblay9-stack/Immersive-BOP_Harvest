@@ -619,7 +619,7 @@
     "tree": "9879736b58d192f60d64bbc26efbdda2dd1afef4",
     "authority": "Owner: The correct next Codex action is now S3-A -> S4 -> S5",
     "version": "0.1.1-alpha.10",
-    "single_write_owner": "root",
+    "single_write_owner": "root; production_evidence agent owned its two new validator files; Technical Writer owned the new S5 runbook",
     "tasks": {
       "S3-A": {
         "status": "PASS",
@@ -671,7 +671,7 @@
         }
       },
       "S4": {
-        "status": "IN_PROGRESS",
+        "status": "PASS",
         "scope": "Existing spec behavior tests and necessary fixes",
         "depends_on": [
           "S3-A"
@@ -686,15 +686,129 @@
           "assertions": 4488,
           "repeated_datagen": "PASS; zero source drift"
         },
-        "review": "Code Reviewer PASS; canonical CI and Reality Checker merge verdict pending",
-        "next_action": "Final-head CI, review, merge and independent main report readback"
+        "review": "Code Reviewer and Reality Checker PASS; canonical CI/readback PASS",
+        "next_action": "S5 disposable production qualification",
+        "merge_commit": "1b84049fe53d59b1b263ee11942be304c441cab6",
+        "merge_tree": "61653629b81a4632b119d7b9ea46f872269e904d",
+        "run_id": 33984397632,
+        "attempt": 1,
+        "verifier_exit_code": 0,
+        "readback": {
+          "authenticatedExecution": true,
+          "stableReady": false,
+          "status": "AUTHENTICATED_DEVELOPMENT_EXECUTION",
+          "runId": 33984397632,
+          "runAttempt": 1,
+          "sourceCommit": "1b84049fe53d59b1b263ee11942be304c441cab6",
+          "sourceTree": "61653629b81a4632b119d7b9ea46f872269e904d",
+          "artifactId": 9974753888,
+          "archiveSha256": "fe22c5c62fcc8a71c2e6c64df38c3232b96212363e6c4d459ed609b49c29e98f",
+          "candidate": {
+            "modId": "immersive_bop_harvest",
+            "version": "0.1.1-alpha.10",
+            "license": "All Rights Reserved",
+            "name": "immersive_bop_harvest-0.1.1-alpha.10.jar",
+            "size": 1606581,
+            "sha256": "efd4446ee0cff2fa36f9d2e00c92f4f2200de1b582491dd7c926b69006b93a53"
+          },
+          "capabilities": {
+            "sourceBuild": true,
+            "developmentGameTests": 305,
+            "repeatedDatagen": true,
+            "packagedRuntime": false,
+            "client": false,
+            "multiplayer": false,
+            "saveReload": false,
+            "scopedCompatibility": {
+              "cases": 302,
+              "assertions": 4488,
+              "mode": "development-classpath",
+              "cuttingBoardOperations": true,
+              "sawmillProcessLogic": true,
+              "harvestLoot": true,
+              "placedSegmentDestruction": true,
+              "nativeLootInvariance": true,
+              "formedSawmillPorts": false,
+              "packagedRuntime": false
+            }
+          },
+          "remaining": [
+            "packaged-runtime",
+            "client",
+            "multiplayer",
+            "save-reload",
+            "full-acceptance",
+            "final-stable-version"
+          ]
+        }
       },
       "S5": {
-        "status": "PLANNED",
-        "scope": "Disposable exact-JAR client/server/multiplayer/save qualification",
+        "status": "IN_PROGRESS",
+        "scope": "Exact alpha.10 JAR, seven disposable production phases and authenticated CI readback",
         "depends_on": [
           "S4"
-        ]
+        ],
+        "input_commit": "1b84049fe53d59b1b263ee11942be304c441cab6",
+        "implementation": "tools/ci/production_evidence.py; tools/ci/qualify_packaged_runtime.py",
+        "local_evidence": "PASS: final4 seven phases, exit 0 each, no timeout or abort; strict packet validator exit 0; canonical S5 CI authentication pending",
+        "next_action": "Qualify the CI-built JAR, obtain final independent merge verdict, then authenticate canonical main run and artifact",
+        "local_candidate": {
+          "modId": "immersive_bop_harvest",
+          "version": "0.1.1-alpha.10",
+          "license": "All Rights Reserved",
+          "name": "immersive_bop_harvest-0.1.1-alpha.10.jar",
+          "size": 1606581,
+          "sha256": "efd4446ee0cff2fa36f9d2e00c92f4f2200de1b582491dd7c926b69006b93a53"
+        },
+        "local_harness_sha256": "eebbe989715f5e43450bb6abaa46a699f4b43f3734f9909f128e55830bc6a193",
+        "local_baseline": {
+          "source_commit": "ee525b9d9406b030e17d87249219c007f97af47c",
+          "size": 1607128,
+          "sha256": "0b8fd189a5baff1175f65bcb1dfb861a2288989fbc00bcb2bd1a6d914d1668c8",
+          "identity_note": "Fresh fixed-source build; not historical published or CI bytes"
+        },
+        "review": "Code Reviewer PASS for source/parser and actual frozen packet; Evidence Collector PASS-WITH-GAPS for screenshot framing; Reality Checker PASS-WITH-GAPS local evidence",
+        "local_proof": {
+          "packet": "s5-local-final4",
+          "flat_exports": "s5-final4-flat",
+          "integrity_report": "s5-final4-integrity.json",
+          "authentication": "INTEGRITY_ONLY_PACKAGED_EXECUTION",
+          "phases": 7,
+          "phase_exit_codes": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "timeout": false,
+          "aborted": false,
+          "scoped_cases_per_full_phase": 302,
+          "assertions_per_full_phase": 4488,
+          "formed_sawmills": 52,
+          "repeated_board_operations": 100,
+          "phase_durations_seconds": [
+            40.626,
+            24.622,
+            47.445,
+            20.178,
+            120.639,
+            103.533,
+            103.511
+          ],
+          "screenshot_limitations": "Initial world and board-result images do not frame their named fixtures; observed server state proves exact quantities"
+        },
+        "initial_pr_ci": {
+          "run_id": 33989511906,
+          "attempt": 1,
+          "head": "358fb690f2f1960142a0e2ad0c631ba01265f6c5",
+          "result": "FAIL: clients rejected different cached revision of official index17 before launch",
+          "passed": "Windows regressions; Linux lint/build/305 GameTests/repeated datagen; four packaged server phases",
+          "correction": "Owned assets prepared from pinned parent; shared cache readonly; strict client hash retained",
+          "regressions": "19 affected tests PASS, one existing Windows privilege skip; actual preparation and reread of 3887 objects PASS"
+        }
       },
       "S6": {
         "status": "NOT_AUTHORIZED",
@@ -716,21 +830,23 @@
     "production_upload_count": 0,
     "local_validation": {
       "publisher_tests": 69,
-      "ci_tests": 44,
+      "ci_tests": 85,
       "beta_and_stable_tests": 21,
       "spec_and_resource_checks": "PASS; two deterministic generations; resource diff and whitespace exit 0",
-      "manifest": "Refresh after intentional S4 staging",
-      "final_head_ci": "PENDING",
-      "remote_producer_readback": "S3-A canonical main verified; S4 pending",
-      "local_command_ledger": "s3a-commands.json; s4-commands.json in isolated qualification evidence"
+      "manifest": "Refresh after intentional S5 staging; 248 tracked files",
+      "final_head_ci": "S4 canonical run 33984397632 attempt1 PASS; S5 pending",
+      "remote_producer_readback": "S3-A and S4 independently verified; S5 pending",
+      "local_command_ledger": "s3a-commands.json; s4-commands.json; s5-local-final4/orchestration.json; s5-*.log in isolated qualification evidence",
+      "ci_test_skips": "1 Windows symlink-privilege skip",
+      "clean_build": "PASS; Java test NO-SOURCE; final harness rebuilt afterward",
+      "gametests": "305 PASS on final Java source",
+      "repeated_datagen": "PASS; no resource drift",
+      "legacy_beta_cli": "BLOCKED, exit 1: historical alpha.9 build/install evidence; personal Prism still alpha.9; no mutation",
+      "local_actionlint": "NOT_PERFORMED: Go/actionlint unavailable; existing CI step mandatory"
     },
     "qualification_only_harness": "Separate JAR; excluded from distributed addon",
     "remaining_runtime_gaps": [
-      "production-loader packaged bytes",
-      "formed sawmill ports",
-      "clean client and world",
-      "multiplayer and reconnect/concurrency",
-      "world save/restart/alpha9 upgrade"
+      "S5 CI execution of its own candidate bytes and independent canonical service readback"
     ]
   }
 }

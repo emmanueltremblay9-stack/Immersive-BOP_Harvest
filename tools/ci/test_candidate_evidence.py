@@ -68,6 +68,27 @@ class EvidenceTests(unittest.TestCase):
         self.assertFalse(result['capabilities']['packagedRuntime'])
         self.assertFalse(result['capabilities']['client'])
 
+    def test_packaged_bytes_require_actual_production_steps(self):
+        self.files['production-baseline-create.json']=b'{}'
+        self.repack()
+        with self.assertRaisesRegex(ValueError,'Required packaged execution steps'):
+            self.verify()
+
+    def test_successful_production_step_alone_does_not_promote_old_artifact(self):
+        self.jobs['jobs'][0]['steps'] += [{'name':name,'conclusion':'success'} for name in evidence.PRODUCTION_STEPS]
+        result=self.verify()
+        self.assertEqual(result['status'],'AUTHENTICATED_DEVELOPMENT_EXECUTION')
+        self.assertFalse(result['capabilities']['client'])
+
+    def test_packaged_mode_without_complete_scoped_reports_is_rejected(self):
+        self.jobs['jobs'][0]['steps'] += [{'name':name,'conclusion':'success'} for name in evidence.PRODUCTION_STEPS]
+        self.files['production-baseline-create.json']=b'{}'
+        self.receipt['executionMode']='development-and-packaged-production'
+        self.receipt['files']={k:{'size':len(v),'sha256':evidence.sha(v)} for k,v in self.files.items()}
+        self.repack()
+        with self.assertRaisesRegex(ValueError,'exact scoped source evidence'):
+            self.verify()
+
     def test_wrong_service_identity_and_failed_or_pr_runs_rejected(self):
         original=copy.deepcopy(self.run)
         for key,value in [('head_sha','c'*40),('run_attempt',1),('event','pull_request'),('head_branch','other'),('conclusion','failure'),('path','.github/workflows/other.yml')]:

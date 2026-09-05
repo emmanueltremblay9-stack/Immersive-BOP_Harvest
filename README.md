@@ -34,7 +34,10 @@ gradlew.bat --no-configuration-cache runGameTestServer -x syncRuntimeDeps --stac
 The harness is compiled from `src/qualification` and is excluded from the
 production mod JAR. Its report is `build/ci-evidence/qualification-gametests.json`.
 It verifies real Cutting Board operations and sawmill process logic; formed
-sawmill ports and packaged client/server qualification remain separate S5 gates.
+sawmill ports and packaged client/server qualification use the separate
+[S5 production runner](docs/release/PACKAGED_RUNTIME_QUALIFICATION.md). All seven
+local phases passed against the retained canonical alpha.10 JAR; CI must qualify
+its own candidate bytes before canonical execution can be authenticated.
 
 ## Purpose
 
@@ -125,6 +128,12 @@ The script writes `build/install-report.json` with source and installed SHA-256
 values, metadata readback, dependency proof, and remaining-jar counts.
 
 ## Release gate
+
+The active unpublished qualification version is `0.1.1-alpha.10`. S4 has
+authenticated canonical CI evidence for 305 GameTests. Disposable production
+qualification is documented in the [S5 runbook](docs/release/PACKAGED_RUNTIME_QUALIFICATION.md)
+and [current audit](docs/release/STABLE_RELEASE_AUDIT.md). A full stable release
+still requires its separately authorized final version and release bundle.
 
 The project must pass every item in `docs/QA_ACCEPTANCE.md`.  
 The owner selected `All Rights Reserved`; see `LICENSE`. Redistribution and
