@@ -1,12 +1,19 @@
 # Stable acceptance matrix
 
-Current qualification follow-up: S4 adds 302 runtime cases in the separate
+Current qualification follow-up: S4 passed canonical run `33984397632`, attempt 1,
+at merge `1b84049fe53d59b1b263ee11942be304c441cab6`, with independent readback.
+It adds 302 runtime cases in the separate
 qualification harness for alpha.10; see `tools/ci/qualification_report.py` for
 the exact source-derived case inventory and required observed assertions.
 Cases map Cutting Board inputs, every wood form, direct-harvest blocks and
 the native-only coverage inventory directly to the corresponding spec IDs.
 Four plant-cascade tests wait for scheduled destruction. S3-A authenticates
 the CI execution and report against the expected source commit.
+S5 adds a seven-phase production runner with formed machines, actual client
+packets, multiplayer tool/output conservation and clean world migration.
+All seven local S5 phases and the strict validator passed against the frozen
+canonical S4 JAR. S5 CI and canonical authentication remain pending; see the
+[runbook](PACKAGED_RUNTIME_QUALIFICATION.md) and [audit](STABLE_RELEASE_AUDIT.md).
 
 The rows below retain their future **final stable candidate** meaning; alpha.10
 development tests do not satisfy packaged client/server/multiplayer, formed
@@ -18,7 +25,9 @@ This is a requirement-to-evidence map, not a runtime result. Every row below is
 NOT_PERFORMED for a future stable candidate. Static generators/checks exist in
 scripts/validate_specs.py and scripts/qa_alpha_resources.py. Existing GameTests
 prove namespace, 103 recipe presence and vanilla-shears tag membership only.
-They do not prove FD/IE processing, direct harvest, save/reload or multiplayer.
+Those original three tests alone do not prove FD/IE processing, direct harvest,
+save/reload or multiplayer. The current S4/S5 harness provides the additional
+observations; the table retains its separate final-version requirement.
 
 Receipt kinds client/server/multiplayer/gameplay/save_reload are mandatory in
 addition to automated checks. Title-screen evidence cannot substitute for

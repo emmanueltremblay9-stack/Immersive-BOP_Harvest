@@ -6,7 +6,10 @@
 - Add a separate test harness for decoded recipes, actual Cutting Board
   processing, sawmill process/save state, harvest tools and native loot.
 - Authenticate CI candidate evidence against the exact GitHub run and archive.
-- Runtime results remain pending the recorded execution and review gates.
+- Add disposable production-loader client/server, formed-machine, multiplayer,
+  reconnect and in-flight save/migration qualification with strict CI readback.
+- S4 canonical CI passed 305 GameTests. The complete seven-phase local S5
+  packet passed with byte-bound receipts; canonical S5 CI/readback is pending.
   The historical alpha.9 client waiver does not apply to this candidate.
 
 ## [Unreleased automation] - 2026-09-05

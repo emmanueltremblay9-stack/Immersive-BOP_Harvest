@@ -1,26 +1,79 @@
 # Stable readiness maintenance audit — 2026-09-05
 
-## Current S3-A/S4 follow-up
+## Current S3-A/S4/S5 follow-up
 
 S3-A PR #4 merged at `ee525b9d9406b030e17d87249219c007f97af47c`.
 Main run `33982279621` attempt 1 and archive digest were independently read
 back by the implemented verifier, exit 0. Stable CLI still returned exit 2.
 
-The S4 pre-integration alpha.10 harness has 302 scoped runtime cases plus the
+S4 PR #5 merged as `1b84049fe53d59b1b263ee11942be304c441cab6`, tree
+`61653629b81a4632b119d7b9ea46f872269e904d`. Canonical main run
+`33984397632`, attempt 1 passed both jobs; independent readback returned exit 0.
+Artifact `9974753888` matched archive SHA-256
+`fe22c5c62fcc8a71c2e6c64df38c3232b96212363e6c4d459ed609b49c29e98f`.
+The exact CI candidate is 1,606,581 bytes, SHA-256
+`efd4446ee0cff2fa36f9d2e00c92f4f2200de1b582491dd7c926b69006b93a53`.
+Code Reviewer and Reality Checker accepted S4 before merge.
+
+The S4 alpha.10 harness has 302 scoped runtime cases plus the
 three existing GameTests. Clean compile/resources/test/build, all 305 GameTests,
 two datagen passes and 44 CI Python regressions passed locally. The final report
 contains 4,488 recorded assertions. The initial harness
 return-type mistake and independent-review findings were corrected without
 changing gameplay: copy emissions each tick, observe natural scheduled
 cascades with a sufficient capture margin, and reject omitted state/tool/tag
-assertions. Final source review passed. Final-head CI, independent merge verdict
-and raw report readback remain subsequent gates.
+assertions. Final source review, canonical CI, independent merge verdict
+and raw report readback passed.
 
-S4 checks the actual FD board and IE process logic. Formed sawmill ports,
-installed production-loader execution, client, multiplayer and world continuity
-remain S5 obligations. No public upload, tag/Release or publisher dispatch.
+S5 adds an explicit production launcher and seven-phase receipt validator.
+Four local server phases have passed with one frozen harness: fresh alpha.9,
+clean restart, alpha.10 upgrade and clean restart. They exercise all 302 scoped
+cases, 52 formed sawmills with actual ports, 100 repeated board operations,
+datapack reload, a saved board input and a redstone-paused in-flight sawmill.
+The complete final4 local packet now passes all seven phases and the strict
+independent Python validator, exit 0. Frozen harness SHA-256 is
+`eebbe989715f5e43450bb6abaa46a699f4b43f3734f9909f128e55830bc6a193`.
+The two clients completed actual FD, IE and harvest interactions, simultaneous
+board use, tool conservation/retrieval, reconnect and clean exits. Every process
+exited 0 without timeout or abort. Canonical S5 CI/readback remains pending.
+The partial client run reached title, created a world and passed real FD, IE
+blade and knife-harvest interactions; its disconnect wait was a harness defect,
+so that run is retained as failed evidence. Shared-library download races were
+also fixed in the launcher. Neither fix changes addon gameplay.
+The earlier multiplayer test incorrectly assumed an empty FD board after
+repeated clicks. Saved NBT and FD bytecode confirmed normal axe storage; the
+final test measures tools and outputs before/after a genuine empty-hand pickup.
+
+Final local phase durations were 40.626, 24.622, 47.445, 20.178, 120.639,
+103.533 and 103.511 seconds respectively (the clients and multiplayer phase
+overlap). Upgrade/full-baseline ratio was 1.168; log sizes were 14,380 versus
+14,244 bytes. These bounded observations are not a general performance SLA.
+The baseline JAR was rebuilt from the fixed S3-A source commit: 1,607,128 bytes,
+SHA-256 `0b8fd189a5baff1175f65bcb1dfb861a2288989fbc00bcb2bd1a6d914d1668c8`.
+It is distinct from the historical published file and earlier CI artifact.
+
+Independent screenshot review matched seven images to their byte hashes.
+The title, world, sawmill models and multiplayer clients are visibly rendered.
+The initial world image does not frame machines, and the board-result image
+does not frame the board. Actual server observations, rather than those two
+frames, prove machine/output quantities and conservation.
+See [packaged qualification runbook](PACKAGED_RUNTIME_QUALIFICATION.md).
+No public upload, tag/Release or publisher dispatch.
 The separate harness has been verified absent from the built production JAR.
 The old alpha.9 waiver is unchanged and does not apply to alpha.10.
+
+Final S5 local checks passed: clean compile/resources/build and qualification
+JAR build; 305 development GameTests; repeated datagen with no resource drift;
+85 CI Python tests (one Windows symlink-privilege skip). Java `test` remains
+NO-SOURCE. The clean build also ran 69 publisher and 21 release-checker tests.
+The later frozen harness rebuild, GameTests and datagen used the final Java
+source. The real beta CLI exited 1 because its historical build/install record
+still targets alpha.9 and the personal Prism installation remains alpha.9.
+That legacy installed-release gate does not validate the disposable S5 packet;
+its failure is retained and neither record nor personal installation was altered.
+Local actionlint was NOT_PERFORMED because Go/actionlint is unavailable; the
+existing CI lint step remains mandatory. Source/parser review independently
+revalidated the actual frozen packet and passed. Final canonical CI is pending.
 
 Local S4 commands (all exit 0):
 
@@ -48,13 +101,13 @@ future CI build. The qualification classes and copied specs are excluded.
 
 ```text
 AUTOMATION_ROUTE: compatibility QA -> Code Reviewer -> Reality Checker
-AGENTS_ACTUALLY_USED: s3a_review (Code Reviewer); stable_gate_design (Software Architect); baseline_review (Evidence Collector); reality_check (S3-A)
+AGENTS_ACTUALLY_USED: s3a_review (Code Reviewer); stable_gate_design (Software Architect); baseline_review (Evidence Collector); reality_check (Reality Checker); production_evidence (Minimal Change Engineer); s5_runbook (Technical Writer)
 FALLBACKS_OR_NO_DELEGATION: existing Codebase Memory plus affected source/log/report reads
 SINGLE_WRITE_OWNER: root
-EVIDENCE_GATE: PASS for local development execution; canonical S4 CI pending
-REVIEW_GATE: PASS for final S4 implementation and actual report
-REALITY_CHECK_GATE: S3-A PASS; S4 merge verdict pending
-UNRESOLVED_GAPS: canonical S4 CI/readback; S5 packaged runtime/client/server/multiplayer/save; S6 final stable version
+EVIDENCE_GATE: PASS for canonical S4 and measured local S5; S5 canonical CI/readback pending
+REVIEW_GATE: PASS for S4 and final S5 source/parser/local packet
+REALITY_CHECK_GATE: S3-A and S4 PASS; local S5 PASS-WITH-GAPS; final CI verdict pending
+UNRESOLVED_GAPS: S5 canonical CI/readback; screenshot framing limits; S6 final stable version
 FINAL_VERDICT: PASS-WITH-GAPS
 ```
 

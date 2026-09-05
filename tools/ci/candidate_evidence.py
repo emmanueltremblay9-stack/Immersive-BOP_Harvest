@@ -29,6 +29,10 @@ REQUIRED_STEPS = {
     "Collect candidate evidence", "Retain candidate evidence",
 }
 WINDOWS_STEPS = {"Test publisher safety first", "Test source consumers and strict stable evidence"}
+PRODUCTION_STEPS = {
+    "Build isolated production harness and historical baseline",
+    "Qualify exact packaged client server multiplayer and save continuity",
+}
 
 
 def require(condition: bool, message: str) -> None:
@@ -98,6 +102,15 @@ def report_capabilities(files: dict[str, bytes], *, specs: dict | None = None) -
         qualified = validate(files["qualification-gametests.json"], specs, jar_identity(files["candidate.jar"])["version"])
         require(int(matches[0]) == qualified["cases"] + 3, "GameTest log/report count mismatch")
         result["scopedCompatibility"] = qualified
+    if any(name.startswith("production-") for name in files):
+        require(specs is not None and "scopedCompatibility" in result, "Packaged qualification requires exact scoped source evidence")
+        from tools.ci.production_evidence import validate
+        raw = files["candidate.jar"]
+        candidate = {**jar_identity(raw), "name": f"immersive_bop_harvest-{jar_identity(raw)['version']}.jar", "size": len(raw), "sha256": sha(raw)}
+        production = validate(files, specs, candidate)
+        for capability in ("packagedRuntime", "client", "multiplayer", "saveReload"):
+            result[capability] = production[capability]
+        result["packagedQualification"] = production
     return result
 
 
@@ -120,6 +133,9 @@ def collect() -> None:
     files = {"candidate.jar": jar}
     for filename in ("runtime.log", "gradle-build.log", "datagen-repeat.log", "runtime-dependencies.json", "qualification-gametests.json"):
         files[filename] = (ROOT / "build/ci-evidence" / filename).read_bytes()
+    from tools.ci.production_evidence import collect as collect_production
+    files.update(collect_production(ROOT / "build/production-runtime", ROOT / "build/ci-evidence/production-flat",
+                                    baseline_build=ROOT / "build/qualification-baseline"))
     from tools.ci.qualification_report import load_specs
     capabilities = report_capabilities(files, specs=load_specs(ROOT))
     check_dependency_receipt(files["runtime-dependencies.json"], (ROOT / "tools/ci/runtime-dependencies.lock.json").read_bytes())
@@ -129,7 +145,7 @@ def collect() -> None:
                "event": os.environ["GITHUB_EVENT_NAME"], "sourceCommit": commit, "sourceTree": git("rev-parse", "HEAD^{tree}"),
                "dependencyLockSha256": sha((ROOT / "tools/ci/runtime-dependencies.lock.json").read_bytes()),
                "candidate": {**identity, "name": name, "size": len(jar), "sha256": sha(jar)},
-               "executionMode": "development-classpath", "capabilities": capabilities,
+               "executionMode": "development-and-packaged-production", "capabilities": capabilities,
                "files": {name: {"size": len(raw), "sha256": sha(raw)} for name, raw in files.items()}}
     output = ROOT / "build/candidate-evidence"
     output.mkdir(parents=True, exist_ok=False)
@@ -196,11 +212,15 @@ def verify(run_id: int, attempt: int, expected_commit: str, *, api: GitHub | Non
     require(artifact.get("digest") == "sha256:" + sha(archive), "Service digest missing or artifact altered")
     files = contents(archive)
     receipt = read_json(files.pop("receipt.json"))
+    production = any(name.startswith("production-") for name in files)
+    if production:
+        passed = {s["name"] for s in by_name["Gradle validation"]["steps"] if s["conclusion"] == "success"}
+        require(PRODUCTION_STEPS <= passed, "Required packaged execution steps missing or skipped")
     require(type(receipt.get("schemaVersion")) is int and receipt["schemaVersion"] == 1, "Wrong evidence schema")
     for key, expected in {"repository": REPOSITORY, "workflowPath": WORKFLOW, "runId": run_id, "runAttempt": attempt,
                           "event": "push", "sourceCommit": expected_commit, "sourceTree": commit["tree"]["sha"],
                           "workflowSha": expected_commit, "workflowRef": f"{REPOSITORY}/{WORKFLOW}@refs/heads/main",
-                          "executionMode": "development-classpath"}.items():
+                          "executionMode": "development-and-packaged-production" if production else "development-classpath"}.items():
         require(type(receipt.get(key)) is type(expected) and receipt[key] == expected, f"Receipt {key} not bound to service state")
     require(set(receipt["files"]) == set(files), "Receipt inventory mismatch")
     for name, raw in files.items():
@@ -222,10 +242,10 @@ def verify(run_id: int, attempt: int, expected_commit: str, *, api: GitHub | Non
             specs[name] = read_json(base64.b64decode(source["content"]))
     capabilities = report_capabilities(files, specs=specs)
     require(receipt["capabilities"] == capabilities, "Unsupported capability claim")
-    return {"authenticatedExecution": True, "stableReady": False, "status": "AUTHENTICATED_DEVELOPMENT_EXECUTION",
+    return {"authenticatedExecution": True, "stableReady": False, "status": "AUTHENTICATED_PACKAGED_EXECUTION" if production else "AUTHENTICATED_DEVELOPMENT_EXECUTION",
             "runId": run_id, "runAttempt": attempt, "sourceCommit": expected_commit, "sourceTree": receipt["sourceTree"],
             "artifactId": artifact["id"], "archiveSha256": sha(archive), "candidate": candidate, "capabilities": capabilities,
-            "remaining": ["packaged-runtime", "client", "multiplayer", "save-reload", "full-acceptance", "final-stable-version"]}
+            "remaining": ["final-stable-version", "final-release-bundle"] if production else ["packaged-runtime", "client", "multiplayer", "save-reload", "full-acceptance", "final-stable-version"]}
 
 
 def main(argv=None) -> int:

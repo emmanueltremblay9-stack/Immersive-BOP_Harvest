@@ -31,18 +31,20 @@ def catalog(sources: dict | Path) -> set[str]:
     return result
 
 
-def validate(raw: bytes, sources: dict | Path, version: str) -> dict:
+def validate(raw: bytes, sources: dict | Path, version: str, *, expected_mode: str = 'development-classpath') -> dict:
     from tools.ci.candidate_evidence import read_json, require
     if isinstance(sources, Path):
         sources = load_specs(sources)
     report = read_json(raw)
-    require(type(report.get('schemaVersion')) is int and report['schemaVersion'] == 1 and report.get('executionMode') == 'development-classpath', 'Wrong harness report schema/mode')
+    require(expected_mode in {'development-classpath','packaged-production'}, 'Unsupported expected execution mode')
+    require(type(report.get('schemaVersion')) is int and report['schemaVersion'] == 1 and report.get('executionMode') == expected_mode, 'Wrong harness report schema/mode')
     require(report.get('candidateVersion') == version, 'Harness report belongs to another candidate version')
     expected = catalog(sources)
     rows = report['cases']
     names = [row['id'] for row in rows]
     require(len(names) == len(set(names)), 'Duplicate reported test execution')
-    require({name.removeprefix('bop_qa.') for name in names if name.startswith('bop_qa.')} == expected, 'Incomplete scoped runtime cases')
+    scoped={name.removeprefix('bop_qa.') for name in names if name.startswith('bop_qa.')} if expected_mode=='development-classpath' else set(names)
+    require(scoped == expected, 'Incomplete scoped runtime cases')
     require(all(row.get('passed') is True and row.get('required') is True and row.get('error') is None for row in rows), 'Failed/optional runtime cases')
     assertions = report['assertions']
     require(set(assertions) == expected, 'Missing per-case observed assertions')
@@ -77,7 +79,7 @@ def validate(raw: bytes, sources: dict | Path, version: str) -> dict:
             required = {'native shears tag'} | {f"tag {row['tag']} accepts {value}" for row in sources['tag_integrations']['integrations'] for value in row['values']}
             require(required <= labels and all(row['actual'] is True and row['expected'] is True for row in checks), 'Missing actual required tag memberships')
         total += len(checks)
-    return {'cases': len(expected), 'assertions': total, 'mode': 'development-classpath',
+    return {'cases': len(expected), 'assertions': total, 'mode': expected_mode,
             'cuttingBoardOperations': True, 'sawmillProcessLogic': True, 'harvestLoot': True,
             'placedSegmentDestruction': True, 'nativeLootInvariance': True,
             'formedSawmillPorts': False, 'packagedRuntime': False}

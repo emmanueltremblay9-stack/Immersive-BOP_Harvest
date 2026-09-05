@@ -18,6 +18,7 @@ import java.util.Map;
 @Mod("bop_harvest_qa")
 public final class QualificationMod {
     public QualificationMod() {
+        PackagedRuntime.install();
         if (Boolean.getBoolean("neoforge.gameTestServer")) {
             GlobalTestReporter.replaceWith(new Reporter());
         }
