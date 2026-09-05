@@ -92,13 +92,13 @@
     },
     {
       "path": "00_START_HERE.txt",
-      "size_bytes": 1776,
-      "sha256": "611b1935914008f14547613556a08a9abb9b1cf5c9dc44b0679d38165118ea5e"
+      "size_bytes": 1777,
+      "sha256": "e7257adf54a748933c1c44bb9c53bfdc8ba50eaec41accf51b6c99a63c10282c"
     },
     {
       "path": "01_CODEX_MASTER_PROMPT.txt",
-      "size_bytes": 13593,
-      "sha256": "de708a90d174f5c4f5288e2f68e883dee56cc66e3320f5301334bbc688e869d3"
+      "size_bytes": 13595,
+      "sha256": "11184728b05ef37adc85897b9b116df23e23fc0ce068860547b96a46babaf26f"
     },
     {
       "path": "AGENTS.md",
@@ -117,8 +117,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 8992,
-      "sha256": "416dfa7fe62ee6592b00cb29d3b8c23dc1523d33ba818108e50b66633c606360"
+      "size_bytes": 8993,
+      "sha256": "f230ec1550676fd123b5d257c7d56a69f76486fc3e593415c3a14a6dd1e668d3"
     },
     {
       "path": "VALIDATION_REPORT.txt",

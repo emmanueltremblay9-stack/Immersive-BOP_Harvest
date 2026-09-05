@@ -17,7 +17,7 @@ alpha.9 Prism smoke. Publisher-only changes do not require a new Prism smoke.
 
 The gameplay design below is retained as the established implementation
 contract, not an instruction to recreate or modify working gameplay during
-an automation task. The current version remains 0.1.1-alpha.9.
+an automation task. The current version remains 0.1.1-alpha.10.
 
 ROLE
 You are the lead NeoForge integration developer responsible for delivering a small, maintainable, server-safe compatibility addon between:
@@ -314,7 +314,7 @@ RELEASE QUALITY
 - No generated resources committed outside the intended generated-resource directory.
 - No warnings caused by this addon during normal startup.
 - Clear English and French mod descriptions.
-- Historical first-development version was 0.1.0; preserve current 0.1.1-alpha.9 for automation changes.
+- Historical first-development version was 0.1.0; preserve current 0.1.1-alpha.10 for automation changes.
 - All Rights Reserved is selected. The verified CurseForge project configuration is integrated, but publication remains NOT_AUTHORIZED in this migration and gated by the missing canonical reviewed GitHub Release/immutable manifest and the current public relation mismatch.
 
 FINAL RESPONSE FORMAT

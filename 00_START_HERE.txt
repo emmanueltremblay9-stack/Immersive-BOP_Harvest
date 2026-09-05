@@ -1,7 +1,7 @@
 IMMERSIVE BOP_HARVEST — CURRENT SOURCE HANDOFF
 
 Current source: Minecraft 1.21.1 / NeoForge 21.1.233 / Java 21.
-Version: 0.1.1-alpha.9. Mod ID: immersive_bop_harvest.
+Version: 0.1.1-alpha.10. Mod ID: immersive_bop_harvest.
 License decision complete: All Rights Reserved; see LICENSE.
 
 1. Read AGENTS.md, then 01_CODEX_MASTER_PROMPT.txt and README.md.
