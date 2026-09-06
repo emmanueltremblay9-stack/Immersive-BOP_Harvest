@@ -94,7 +94,7 @@ On Windows PowerShell, replace `bash gradlew` with `.\gradlew.bat`.
 `check` includes all publisher safety tests and release-checker regressions.
 The runtime preparation validates locked dependency size, SHA-256, mod ID and
 version before the Windows/Prism copy task is bypassed. No runtime test is skipped.
-The resulting development JAR is `build/libs/immersive_bop_harvest-0.1.1-alpha.9.jar`.
+The resulting development JAR is `build/libs/immersive_bop_harvest-0.1.1-alpha.10.jar`.
 It is not an approved public release artifact.
 
 `--check` validates the source ledger read-only and works without `.git`.
