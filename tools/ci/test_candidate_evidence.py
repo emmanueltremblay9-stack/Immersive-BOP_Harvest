@@ -25,7 +25,7 @@ class EvidenceTests(unittest.TestCase):
             {"name": "Windows manifest regressions", "conclusion": "success", "steps": [{"name": name, "conclusion": "success"} for name in evidence.WINDOWS_STEPS]}]}
         jar = io.BytesIO()
         with zipfile.ZipFile(jar, "w") as z:
-            z.writestr("META-INF/neoforge.mods.toml", 'license="All Rights Reserved"\n[[mods]]\nmodId="immersive_bop_harvest"\nversion="0.1.1-alpha.10"\n')
+            z.writestr("META-INF/neoforge.mods.toml", 'license="All Rights Reserved"\n[[mods]]\nmodId="immersive_bop_harvest"\nversion="0.1.1"\n')
         self.lock = (evidence.ROOT / 'tools/ci/runtime-dependencies.lock.json').read_bytes()
         keys=['modId','version','projectId','fileId','filename','size','sha256']
         dependencies=[{k:r[k] for k in keys} for r in json.loads(self.lock)['dependencies']]
@@ -36,7 +36,7 @@ class EvidenceTests(unittest.TestCase):
                         "workflowRef": f"{evidence.REPOSITORY}/{evidence.WORKFLOW}@refs/heads/main", "workflowSha": self.commit,
                         "runId":10,"runAttempt":2,"event":"push","sourceCommit":self.commit,"sourceTree":self.tree,
                         "dependencyLockSha256":evidence.sha(self.lock),"executionMode":"development-classpath",
-                        "candidate": {**evidence.jar_identity(jar.getvalue()),"name":"immersive_bop_harvest-0.1.1-alpha.10.jar", "size":len(jar.getvalue()),"sha256":evidence.sha(jar.getvalue())},
+                        "candidate": {**evidence.jar_identity(jar.getvalue()),"name":"immersive_bop_harvest-0.1.1.jar", "size":len(jar.getvalue()),"sha256":evidence.sha(jar.getvalue())},
                         "capabilities":evidence.report_capabilities(self.files),
                         "files":{k:{"size":len(v),"sha256":evidence.sha(v)} for k,v in self.files.items()}}
         self.artifact = {"id":11,"name":"candidate-evidence-10-2","expired":False,"workflow_run":{"id":10,"head_sha":self.commit}}

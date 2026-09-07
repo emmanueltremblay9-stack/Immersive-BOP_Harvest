@@ -7,6 +7,8 @@ ROOT=Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path: sys.path.insert(0,str(ROOT))
 from tools.ci.prepare_runtime import validate_bytes, validate_lock, properties
 
+CURRENT_VERSION = properties(ROOT / 'gradle.properties')['mod_version']
+
 def digest(path): return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def guarded_directory(path: Path):
@@ -31,10 +33,10 @@ def candidate_version(candidate: Path):
 def validate_chain(phase: str, predecessor: Path | None, home: Path, candidate: Path, harness: Path, backup: Path | None):
     links={'baseline-restart':('baseline-create','0.1.1-alpha.9'),
            'candidate-upgrade':('baseline-restart','0.1.1-alpha.9'),
-           'candidate-restart':('candidate-upgrade','0.1.1-alpha.10'),
-           'multiplayer':('candidate-restart','0.1.1-alpha.10')}
+           'candidate-restart':('candidate-upgrade',CURRENT_VERSION),
+           'multiplayer':('candidate-restart',CURRENT_VERSION)}
     version=candidate_version(candidate)
-    if version!=('0.1.1-alpha.9' if phase.startswith('baseline-') else '0.1.1-alpha.10'):raise ValueError('Phase candidate version mismatch')
+    if version!=('0.1.1-alpha.9' if phase.startswith('baseline-') else CURRENT_VERSION):raise ValueError('Phase candidate version mismatch')
     if phase=='baseline-create':
         if predecessor is not None or (home/'world').exists():raise ValueError('Baseline creation requires a fresh disposable world')
         return None,None

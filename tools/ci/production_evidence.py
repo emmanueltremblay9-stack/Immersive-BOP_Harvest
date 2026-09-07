@@ -17,11 +17,13 @@ from tools.ci.candidate_evidence import jar_identity, read_json, require, sha
 from tools.ci import qualification_report
 from tools.ci.prepare_production_runtime import INSTALLER_SHA256, METADATA_SHA256
 from tools.ci.build_qualification_baseline import COMMIT as BASELINE_COMMIT, TREE as BASELINE_TREE
+from tools.ci.prepare_runtime import properties
 
 SERVER_PHASES = ('baseline-create', 'baseline-restart', 'candidate-upgrade', 'candidate-restart', 'multiplayer')
 CLIENT_PHASES = ('client-one', 'client-two')
 PHASES = SERVER_PHASES + CLIENT_PHASES
 MOD = 'immersive_bop_harvest'
+CURRENT_VERSION = properties(Path(__file__).resolve().parents[2] / 'gradle.properties')['mod_version']
 HARNESS = 'bop_harvest_qa'
 DEPENDENCIES = {'biomesoplenty', 'glitchcore', 'terrablender', 'farmersdelight', 'immersiveengineering'}
 BOARD_OUTPUT = {'biomesoplenty:stripped_fir_log': 1, 'farmersdelight:tree_bark': 1}
@@ -231,7 +233,7 @@ def scoped(runtime, specs):
 def validate(files: dict[str, bytes], specs: dict, candidate: dict) -> dict:
     """Derive bounded capabilities. This function cannot authenticate submitted/local files."""
     require(candidate == {**jar_identity(files['candidate.jar']), 'name': f"immersive_bop_harvest-{candidate['version']}.jar", 'size': len(files['candidate.jar']), 'sha256': sha(files['candidate.jar'])}
-            and candidate['version'] == '0.1.1-alpha.10' and type(candidate['size']) is int, 'Wrong candidate raw-byte identity')
+            and candidate['version'] == CURRENT_VERSION and type(candidate['size']) is int, 'Wrong candidate raw-byte identity')
     dependencies = read_json(files['runtime-dependencies.json'])
     require(dependencies.get('status') == 'PASS' and type(dependencies.get('dependencies')) is list and len(dependencies['dependencies']) == 5, 'Missing exact five dependency identities')
     locked = {row['modId']: row for row in dependencies['dependencies']}

@@ -13,7 +13,7 @@ class PackagedRuntimeGuards(unittest.TestCase):
         (self.home/'world').mkdir();(self.home/'world/level.dat').write_bytes(b'synthetic world')
         self.harness=self.root/'harness.jar';self.harness.write_bytes(b'synthetic harness')
         self.candidate=self.root/'candidate.jar'
-        with zipfile.ZipFile(self.candidate,'w') as archive:archive.writestr('META-INF/neoforge.mods.toml','[[mods]]\nmodId="immersive_bop_harvest"\nversion="0.1.1-alpha.10"\n')
+        with zipfile.ZipFile(self.candidate,'w') as archive:archive.writestr('META-INF/neoforge.mods.toml','[[mods]]\nmodId="immersive_bop_harvest"\nversion="0.1.1"\n')
         self.log=self.root/'previous.log';self.log.write_text('synthetic prior log')
         self.previous=self.root/'previous.json'
         self.receipt={'passed':True,'exitCode':0,'timeout':False,'aborted':False,'cwd':str(self.home),'log':str(self.log),'logSha256':digest(self.log),'runtime':{'phaseStatus':'PASS','phase':'baseline-restart','candidateVersion':'0.1.1-alpha.9','nonce':'test-nonce','saveCalled':True,'loadedJarIdentities':[{'modId':'bop_harvest_qa','sha256':digest(self.harness)}],'savedSnapshot':{}}}
@@ -38,7 +38,7 @@ class PackagedRuntimeGuards(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'separate copy'):
             validate_chain('candidate-upgrade',self.previous,self.home,self.candidate,self.harness,record)
     def test_wrong_phase_and_version_rejected(self):
-        for field,value in [('phase','baseline-create'),('candidateVersion','0.1.1-alpha.10')]:
+        for field,value in [('phase','baseline-create'),('candidateVersion','0.1.1')]:
             with self.subTest(field=field):
                 old=self.receipt['runtime'][field];self.receipt['runtime'][field]=value;self.save()
                 with self.assertRaisesRegex(ValueError,'phase/version'):self.check()

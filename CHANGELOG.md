@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.1] - stable candidate
+
+Stable finalization of the qualified `0.1.1-alpha.10` line. No gameplay
+changes are introduced by this version transition. Publication is not
+authorized in this S6 candidate packet.
+
 ## [0.1.1-alpha.10] - qualification in progress
 
 - Use a fresh alpha version for the authorized S4/S5 qualification passes.

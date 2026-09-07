@@ -81,9 +81,9 @@ def saved_snapshot(specs, restart=False):
 
 
 def fixture(specs):
-    files = {'candidate.jar': archive(evidence.MOD, '0.1.1-alpha.10'), 'production-baseline.jar': archive(evidence.MOD, '0.1.1-alpha.9'),
+    files = {'candidate.jar': archive(evidence.MOD, '0.1.1'), 'production-baseline.jar': archive(evidence.MOD, '0.1.1-alpha.9'),
              'production-harness.jar': archive(evidence.HARNESS, '1', specs)}
-    candidate = {**evidence.jar_identity(files['candidate.jar']), 'name': 'immersive_bop_harvest-0.1.1-alpha.10.jar',
+    candidate = {**evidence.jar_identity(files['candidate.jar']), 'name': 'immersive_bop_harvest-0.1.1.jar',
                  'size': len(files['candidate.jar']), 'sha256': evidence.sha(files['candidate.jar'])}
     deps = [{'modId': mod, 'filename': mod + '.jar', 'size': 10, 'sha256': evidence.sha(mod.encode())} for mod in sorted(evidence.DEPENDENCIES)]
     files['runtime-dependencies.json'] = encoded({'status': 'PASS', 'dependencies': deps})
@@ -306,7 +306,7 @@ class ProductionEvidenceTests(unittest.TestCase):
         self.edit('production-baseline-build.json', lambda row: row.update(sourceCommit='0' * 40))
         with self.assertRaisesRegex(ValueError, 'baseline'): self.validate()
         self.files = copy.deepcopy(self.original)
-        self.files['production-baseline.jar'] = archive(evidence.MOD, '0.1.1-alpha.10')
+        self.files['production-baseline.jar'] = archive(evidence.MOD, '0.1.1')
         with self.assertRaisesRegex(ValueError, 'baseline'): self.validate()
 
     def test_false_saved_board_and_machine_outputs_cannot_be_self_attested(self):
