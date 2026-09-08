@@ -80,6 +80,36 @@ def saved_snapshot(specs, restart=False):
             'boardInput': {'item': 'biomesoplenty:fir_log', 'count': 1}, 'formedMachines': machines}
 
 
+def harvest_observation(players, recipient='BopQaOne', ground=False):
+    identity = {player: str(uuid.UUID(int=index + 1)) for index, player in enumerate(players)}
+    def inventory(string=False):
+        return [{'slot': slot, 'item': 'farmersdelight:iron_knife' if slot == 0 else ('minecraft:string' if slot == 1 and string else 'minecraft:air'),
+                 'count': 1 if slot == 0 or (slot == 1 and string) else 0, 'damage': 0} for slot in range(36)]
+    def players_rows(string=False):
+        return [{'player': player, 'uuid': identity[player], 'position': {'x': 6 if player == 'BopQaOne' else 10, 'y': 91, 'z': 10},
+                 'inventory': inventory(string and player == recipient)} for player in players]
+    entity = str(uuid.UUID(int=99))
+    events = [{'sequence': 1, 'tick': 50, 'kind': 'drop', 'entityUuid': entity, 'item': 'minecraft:string', 'count': 1},
+              {'sequence': 2, 'tick': 51, 'kind': 'join', 'entityUuid': entity, 'item': 'minecraft:string', 'count': 1}]
+    nearby = [{'uuid': entity, 'item': 'minecraft:string', 'count': 1, 'position': {'x': 8, 'y': 91, 'z': 9}}] if ground else []
+    destinations = [{'kind': 'ground', 'entityUuid': entity, 'item': 'minecraft:string', 'count': 1}] if ground else []
+    if not ground:
+        events.append({'sequence': 3, 'tick': 52, 'kind': 'pickup', 'entityUuid': entity, 'item': 'minecraft:string', 'count': 1,
+                       'destination': {'player': recipient, 'uuid': identity[recipient]}})
+        destinations.append({'kind': 'pickup', 'entityUuid': entity, 'item': 'minecraft:string', 'count': 1,
+                             'destination': {'player': recipient, 'uuid': identity[recipient]}})
+    position = {'x': 8, 'y': 91, 'z': 9}
+    return {'schemaVersion': 1,
+            'fixture': {'dimension': 'minecraft:overworld', 'block': 'biomesoplenty:webbing', 'position': position,
+                        'observationBounds': {'center': position, 'inflate': 7}},
+            'expectedAggregate': {'minecraft:string': 1},
+            'qaIdentities': [{'player': player, 'uuid': identity[player]} for player in players],
+            'baseline': {'tick': 40, 'extraStage': 4, 'players': players_rows(), 'nearbyItemEntities': []},
+            'events': events, 'anchoredDropAggregate': {'minecraft:string': 1},
+            'final': {'tick': 60, 'extraStage': 6, 'players': players_rows(not ground), 'nearbyItemEntities': nearby,
+                      'destinations': destinations, 'aggregate': {'minecraft:string': 1}}}
+
+
 def fixture(specs):
     files = {'candidate.jar': archive(evidence.MOD, '0.1.1'), 'production-baseline.jar': archive(evidence.MOD, '0.1.1-alpha.9'),
              'production-harness.jar': archive(evidence.HARNESS, '1', specs)}
@@ -171,7 +201,7 @@ def fixture(specs):
                 add('client observed server result ' + player, True)
                 add('finished client observed output ' + player, True)
             runtime['clientInteractions'] = {'verified': True, 'maxConcurrentPlayers': len(players), 'finishedClients': len(players), 'reconnected': phase == 'multiplayer', 'events': events,
-                                             'extraChecks': {'sawmill': True, 'harvest': True}}
+                                             'extraChecks': {'sawmill': True, 'harvest': True}, 'harvestObservation': harvest_observation(players)}
             if phase == 'multiplayer':
                 for label, value in {'two concurrent real clients': 2, 'real client reconnect': True, 'client reconnect after observed result': True,
                                      'real client retrieved parked tool': True, 'parked tool retrieval uses empty hand': True,
@@ -366,6 +396,55 @@ class ProductionEvidenceTests(unittest.TestCase):
         self.files = copy.deepcopy(self.original)
         self.check('multiplayer', 'authoritative combined client and ground outputs', {'biomesoplenty:stripped_fir_log': 2, 'farmersdelight:tree_bark': 2})
         with self.assertRaises(ValueError): self.validate()
+
+    def test_harvest_observation_is_strict_and_independently_recomputed(self):
+        def replace(value):
+            self.edit('production-multiplayer.json', lambda row: row['runtime']['clientInteractions'].update(harvestObservation=value))
+        for recipient in ('BopQaOne', 'BopQaTwo'):
+            self.files = copy.deepcopy(self.original)
+            replace(harvest_observation(['BopQaOne', 'BopQaTwo'], recipient=recipient))
+            with self.subTest(destination=recipient): self.assertEqual('INTEGRITY_ONLY_PACKAGED_EXECUTION', self.validate()['status'])
+        self.files = copy.deepcopy(self.original)
+        replace(harvest_observation(['BopQaOne', 'BopQaTwo'], ground=True))
+        self.assertEqual('INTEGRITY_ONLY_PACKAGED_EXECUTION', self.validate()['status'])
+        cases = {
+            'no-string': lambda value: value['final'].update(aggregate={}),
+            'duplicate-string': lambda value: (value.update(anchoredDropAggregate={'minecraft:string': 2}), value['final'].update(aggregate={'minecraft:string': 2})),
+            'unrelated-output': lambda value: (value['final']['players'][0]['inventory'][2].update(item='minecraft:diamond', count=1), value['final'].update(aggregate={'minecraft:diamond': 1, 'minecraft:string': 1})),
+            'non-qa': lambda value: value['events'][2]['destination'].update(player='NotQa', uuid=str(uuid.UUID(int=9))),
+            'reordered-identities': lambda value: value['qaIdentities'].reverse(),
+            'reordered-events': lambda value: value['events'].reverse(),
+            'missing-observation': lambda value: None,
+            'missing-field': lambda value: value['baseline'].pop('players'),
+            'malformed-key-set': lambda value: value.update(extra=True),
+            'malformed-uuid': lambda value: value['qaIdentities'][0].update(uuid='not-a-uuid'),
+            'malformed-tick-stage': lambda value: value['final'].update(tick=True),
+            'malformed-position': lambda value: value['fixture']['position'].update(x='8'),
+            'float-fixture-coordinate': lambda value: value['fixture']['position'].update(x=8.0),
+            'malformed-slot-order': lambda value: value['final']['players'][0]['inventory'][1].update(slot=2),
+            'malformed-item-count': lambda value: value['events'][0].update(item='Minecraft:String', count=-1),
+            'broken-correlation': lambda value: value['events'][1].update(entityUuid=str(uuid.UUID(int=98))),
+            'duplicate-pickup': lambda value: value['events'].append({**copy.deepcopy(value['events'][2]), 'sequence': 4}),
+            'oversized-pickup': lambda value: value['events'][2].update(count=2),
+            'unresolved-anchor': lambda value: value['events'].pop(),
+            'pickup-and-ground': lambda value: value.update(final=harvest_observation(['BopQaOne', 'BopQaTwo'], ground=True)['final']),
+            'mismatched-pickup-destination': lambda value: (value['final']['players'][0]['inventory'][1].update(item='minecraft:air', count=0), value['final']['players'][1]['inventory'][1].update(item='minecraft:string', count=1)),
+            'pre-baseline-event': lambda value: value['events'][0].update(tick=39),
+            'post-final-event': lambda value: value['events'][2].update(tick=61),
+            'aggregate-mismatch': lambda value: value['final'].update(aggregate={'minecraft:string': 2}),
+        }
+        for name, mutate in cases.items():
+            self.files = copy.deepcopy(self.original)
+            value = harvest_observation(['BopQaOne', 'BopQaTwo'])
+            mutate(value)
+            if name == 'missing-observation':
+                self.edit('production-multiplayer.json', lambda row: row['runtime']['clientInteractions'].pop('harvestObservation'))
+            else: replace(value)
+            with self.subTest(case=name), self.assertRaises(ValueError): self.validate()
+        self.files = copy.deepcopy(self.original)
+        historical = self.files['production-baseline.jar']
+        self.assertEqual(historical, self.original['production-baseline.jar'])
+        self.assertEqual('INTEGRITY_ONLY_PACKAGED_EXECUTION', self.validate()['status'])
 
     def test_board_accepts_late_empty_hand_and_unordered_java_player_set(self):
         def mutate(row):

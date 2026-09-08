@@ -1122,8 +1122,8 @@
     },
     {
       "path": "src/qualification/java/com/oblixorprime/immersivebopharvest/qa/ClientInteractions.java",
-      "size_bytes": 20407,
-      "sha256": "eae7028e178c1950988d3a2011e952a7939e845c901638d1c9ac3482fad7197f"
+      "size_bytes": 28995,
+      "sha256": "34db930bdd640e2524e742cd9378d212f8f24d6da5f3caf48cfc93971881072d"
     },
     {
       "path": "src/qualification/java/com/oblixorprime/immersivebopharvest/qa/ClientQualification.java",
@@ -1192,8 +1192,8 @@
     },
     {
       "path": "tools/ci/production_evidence.py",
-      "size_bytes": 38979,
-      "sha256": "5ab97d21612530e7702a917c45b92e576d4abf4c741e40c3e41acd1f05481ebf"
+      "size_bytes": 49153,
+      "sha256": "697fa50e433b8a0f1b38b9a48ba753ea77524110a754dab64daa6eb8796a80ad"
     },
     {
       "path": "tools/ci/qualification_report.py",
@@ -1247,8 +1247,8 @@
     },
     {
       "path": "tools/ci/test_production_evidence.py",
-      "size_bytes": 41440,
-      "sha256": "37c49664fb4bc94dbe919022d03ac115814deacd85ced3845ccb7e10c09b5840"
+      "size_bytes": 48162,
+      "sha256": "b4db18b3d10721c73968cf63d8e50fc88bd5962b497bf315b47c3371a495ff82"
     },
     {
       "path": "tools/ci/test_qualification_report.py",

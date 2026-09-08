@@ -26,8 +26,11 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import vectorwing.farmersdelight.common.block.entity.CuttingBoardBlockEntity;
 import java.util.ArrayList;
@@ -55,6 +58,11 @@ final class ClientInteractions {
     private static final Map<String,Boolean> extraChecks=new LinkedHashMap<>();
     private static boolean sawPacket,harvestPacket;
     private static boolean interactionInspected,cleanupPending,retrievalPacket;
+    private static final List<Map<String,Object>> harvestEvents=new ArrayList<>();
+    private static final Map<UUID,Map<String,Object>> anchoredDrops=new LinkedHashMap<>();
+    private static final Set<UUID> joinedDrops=new HashSet<>();
+    private static int harvestSequence;
+    private static Map<String,Object> harvestBaseline;
 
     static void install() {
         NeoForge.EVENT_BUS.addListener(ClientInteractions::commands);
@@ -62,6 +70,9 @@ final class ClientInteractions {
         NeoForge.EVENT_BUS.addListener(ClientInteractions::logout);
         NeoForge.EVENT_BUS.addListener(ClientInteractions::tick);
         NeoForge.EVENT_BUS.addListener(ClientInteractions::broken);
+        NeoForge.EVENT_BUS.addListener(ClientInteractions::drops);
+        NeoForge.EVENT_BUS.addListener(ClientInteractions::join);
+        NeoForge.EVENT_BUS.addListener(ClientInteractions::pickup);
     }
     private static void commands(RegisterCommandsEvent event) {
         var root=Commands.literal("bopqa").requires(source->source.getEntity() instanceof ServerPlayer player&&Set.of("BopQaOne","BopQaTwo").contains(player.getGameProfile().getName()));
@@ -118,7 +129,7 @@ final class ClientInteractions {
                 server.overworld().getEntitiesOfClass(ItemEntity.class,new AABB(BOARD).inflate(7)).forEach(ItemEntity::discard);
                 var web=BuiltInRegistries.BLOCK.get(ResourceLocation.parse("biomesoplenty:webbing")).defaultBlockState().setValue(MultifaceBlock.getFaceProperty(Direction.DOWN),true);
                 PackagedRuntime.equal("client webbing fixture is supported",true,web.canSurvive(server.overworld(),HARVEST));
-                server.overworld().setBlockAndUpdate(HARVEST,web);extraStage=4;
+                server.overworld().setBlockAndUpdate(HARVEST,web);extraStage=4;captureHarvestBaseline();
                 server.overworld().setBlockAndUpdate(MARKER,Blocks.REDSTONE_BLOCK.defaultBlockState());
             }
             case "harvested" -> {PackagedRuntime.equal("client harvest stage",4,extraStage);extraStage=5;due=ticks+20;}
@@ -159,6 +170,26 @@ final class ClientInteractions {
             harvestPacket=true;events.add(Map.of("event","actual-harvest-break-packet","player","BopQaOne","tick",ticks,"block",BuiltInRegistries.BLOCK.getKey(event.getState().getBlock()).toString()));
         }
     }
+    private static void drops(BlockDropsEvent event) {
+        if(server==null||extraStage!=4||!event.getPos().equals(HARVEST)||!event.getState().is(BuiltInRegistries.BLOCK.get(ResourceLocation.parse("biomesoplenty:webbing"))))return;
+        if(!(event.getBreaker() instanceof ServerPlayer player)||!player.getUUID().equals(ready.get("BopQaOne"))||!event.getTool().is(TagKey.create(Registries.ITEM,ResourceLocation.parse("c:tools/knife"))))return;
+        for(ItemEntity entity:event.getDrops()) {
+            ItemStack stack=entity.getItem();String item=BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();UUID uuid=entity.getUUID();
+            var drop=new LinkedHashMap<String,Object>();drop.put("entityUuid",uuid.toString());drop.put("item",item);drop.put("count",stack.getCount());
+            anchoredDrops.put(uuid,drop);harvestEvent("drop",uuid,item,stack.getCount(),null);
+        }
+    }
+    private static void join(EntityJoinLevelEvent event) {
+        if(server==null||event.getLevel().isClientSide()||!(event.getEntity() instanceof ItemEntity entity)||!anchoredDrops.containsKey(entity.getUUID()))return;
+        ItemStack stack=entity.getItem();joinedDrops.add(entity.getUUID());harvestEvent("join",entity.getUUID(),BuiltInRegistries.ITEM.getKey(stack.getItem()).toString(),stack.getCount(),null);
+    }
+    private static void pickup(ItemEntityPickupEvent.Post event) {
+        if(server==null||!anchoredDrops.containsKey(event.getItemEntity().getUUID()))return;
+        {
+            ItemStack original=event.getOriginalStack();int count=original.getCount()-event.getCurrentStack().getCount();
+            if(count>0)harvestEvent("pickup",event.getItemEntity().getUUID(),BuiltInRegistries.ITEM.getKey(original.getItem()).toString(),count,event.getPlayer());
+        }
+    }
     private static void logout(PlayerEvent.PlayerLoggedOutEvent event) {
         if(server!=null&&event.getEntity() instanceof ServerPlayer player) {
             String name=player.getGameProfile().getName();events.add(Map.of("event","logout","player",name,"tick",ticks));
@@ -183,10 +214,12 @@ final class ClientInteractions {
             }
             if(extraStage==5&&ticks>=due) {
                 PackagedRuntime.equal("actual client broke supported webbing",true,harvestPacket&&server.overworld().getBlockState(HARVEST).isAir());
-                Map<String,Integer> drops=new TreeMap<>();
-                for(ServerPlayer player:server.getPlayerList().getPlayers())if(player.getGameProfile().getName().equals("BopQaOne"))for(ItemStack item:player.getInventory().items)
-                    if(!item.isEmpty()&&!BuiltInRegistries.ITEM.getKey(item.getItem()).toString().equals("farmersdelight:iron_knife"))drops.merge(BuiltInRegistries.ITEM.getKey(item.getItem()).toString(),item.getCount(),Integer::sum);
-                for(ItemEntity entity:server.overworld().getEntitiesOfClass(ItemEntity.class,new AABB(BOARD).inflate(7))) {ItemStack item=entity.getItem();drops.merge(BuiltInRegistries.ITEM.getKey(item.getItem()).toString(),item.getCount(),Integer::sum);}
+                Map<String,Object> observation=harvestObservation();
+                @SuppressWarnings("unchecked") Map<String,Integer> drops=(Map<String,Integer>)((Map<String,Object>)observation.get("final")).get("aggregate");
+                @SuppressWarnings("unchecked") Map<String,Integer> anchored=(Map<String,Integer>)observation.get("anchoredDropAggregate");
+                PackagedRuntime.interactionReport(interactionReport(observation,false));
+                PackagedRuntime.equal("anchored harvest lifecycle joined",anchoredDrops.keySet(),joinedDrops);
+                PackagedRuntime.equal("anchored client harvest output",anchored,drops);
                 PackagedRuntime.equal("actual client harvest output",Map.of("minecraft:string",1),drops);
                 extraChecks.put("harvest",true);extraStage=6;server.overworld().setBlockAndUpdate(MARKER,Blocks.NETHERITE_BLOCK.defaultBlockState());
             }
@@ -211,12 +244,12 @@ final class ClientInteractions {
                 PackagedRuntime.equal("all tools returned to client inventories",requiredPlayers(),inventoryTools);
                 PackagedRuntime.equal("only one actual tool use consumes durability",1,after.damage);
                 verified=true;level.setBlockAndUpdate(MARKER,Blocks.EMERALD_BLOCK.defaultBlockState());
-                PackagedRuntime.interactionReport(Map.of("events",events,"verified",true,"maxConcurrentPlayers",maxOnline,"outputs",after.outputs));
+                PackagedRuntime.interactionReport(interactionReport(harvestObservation(),false));
             }
             if(verified&&finished.size()==requiredPlayers()&&(server.isSingleplayer()||server.getPlayerCount()==0)) {
                 PackagedRuntime.equal("real client IE and harvest completed",Map.of("sawmill",true,"harvest",true),extraChecks);
                 if(!server.isSingleplayer()){PackagedRuntime.equal("two concurrent real clients",2,maxOnline);PackagedRuntime.equal("real client reconnect",true,reconnected);}
-                completion=true;PackagedRuntime.interactionReport(Map.of("events",events,"verified",true,"maxConcurrentPlayers",maxOnline,"reconnected",reconnected,"finishedClients",finished.size(),"extraChecks",extraChecks));
+                completion=true;PackagedRuntime.interactionReport(interactionReport(harvestObservation(),true));
                 if(!server.isSingleplayer())PackagedRuntime.finishMultiplayer(server);
             }
         } catch(Throwable e){completion=true;PackagedRuntime.failInteraction(server,e);}
@@ -238,4 +271,43 @@ final class ClientInteractions {
         for(ItemStack stack:player.getInventory().items)result.add(Map.of("slot",slot++,"item",BuiltInRegistries.ITEM.getKey(stack.getItem()).toString(),"count",stack.getCount(),"damage",stack.getDamageValue()));
         return result;
     }
+    private static void captureHarvestBaseline() {
+        harvestEvents.clear();anchoredDrops.clear();joinedDrops.clear();harvestSequence=0;
+        var baseline=new LinkedHashMap<String,Object>();baseline.put("tick",ticks);baseline.put("extraStage",extraStage);baseline.put("players",harvestPlayers());baseline.put("nearbyItemEntities",nearbyItems());harvestBaseline=baseline;
+    }
+    private static List<Map<String,Object>> harvestPlayers() {
+        List<Map<String,Object>> players=new ArrayList<>();
+        for(String name:List.of("BopQaOne","BopQaTwo"))if(ready.containsKey(name)) {
+            ServerPlayer player=server.getPlayerList().getPlayer(ready.get(name));if(player==null)throw new IllegalStateException("Missing ready-bound QA player "+name);
+            var row=new LinkedHashMap<String,Object>();row.put("player",name);row.put("uuid",player.getUUID().toString());row.put("position",position(player.blockPosition()));row.put("inventory",inventory(player));players.add(row);
+        }
+        return players;
+    }
+    private static List<Map<String,Object>> nearbyItems() {
+        List<Map<String,Object>> result=new ArrayList<>();
+        for(ItemEntity entity:server.overworld().getEntitiesOfClass(ItemEntity.class,new AABB(HARVEST).inflate(7))) {
+            ItemStack item=entity.getItem();var row=new LinkedHashMap<String,Object>();row.put("uuid",entity.getUUID().toString());row.put("item",BuiltInRegistries.ITEM.getKey(item.getItem()).toString());row.put("count",item.getCount());row.put("position",position(entity.blockPosition()));result.add(row);
+        }
+        result.sort((left,right)->String.valueOf(left.get("uuid")).compareTo(String.valueOf(right.get("uuid"))));return result;
+    }
+    private static Map<String,Object> position(BlockPos value) {return Map.of("x",value.getX(),"y",value.getY(),"z",value.getZ());}
+    private static void harvestEvent(String kind,UUID entity,String item,int count,net.minecraft.world.entity.player.Player destination) {
+        var row=new LinkedHashMap<String,Object>();row.put("sequence",++harvestSequence);row.put("tick",ticks);row.put("kind",kind);row.put("entityUuid",entity.toString());row.put("item",item);row.put("count",count);
+        if(destination!=null) {var to=new LinkedHashMap<String,Object>();to.put("player",destination.getGameProfile().getName());to.put("uuid",destination.getUUID().toString());row.put("destination",to);}harvestEvents.add(row);
+    }
+    private static Map<String,Object> harvestObservation() {
+        var fixture=new LinkedHashMap<String,Object>();fixture.put("dimension","minecraft:overworld");fixture.put("block","biomesoplenty:webbing");fixture.put("position",position(HARVEST));fixture.put("observationBounds",Map.of("center",position(HARVEST),"inflate",7));
+        List<Map<String,Object>> identities=new ArrayList<>();for(String name:List.of("BopQaOne","BopQaTwo"))if(ready.containsKey(name))identities.add(Map.of("player",name,"uuid",ready.get(name).toString()));
+        Map<String,Object> baseline=harvestBaseline==null?Map.of("tick",ticks,"extraStage",extraStage,"players",List.of(),"nearbyItemEntities",List.of()):harvestBaseline;
+        List<Map<String,Object>> players=harvestPlayers(),ground=nearbyItems();Map<String,Integer> aggregate=positiveDeltas(players,ground),anchored=new TreeMap<>();
+        for(Map<String,Object> drop:anchoredDrops.values())anchored.merge((String)drop.get("item"),(Integer)drop.get("count"),Integer::sum);
+        List<Map<String,Object>> destinations=new ArrayList<>();for(Map<String,Object> event:harvestEvents)if(event.get("kind").equals("pickup")) {var row=new LinkedHashMap<>(event);row.remove("sequence");row.remove("tick");row.remove("destination");row.put("destination",event.get("destination"));destinations.add(row);}for(Map<String,Object> item:ground)if(anchoredDrops.containsKey(UUID.fromString((String)item.get("uuid"))))destinations.add(Map.of("kind","ground","entityUuid",item.get("uuid"),"item",item.get("item"),"count",item.get("count")));
+        var finalSample=new LinkedHashMap<String,Object>();finalSample.put("tick",ticks);finalSample.put("extraStage",extraStage);finalSample.put("players",players);finalSample.put("nearbyItemEntities",ground);finalSample.put("destinations",destinations);finalSample.put("aggregate",aggregate);
+        var result=new LinkedHashMap<String,Object>();result.put("schemaVersion",1);result.put("fixture",fixture);result.put("expectedAggregate",Map.of("minecraft:string",1));result.put("qaIdentities",identities);result.put("baseline",baseline);result.put("events",new ArrayList<>(harvestEvents));result.put("anchoredDropAggregate",anchored);result.put("final",finalSample);return result;
+    }
+    private static Map<String,Integer> positiveDeltas(List<Map<String,Object>> players,List<Map<String,Object>> ground) {
+        Map<String,Integer> baseline=new TreeMap<>(),current=new TreeMap<>(),result=new TreeMap<>();if(harvestBaseline!=null)for(Map<String,Object> player:(List<Map<String,Object>>)harvestBaseline.get("players"))totals((List<Map<String,Object>>)player.get("inventory"),baseline);for(Map<String,Object> player:players)totals((List<Map<String,Object>>)player.get("inventory"),current);for(var entry:current.entrySet())if(entry.getValue()>baseline.getOrDefault(entry.getKey(),0))result.put(entry.getKey(),entry.getValue()-baseline.getOrDefault(entry.getKey(),0));for(Map<String,Object> item:ground)result.merge((String)item.get("item"),(Integer)item.get("count"),Integer::sum);return result;
+    }
+    private static void totals(List<Map<String,Object>> inventory,Map<String,Integer> result) {for(Map<String,Object> item:inventory)if((Integer)item.get("count")>0&&!item.get("item").equals("minecraft:air"))result.merge((String)item.get("item"),(Integer)item.get("count"),Integer::sum);}
+    private static Map<String,Object> interactionReport(Map<String,Object> observation,boolean finishedReport) {var result=new LinkedHashMap<String,Object>();result.put("events",events);result.put("verified",true);result.put("maxConcurrentPlayers",maxOnline);result.put("extraChecks",extraChecks);result.put("harvestObservation",observation);if(finishedReport){result.put("reconnected",reconnected);result.put("finishedClients",finished.size());}return result;}
 }
