@@ -110,6 +110,7 @@ jobs:
         with:
           name: source-validation-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
+            PROJECT_MANIFEST.json
             build/ci-evidence/
             build/reports/
             build/production-runtime/receipts/
