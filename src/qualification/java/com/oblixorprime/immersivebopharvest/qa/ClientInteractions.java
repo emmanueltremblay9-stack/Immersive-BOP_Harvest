@@ -63,6 +63,7 @@ final class ClientInteractions {
     private static final Set<UUID> joinedDrops=new HashSet<>();
     private static int harvestSequence;
     private static Map<String,Object> harvestBaseline;
+    private static Map<String,Object> frozenHarvestObservation;
 
     static void install() {
         NeoForge.EVENT_BUS.addListener(ClientInteractions::commands);
@@ -214,7 +215,7 @@ final class ClientInteractions {
             }
             if(extraStage==5&&ticks>=due) {
                 PackagedRuntime.equal("actual client broke supported webbing",true,harvestPacket&&server.overworld().getBlockState(HARVEST).isAir());
-                Map<String,Object> observation=harvestObservation();
+                Map<String,Object> observation=frozenHarvestObservation=harvestObservation();
                 @SuppressWarnings("unchecked") Map<String,Integer> drops=(Map<String,Integer>)((Map<String,Object>)observation.get("final")).get("aggregate");
                 @SuppressWarnings("unchecked") Map<String,Integer> anchored=(Map<String,Integer>)observation.get("anchoredDropAggregate");
                 PackagedRuntime.interactionReport(interactionReport(observation,false));
@@ -249,7 +250,7 @@ final class ClientInteractions {
             if(verified&&finished.size()==requiredPlayers()&&(server.isSingleplayer()||server.getPlayerCount()==0)) {
                 PackagedRuntime.equal("real client IE and harvest completed",Map.of("sawmill",true,"harvest",true),extraChecks);
                 if(!server.isSingleplayer()){PackagedRuntime.equal("two concurrent real clients",2,maxOnline);PackagedRuntime.equal("real client reconnect",true,reconnected);}
-                completion=true;PackagedRuntime.interactionReport(interactionReport(harvestObservation(),true));
+                completion=true;PackagedRuntime.interactionReport(interactionReport(reportedHarvestObservation(),true));
                 if(!server.isSingleplayer())PackagedRuntime.finishMultiplayer(server);
             }
         } catch(Throwable e){completion=true;PackagedRuntime.failInteraction(server,e);}
@@ -272,7 +273,7 @@ final class ClientInteractions {
         return result;
     }
     private static void captureHarvestBaseline() {
-        harvestEvents.clear();anchoredDrops.clear();joinedDrops.clear();harvestSequence=0;
+        harvestEvents.clear();anchoredDrops.clear();joinedDrops.clear();harvestSequence=0;frozenHarvestObservation=null;
         var baseline=new LinkedHashMap<String,Object>();baseline.put("tick",ticks);baseline.put("extraStage",extraStage);baseline.put("players",harvestPlayers());baseline.put("nearbyItemEntities",nearbyItems());harvestBaseline=baseline;
     }
     private static List<Map<String,Object>> harvestPlayers() {
@@ -305,6 +306,7 @@ final class ClientInteractions {
         var finalSample=new LinkedHashMap<String,Object>();finalSample.put("tick",ticks);finalSample.put("extraStage",extraStage);finalSample.put("players",players);finalSample.put("nearbyItemEntities",ground);finalSample.put("destinations",destinations);finalSample.put("aggregate",aggregate);
         var result=new LinkedHashMap<String,Object>();result.put("schemaVersion",1);result.put("fixture",fixture);result.put("expectedAggregate",Map.of("minecraft:string",1));result.put("qaIdentities",identities);result.put("baseline",baseline);result.put("events",new ArrayList<>(harvestEvents));result.put("anchoredDropAggregate",anchored);result.put("final",finalSample);return result;
     }
+    private static Map<String,Object> reportedHarvestObservation() {return frozenHarvestObservation==null?harvestObservation():frozenHarvestObservation;}
     private static Map<String,Integer> positiveDeltas(List<Map<String,Object>> players,List<Map<String,Object>> ground) {
         Map<String,Integer> baseline=new TreeMap<>(),current=new TreeMap<>(),result=new TreeMap<>();if(harvestBaseline!=null)for(Map<String,Object> player:(List<Map<String,Object>>)harvestBaseline.get("players"))totals((List<Map<String,Object>>)player.get("inventory"),baseline);for(Map<String,Object> player:players)totals((List<Map<String,Object>>)player.get("inventory"),current);for(var entry:current.entrySet())if(entry.getValue()>baseline.getOrDefault(entry.getKey(),0))result.put(entry.getKey(),entry.getValue()-baseline.getOrDefault(entry.getKey(),0));for(Map<String,Object> item:ground)result.merge((String)item.get("item"),(Integer)item.get("count"),Integer::sum);return result;
     }
