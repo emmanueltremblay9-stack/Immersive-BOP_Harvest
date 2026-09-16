@@ -171,14 +171,16 @@ jobs:
       - name: Initialize automatic publication paths
         shell: bash
         run: |
-          echo "SOURCE_REPORT_PATH=$RUNNER_TEMP/stable-source-readiness.json" >> "$GITHUB_ENV"
-          echo "CANDIDATE_PATH=$RUNNER_TEMP/immersive_bop_harvest-0.1.1.jar" >> "$GITHUB_ENV"
-          echo "GITHUB_REPORT_PATH=$RUNNER_TEMP/github-publication.json" >> "$GITHUB_ENV"
-          echo "PREPARE_REPORT_PATH=$RUNNER_TEMP/curseforge-upload-intent.json" >> "$GITHUB_ENV"
-          echo "RESULT_REPORT_PATH=$RUNNER_TEMP/curseforge-publication-result.json" >> "$GITHUB_ENV"
-          echo "RECEIPT_PATH=$RUNNER_TEMP/stable-publication-receipt.json" >> "$GITHUB_ENV"
-          echo "RECEIPT_STATE_PATH=$RUNNER_TEMP/stable-publication-receipt-state.json" >> "$GITHUB_ENV"
-          echo "RECEIPT_VERIFY_PATH=$RUNNER_TEMP/stable-publication-receipt-verification.json" >> "$GITHUB_ENV"
+          {
+            echo "SOURCE_REPORT_PATH=$RUNNER_TEMP/stable-source-readiness.json"
+            echo "CANDIDATE_PATH=$RUNNER_TEMP/immersive_bop_harvest-0.1.1.jar"
+            echo "GITHUB_REPORT_PATH=$RUNNER_TEMP/github-publication.json"
+            echo "PREPARE_REPORT_PATH=$RUNNER_TEMP/curseforge-upload-intent.json"
+            echo "RESULT_REPORT_PATH=$RUNNER_TEMP/curseforge-publication-result.json"
+            echo "RECEIPT_PATH=$RUNNER_TEMP/stable-publication-receipt.json"
+            echo "RECEIPT_STATE_PATH=$RUNNER_TEMP/stable-publication-receipt-state.json"
+            echo "RECEIPT_VERIFY_PATH=$RUNNER_TEMP/stable-publication-receipt-verification.json"
+          } >> "$GITHUB_ENV"
 
       - name: Check CurseForge credential availability for exact preflight
         id: auto-credential

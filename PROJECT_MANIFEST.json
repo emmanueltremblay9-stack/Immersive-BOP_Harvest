@@ -82,8 +82,8 @@
     },
     {
       "path": ".github/workflows/publish-curseforge.yml",
-      "size_bytes": 27570,
-      "sha256": "50c0245a0b3c083fd4a2a8bc707f8c4e1b639490370b58cdcb7d05f3c00ce216"
+      "size_bytes": 27491,
+      "sha256": "9b22f4d0cd67d00d4134a052518328fac1a8adab0a8eca6050402dca7dec4825"
     },
     {
       "path": ".gitignore",
