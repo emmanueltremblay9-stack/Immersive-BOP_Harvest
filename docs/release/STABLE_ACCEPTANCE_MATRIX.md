@@ -1,5 +1,19 @@
 # Stable acceptance matrix
 
+## Current `0.1.1` final bundle result — 2026-09-16
+
+The schema-2 final bundle validated all 313 catalog IDs against the same
+authenticated main run, source tree, dependency lock, candidate JAR and raw
+evidence bytes. Coverage is partitioned exactly across the six mandatory receipt
+kinds: 13 automated, 1 client, 2 server, 297 gameplay, plus mandatory
+multiplayer and save/reload capability receipts. Generation and validation
+exited `0`; `stableReady=true` and `publicationReady=false`.
+
+The per-ID `NOT_PERFORMED` rows below are retained as the historical pre-final
+snapshot and are superseded for candidate `0.1.1` only by the byte-bound bundle
+receipt coverage. They must not be reused for another commit, tree, run,
+artifact, JAR, dependency lock, version, or changed acceptance catalog.
+
 Current qualification follow-up: S4 passed canonical run `33984397632`, attempt 1,
 at merge `1b84049fe53d59b1b263ee11942be304c441cab6`, with independent readback.
 It adds 302 runtime cases in the separate
