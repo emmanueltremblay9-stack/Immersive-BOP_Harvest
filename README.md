@@ -7,7 +7,7 @@
 - **Status:** source automation validated; historical alpha.9 client smoke remains `NOT_PERFORMED / OWNER_WAIVED`
 - **Target:** Minecraft 1.21.1, NeoForge
 - **Mod ID:** `immersive_bop_harvest`
-- **Current qualification alpha:** `0.1.1-alpha.10` (unpublished)
+- **Current stable candidate:** `0.1.1` (unpublished)
 
 ## Stable readiness maintenance
 
@@ -94,7 +94,7 @@ On Windows PowerShell, replace `bash gradlew` with `.\gradlew.bat`.
 `check` includes all publisher safety tests and release-checker regressions.
 The runtime preparation validates locked dependency size, SHA-256, mod ID and
 version before the Windows/Prism copy task is bypassed. No runtime test is skipped.
-The resulting development JAR is `build/libs/immersive_bop_harvest-0.1.1-alpha.10.jar`.
+The resulting production JAR is `build/libs/immersive_bop_harvest-0.1.1.jar`.
 It is not an approved public release artifact.
 
 `--check` validates the source ledger read-only and works without `.git`.
@@ -129,7 +129,7 @@ values, metadata readback, dependency proof, and remaining-jar counts.
 
 ## Release gate
 
-The active unpublished qualification version is `0.1.1-alpha.10`. S4 has
+The active unpublished stable candidate is `0.1.1`. Alpha.10 has
 authenticated canonical CI evidence for 305 GameTests. Disposable production
 qualification is documented in the [S5 runbook](docs/release/PACKAGED_RUNTIME_QUALIFICATION.md)
 and [current audit](docs/release/STABLE_RELEASE_AUDIT.md). A full stable release

@@ -3,7 +3,7 @@
   "mod_id": "immersive_bop_harvest",
   "package_type": "NeoForge playable alpha source project",
   "design_profile": "conservative_realistic_with_owner_supplied_branding",
-  "version": "0.1.1-alpha.10",
+  "version": "0.1.1",
   "validation": "spec-check-gametest-runData-server-install-license-logo-manifest-ledger-release-gate-pass-client-smoke-owner-waived",
   "asset_summary": {
     "vector_logos": 1,
@@ -92,13 +92,13 @@
     },
     {
       "path": "00_START_HERE.txt",
-      "size_bytes": 1777,
-      "sha256": "e7257adf54a748933c1c44bb9c53bfdc8ba50eaec41accf51b6c99a63c10282c"
+      "size_bytes": 1768,
+      "sha256": "afb3fe19717696faec662dafa2e4439d5b03a0a63268a6206cef82de22993113"
     },
     {
       "path": "01_CODEX_MASTER_PROMPT.txt",
-      "size_bytes": 13595,
-      "sha256": "11184728b05ef37adc85897b9b116df23e23fc0ce068860547b96a46babaf26f"
+      "size_bytes": 13658,
+      "sha256": "d14bfbee40fee624bbc50b65c642f8f73efa6542c79ea448d16dbcd89d8da4a5"
     },
     {
       "path": "AGENTS.md",
@@ -107,8 +107,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "size_bytes": 14751,
-      "sha256": "8078e23a3cdf4b080d874c37773e015378c83a6a231eecf2e50e8e315846ebd7"
+      "size_bytes": 14965,
+      "sha256": "825eccbd9f45243c1d34e88cb808ac6bc96e916d46351dd6ab48ce5988d58dfb"
     },
     {
       "path": "LICENSE",
@@ -117,8 +117,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 8993,
-      "sha256": "f230ec1550676fd123b5d257c7d56a69f76486fc3e593415c3a14a6dd1e668d3"
+      "size_bytes": 8963,
+      "sha256": "3fc46123352e60c75bd5223adbf02335a55cd089bd54fd34edcb7ce422f39737"
     },
     {
       "path": "VALIDATION_REPORT.txt",
@@ -252,8 +252,8 @@
     },
     {
       "path": "gradle.properties",
-      "size_bytes": 775,
-      "sha256": "dd6d0bd30f6428744e270ecc584c0500c320f50cf2afb174284ff1e22c0eaa40"
+      "size_bytes": 766,
+      "sha256": "79642abe36d637c90d4555ed650588983a9435a08b96af4cf66453067e5a3825"
     },
     {
       "path": "gradle/wrapper/gradle-wrapper.jar",
@@ -1122,8 +1122,8 @@
     },
     {
       "path": "src/qualification/java/com/oblixorprime/immersivebopharvest/qa/ClientInteractions.java",
-      "size_bytes": 20407,
-      "sha256": "eae7028e178c1950988d3a2011e952a7939e845c901638d1c9ac3482fad7197f"
+      "size_bytes": 29276,
+      "sha256": "72b20d93b07135109a68ce09e8273affc060c8174de6052bb83c9dca486dba80"
     },
     {
       "path": "src/qualification/java/com/oblixorprime/immersivebopharvest/qa/ClientQualification.java",
@@ -1187,13 +1187,13 @@
     },
     {
       "path": "tools/ci/production_client.py",
-      "size_bytes": 9628,
-      "sha256": "213a801321d5310ac6ec971edc62b1deb977bf900e750644901398e7d60c8900"
+      "size_bytes": 9930,
+      "sha256": "e80ab28752f3db078eb750e358f09065eb999cbf1485ec1e90580f6bf363a1f8"
     },
     {
       "path": "tools/ci/production_evidence.py",
-      "size_bytes": 38829,
-      "sha256": "ba6b9b68fa113f5c3484a116cfce02a56b83d81387eaef858b48931a5d09da13"
+      "size_bytes": 49153,
+      "sha256": "697fa50e433b8a0f1b38b9a48ba753ea77524110a754dab64daa6eb8796a80ad"
     },
     {
       "path": "tools/ci/qualification_report.py",
@@ -1207,13 +1207,13 @@
     },
     {
       "path": "tools/ci/run_packaged_qualification.py",
-      "size_bytes": 11829,
-      "sha256": "e9daacff7b0801db3729c5d26e400d7f20f098e3c0efa878a215b8d53eca39a4"
+      "size_bytes": 11899,
+      "sha256": "16ff6f778a789be825bf45d8a325727fea642aed267754970df4727193a860c8"
     },
     {
       "path": "tools/ci/run_production_ci.py",
-      "size_bytes": 1558,
-      "sha256": "b0c23eefbc6c8d9fcf3ebace5821508aa1817a3270e7dba49267e9407cd3ec69"
+      "size_bytes": 1722,
+      "sha256": "8321477d577025ed51b2da33e7f0de0b20ac2c9f737579f5a5c41b888615b1da"
     },
     {
       "path": "tools/ci/runtime-dependencies.lock.json",
@@ -1222,8 +1222,8 @@
     },
     {
       "path": "tools/ci/test_candidate_evidence.py",
-      "size_bytes": 9723,
-      "sha256": "71f4a973cd400d89e0c18d4af37639df67aef48dcc5cb0877b2a0c4b883a97eb"
+      "size_bytes": 9705,
+      "sha256": "937593c7d7af5fc77e6c59b80b19520708ef53562abd5f76dd8aea83d054db34"
     },
     {
       "path": "tools/ci/test_manifest_consumers.py",
@@ -1232,8 +1232,8 @@
     },
     {
       "path": "tools/ci/test_packaged_runtime.py",
-      "size_bytes": 6821,
-      "sha256": "5e08db97352582aeab471c30133deaf2c611bd0e3a4a6b645f6a7a8b19c35eb4"
+      "size_bytes": 9342,
+      "sha256": "36a4107a72cb27f624ebe28906d4504f29a4147fbc96b064328d60c804dc807f"
     },
     {
       "path": "tools/ci/test_prepare_runtime.py",
@@ -1247,8 +1247,8 @@
     },
     {
       "path": "tools/ci/test_production_evidence.py",
-      "size_bytes": 41467,
-      "sha256": "381b2871093bd55fe52a697c3964b4bb1efe1353d4c25b85a7ce50e2704fc86b"
+      "size_bytes": 48162,
+      "sha256": "b4db18b3d10721c73968cf63d8e50fc88bd5962b497bf315b47c3371a495ff82"
     },
     {
       "path": "tools/ci/test_qualification_report.py",
