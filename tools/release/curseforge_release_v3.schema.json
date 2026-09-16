@@ -1,6 +1,37 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "CurseForge publisher manifest version 3",
+  "$defs": {
+    "publicRelation": {
+      "type": "object",
+      "required": [
+        "projectId",
+        "slug",
+        "type"
+      ],
+      "properties": {
+        "projectId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "type": {
+          "enum": [
+            "EmbeddedLibrary",
+            "Incompatible",
+            "OptionalDependency",
+            "RequiredDependency",
+            "Tool",
+            "Include"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
   "type": "object",
   "required": [
     "schemaVersion",
@@ -51,7 +82,9 @@
             "mode",
             "previousPublicFileId",
             "releaseType",
-            "gameVersionNames"
+            "gameVersionNames",
+            "previousFileRelations",
+            "projectRelations"
           ],
           "properties": {
             "mode": {
@@ -76,6 +109,20 @@
               },
               "minItems": 1,
               "uniqueItems": true
+            },
+            "previousFileRelations": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/publicRelation"
+              }
+            },
+            "projectRelations": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/publicRelation"
+              }
             }
           },
           "additionalProperties": false

@@ -20,7 +20,21 @@ class TransitionTests(unittest.TestCase):
     def transition(self):
         self.schema2('previousPublicFile')
         self.manifest['schemaVersion'] = 3
-        self.manifest['baseline'].update(releaseType='alpha', gameVersionNames=['1.21.1','NeoForge','Client'])
+        historical = [
+            copy.deepcopy(legacy.EXPECTED_RELATIONS[index])
+            for index in (0, 1, 3)
+        ]
+        self.manifest['baseline'].update(
+            releaseType='alpha',
+            gameVersionNames=['1.21.1','NeoForge','Client'],
+            previousFileRelations=historical,
+            projectRelations=[],
+        )
+        self.state.previous_file_relations = [
+            {'id': row['projectId'], 'slug': row['slug'], 'type': row['type']}
+            for row in historical
+        ]
+        self.state.project_relations = []
         previous = legacy.FakeState.prior_file()
         previous.update(releaseType=3, gameVersions=['1.21.1','NeoForge','Client'])
         return previous
@@ -57,7 +71,13 @@ class TransitionTests(unittest.TestCase):
     def test_missing_or_invalid_transition_fields_rejected(self):
         self.transition()
         original = copy.deepcopy(self.manifest)
-        for key, value in [('releaseType',None),('releaseType','stable'),('releaseType',[]),('gameVersionNames',[]),('gameVersionNames',['Client','Client']),('gameVersionNames','Client')]:
+        for key, value in [
+            ('releaseType',None),('releaseType','stable'),('releaseType',[]),
+            ('gameVersionNames',[]),('gameVersionNames',['Client','Client']),('gameVersionNames','Client'),
+            ('previousFileRelations',None),('previousFileRelations','relations'),
+            ('previousFileRelations',[{'projectId': True, 'slug': 'bad', 'type': 'RequiredDependency'}]),
+            ('projectRelations',None),('projectRelations',[{'projectId': 1, 'slug': 'bad_slug', 'type': 'RequiredDependency'}]),
+        ]:
             self.manifest = copy.deepcopy(original)
             if value is None: self.manifest['baseline'].pop(key)
             else: self.manifest['baseline'][key]=value
@@ -67,20 +87,47 @@ class TransitionTests(unittest.TestCase):
         self.manifest['curseforge']['releaseType']='stable'
         with self.assertRaises(pub.PublicationError): self.publisher()
 
-    def test_transition_does_not_relax_missing_relations(self):
+    def test_historical_project_relation_drift_blocks(self):
         previous = self.transition()
-        self.state.project_relations=[]
+        self.state.project_relations = legacy.public_relations()[:1]
         with mock.patch.object(legacy.FakeState,'prior_file',return_value=previous):
             with self.assertRaises(pub.PublicationError) as got: self.run_publisher()
         self.assertEqual('CURSEFORGE_PROJECT_RELATION_MISMATCH',got.exception.status)
         self.assertEqual(0,self.state.post_count)
 
+    def test_historical_file_relation_drift_blocks(self):
+        previous = self.transition()
+        self.state.previous_file_relations = self.state.previous_file_relations[:-1]
+        with mock.patch.object(legacy.FakeState,'prior_file',return_value=previous):
+            with self.assertRaises(pub.PublicationError) as got: self.run_publisher()
+        self.assertEqual('CURSEFORGE_RELATION_MISMATCH',got.exception.status)
+        self.assertEqual(0,self.state.post_count)
+
+    def test_target_relation_drift_still_blocks_after_historical_match(self):
+        previous = self.transition()
+        with mock.patch.object(legacy.FakeState,'prior_file',return_value=previous):
+            intent, artifact = self.prepare_and_persist()
+            self.state.publish_visible = True
+            self.state.target_public_relations = legacy.public_relations()[:-1]
+            with self.assertRaises(pub.PublicationError) as got:
+                self.publish_from_intent(intent, artifact)
+        self.assertEqual('CURSEFORGE_RELATION_MISMATCH',got.exception.status)
+        self.assertEqual(1,self.state.post_count)
+
     def test_transition_fields_are_bound_into_intent(self):
         previous = self.transition()
         with mock.patch.object(legacy.FakeState,'prior_file',return_value=previous):
             intent, artifact = self.prepare_and_persist()
-            self.manifest['baseline']['releaseType']='beta'
-            with self.assertRaises(pub.PublicationError): self.publish_from_intent(intent,artifact)
+            for field, value in (
+                ('releaseType', 'beta'),
+                ('previousFileRelations', []),
+                ('projectRelations', legacy.EXPECTED_RELATIONS[:1]),
+            ):
+                original = copy.deepcopy(self.manifest['baseline'][field])
+                self.manifest['baseline'][field] = value
+                with self.subTest(field=field), self.assertRaises(pub.PublicationError):
+                    self.publish_from_intent(intent,artifact)
+                self.manifest['baseline'][field] = original
         self.assertEqual(0,self.state.post_count)
 
     def test_schema3_first_publication_still_requires_empty_inventory(self):

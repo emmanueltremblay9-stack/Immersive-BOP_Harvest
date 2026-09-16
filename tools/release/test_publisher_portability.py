@@ -228,6 +228,102 @@ class PortabilityTests(unittest.TestCase):
             self.run_publisher()
         self.assertEqual('CURSEFORGE_PROJECT_IDENTITY_MISMATCH', got.exception.status)
 
+    def test_project_identity_403_uses_exact_official_file_page_fallback(self):
+        self.schema2('previousPublicFile')
+        publisher = self.publisher()
+        original = publisher.http.get_json
+        def blocked_project(url, **kwargs):
+            if url == self.base_url + f'/api/v1/mods/{legacy.PROJECT_ID}':
+                raise pub.HttpStatusError('fixture project identity', 403)
+            return original(url, **kwargs)
+        publisher.http.get_json = blocked_project
+        page_url = (
+            'https://www.curseforge.com/minecraft/mc-mods/sample-mod/files/'
+            f'{legacy.PREVIOUS_FILE_ID}'
+        )
+        publisher.http.get_text_no_redirect = lambda url, **kwargs: (
+            f'<html><head><link href="{page_url}" rel="canonical"></head>'
+            f'<body>Project ID {legacy.PROJECT_ID}</body></html>'
+            if url == page_url else ''
+        )
+        report = publisher.run(
+            mode='dry-run', curseforge_token='', github_token='',
+            resume_file_id=None, poll_attempts=1, poll_interval=0,
+        )
+        self.assertEqual(
+            'OFFICIAL_FILE_PAGE_AND_FILE_API',
+            report['curseForgeBaseline']['projectIdentity']['source'],
+        )
+
+    def test_project_identity_fallback_redirect_or_ambiguous_page_blocks(self):
+        self.schema2('previousPublicFile')
+        for response in ('redirect', 'ambiguous'):
+            publisher = self.publisher()
+            original = publisher.http.get_json
+            def blocked_project(url, **kwargs):
+                if url == self.base_url + f'/api/v1/mods/{legacy.PROJECT_ID}':
+                    raise pub.HttpStatusError('fixture project identity', 403)
+                return original(url, **kwargs)
+            publisher.http.get_json = blocked_project
+            if response == 'redirect':
+                def page(*_args, **_kwargs):
+                    raise pub.HttpStatusError('fixture official page', 302)
+            else:
+                page = lambda *_args, **_kwargs: '<html><body>Project ID 999</body></html>'
+            publisher.http.get_text_no_redirect = page
+            with self.subTest(response=response), self.assertRaises(pub.PublicationError) as got:
+                publisher.run(
+                    mode='dry-run', curseforge_token='', github_token='',
+                    resume_file_id=None, poll_attempts=1, poll_interval=0,
+                )
+            self.assertIn(got.exception.status, {
+                'CURSEFORGE_PROJECT_IDENTITY_BLOCKED',
+                'CURSEFORGE_PROJECT_IDENTITY_MISMATCH',
+            })
+
+    def test_project_identity_fallback_rejects_conflicting_visible_ids(self):
+        self.schema2('previousPublicFile')
+        publisher = self.publisher()
+        original = publisher.http.get_json
+
+        def blocked_project(url, **kwargs):
+            if url == self.base_url + f'/api/v1/mods/{legacy.PROJECT_ID}':
+                raise pub.HttpStatusError('fixture project identity', 403)
+            return original(url, **kwargs)
+
+        publisher.http.get_json = blocked_project
+        page_url = (
+            'https://www.curseforge.com/minecraft/mc-mods/sample-mod/files/'
+            f'{legacy.PREVIOUS_FILE_ID}'
+        )
+        publisher.http.get_text_no_redirect = lambda url, **kwargs: (
+            f'<html><head><link href="{page_url}" rel="canonical"></head>'
+            f'<body>Project ID {legacy.PROJECT_ID}; Project ID 999999</body></html>'
+            if url == page_url else ''
+        )
+        with self.assertRaises(pub.PublicationError) as got:
+            publisher.run(
+                mode='dry-run', curseforge_token='', github_token='',
+                resume_file_id=None, poll_attempts=1, poll_interval=0,
+            )
+        self.assertEqual('CURSEFORGE_PROJECT_IDENTITY_MISMATCH', got.exception.status)
+
+    def test_first_publication_project_identity_403_has_no_unbound_fallback(self):
+        self.schema2()
+        publisher = self.publisher()
+        original = publisher.http.get_json
+        def blocked_project(url, **kwargs):
+            if url == self.base_url + f'/api/v1/mods/{legacy.PROJECT_ID}':
+                raise pub.HttpStatusError('fixture project identity', 403)
+            return original(url, **kwargs)
+        publisher.http.get_json = blocked_project
+        with self.assertRaises(pub.PublicationError) as got:
+            publisher.run(
+                mode='dry-run', curseforge_token='', github_token='',
+                resume_file_id=None, poll_attempts=1, poll_interval=0,
+            )
+        self.assertEqual('CURSEFORGE_PROJECT_IDENTITY_BLOCKED', got.exception.status)
+
     def test_jar_version_must_belong_to_target_mod(self):
         text = '[[mods]]\nmodId="sample_mod"\nversion="wrong"\n[[mods]]\nmodId="other_mod"\nversion="'+legacy.VERSION+'"\n'
         path = self.repo_root/'bad.jar'

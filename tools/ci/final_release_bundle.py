@@ -17,7 +17,7 @@ from tools.ci import candidate_evidence
 from tools.ci.qualification_report import SPEC_FILES as QUALIFICATION_SPEC_FILES
 
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 KINDS = ("automated", "client", "server", "multiplayer", "gameplay", "save_reload")
 SPEC_FILES = (*QUALIFICATION_SPEC_FILES, "forbidden_outputs")
 SOURCE_PATHS = (
@@ -31,15 +31,21 @@ SOURCE_PATHS = (
     "docs/QA_ACCEPTANCE.md",
     "docs/COMPATIBILITY_MATRIX.md",
     "src/main/templates/META-INF/neoforge.mods.toml",
+    ".github/workflows/publish-curseforge.yml",
+    "tools/ci/final_release_bundle.py",
+    "tools/release/stable_autopublish.py",
+    "tools/release/stable_publish.py",
+    "tools/release/curseforge_release_0.1.1.json",
+    "docs/release/0.1.1.md",
     *(f"spec/{name}.json" for name in SPEC_FILES),
 )
-PUBLICATION_BLOCKERS = (
-    "PUBLICATION_AUTHORITY_NOT_GRANTED",
-    "GITHUB_TAG_NOT_PERFORMED",
-    "GITHUB_RELEASE_NOT_PERFORMED",
-    "CURSEFORGE_PUBLICATION_NOT_PERFORMED",
-    "MODRINTH_PUBLICATION_NOT_PERFORMED",
-)
+STABLE_AUTOPUBLISH_POLICY = "AUTHORIZED_WHEN_ELIGIBLE"
+AUTO_PUBLISH_BLOCKERS = ("RUNTIME_PUBLICATION_PREFLIGHT_REQUIRED",)
+PUBLICATION_PENDING = ("GITHUB_TAG", "GITHUB_RELEASE", "CURSEFORGE")
+RELEASE_POLICY = {
+    "targets": ["github", "curseforge"],
+    "modrinth": "FORBIDDEN_BY_PROJECT_POLICY",
+}
 EVIDENCE_BY_KIND = {
     "automated": (
         "receipt.json", "runtime.log", "gradle-build.log", "datagen-repeat.log",
@@ -178,6 +184,25 @@ def validate_source_claims(snapshot: dict) -> tuple[dict[str, str], dict[str, di
     require(candidate["version"] == props.get("mod_version") == "0.1.1"
             and candidate["modId"] == props.get("mod_id")
             and candidate["license"] == props.get("mod_license"), "Wrong final stable source identity")
+    from tools.release.publish_curseforge import validate_manifest
+    release_manifest = parse_json(sources["tools/release/curseforge_release_0.1.1.json"])
+    require(isinstance(release_manifest, dict), "Stable release manifest must be an object")
+    validate_manifest(release_manifest)
+    release = release_manifest["release"]
+    notes = sources["docs/release/0.1.1.md"]
+    require(release_manifest["schemaVersion"] == 3
+            and release["tag"] == "v0.1.1"
+            and release["version"] == candidate["version"]
+            and release["modId"] == candidate["modId"]
+            and release["assetName"] == candidate["name"]
+            and release["assetSize"] == candidate["size"]
+            and release["assetSha256"] == candidate["sha256"],
+            "Stable release manifest differs from authenticated candidate")
+    require(release["changelogPath"] == "docs/release/0.1.1.md"
+            and release["changelogSha256"] == sha(notes)
+            and b"NOT_PERFORMED / OWNER_WAIVED" in notes
+            and b"Modrinth" in notes,
+            "Stable release notes are stale or omit required boundaries")
     manifest = parse_json(sources["PROJECT_MANIFEST.json"])
     require(isinstance(manifest, dict) and manifest.get("version") == candidate["version"]
             and manifest.get("mod_id") == candidate["modId"], "Source manifest identity mismatch")
@@ -388,7 +413,13 @@ def _compose(snapshot: dict) -> bytes:
         },
         "receipts": receipts,
         "defects": defects,
-        "publicationBlockers": list(PUBLICATION_BLOCKERS),
+        "stableReady": True,
+        "autoPublishEligible": False,
+        "publicationComplete": False,
+        "publicationAuthority": STABLE_AUTOPUBLISH_POLICY,
+        "autoPublishBlockers": list(AUTO_PUBLISH_BLOCKERS),
+        "publicationPending": list(PUBLICATION_PENDING),
+        "releasePolicy": RELEASE_POLICY,
     }
     files["bundle.json"] = canonical_json(metadata)
     return deterministic_zip(files)
@@ -404,7 +435,9 @@ def _validate_integrity(raw: bytes, snapshot: dict) -> dict:
     metadata_raw = files.pop("bundle.json")
     metadata = parse_json(metadata_raw)
     exact(metadata, {"schemaVersion", "candidate", "provenance", "candidatePath", "files", "installedInventory",
-                     "receipts", "defects", "publicationBlockers"})
+                     "receipts", "defects", "stableReady", "autoPublishEligible",
+                     "publicationComplete", "publicationAuthority", "autoPublishBlockers",
+                     "publicationPending", "releasePolicy"})
     require(type(metadata["schemaVersion"]) is int and metadata["schemaVersion"] == SCHEMA_VERSION,
             "Unsupported final bundle schema")
     require(metadata_raw == canonical_json(metadata), "Final bundle metadata is not canonical JSON")
@@ -474,7 +507,14 @@ def _validate_integrity(raw: bytes, snapshot: dict) -> dict:
         covered.update(expected_coverage)
     require(seen == set(KINDS) and covered == set(catalog), "Incomplete final receipt/coverage composition")
     require(metadata["defects"] == snapshot["defects"] == [], "Open defects block stable readiness")
-    require(metadata["publicationBlockers"] == list(PUBLICATION_BLOCKERS), "Publication boundary is incomplete")
+    require(metadata["stableReady"] is True, "Stable readiness state is missing")
+    require(metadata["autoPublishEligible"] is False
+            and metadata["publicationComplete"] is False
+            and metadata["publicationAuthority"] == STABLE_AUTOPUBLISH_POLICY
+            and metadata["autoPublishBlockers"] == list(AUTO_PUBLISH_BLOCKERS)
+            and metadata["publicationPending"] == list(PUBLICATION_PENDING)
+            and metadata["releasePolicy"] == RELEASE_POLICY,
+            "Publication state separation is incomplete")
     inventory = exact(metadata["installedInventory"], {"scope", "candidate", "dependencies"})
     runtime = parse_json(snapshot["evidence"]["runtime-dependencies.json"])
     require(inventory == {
@@ -485,8 +525,13 @@ def _validate_integrity(raw: bytes, snapshot: dict) -> dict:
     canonical_files = dict(files)
     canonical_files["bundle.json"] = metadata_raw
     require(raw == deterministic_zip(canonical_files), "Final bundle ZIP is not deterministic canonical output")
-    return {"bundleIntegrity": "PASS", "candidate": candidate, "bundleSha256": sha(raw),
-            "publicationBlockers": list(PUBLICATION_BLOCKERS)}
+    return {
+        "bundleIntegrity": "PASS", "candidate": candidate, "bundleSha256": sha(raw),
+        "autoPublishEligible": False, "publicationComplete": False,
+        "publicationAuthority": STABLE_AUTOPUBLISH_POLICY,
+        "autoPublishBlockers": list(AUTO_PUBLISH_BLOCKERS),
+        "publicationPending": list(PUBLICATION_PENDING), "releasePolicy": RELEASE_POLICY,
+    }
 
 
 def build_authenticated(*, run_id: int, attempt: int, commit: str, tree: str,
@@ -507,7 +552,7 @@ def validate_authenticated(raw: bytes, *, run_id: int, attempt: int, commit: str
     integrity = _validate_integrity(raw, snapshot)
     report = snapshot["report"]
     return {
-        **integrity, "authenticatedExecution": True, "stableReady": True, "publicationReady": False,
+        **integrity, "authenticatedExecution": True, "stableReady": True,
         "status": "AUTHENTICATED_STABLE_CANDIDATE", "runId": report["runId"],
         "runAttempt": report["runAttempt"], "sourceCommit": report["sourceCommit"],
         "sourceTree": report["sourceTree"], "artifactId": report["artifactId"],
