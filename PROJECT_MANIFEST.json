@@ -77,8 +77,8 @@
     },
     {
       "path": ".github/workflows/build.yml",
-      "size_bytes": 7360,
-      "sha256": "4110f08e79c76e7920e1bbd8aa323f3fd2054a164b5585e0957ecbaf87ea3aad"
+      "size_bytes": 7502,
+      "sha256": "5cab86e60259bef74ba73c6837e6b022bb3ac30de977ba5c6f4cce0d55c13033"
     },
     {
       "path": ".github/workflows/publish-curseforge.yml",
