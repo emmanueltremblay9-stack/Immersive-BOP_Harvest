@@ -232,23 +232,23 @@
     },
     {
       "path": "docs/release/STABLE_ACCEPTANCE_MATRIX.md",
-      "size_bytes": 38195,
-      "sha256": "62440ccee644b2c5114f77d4e739d0013fa9ff7be86f1676a6c2f5bc2f50789e"
+      "size_bytes": 38992,
+      "sha256": "2bca2df3c1c25197a8f57182bbd56caf7ef09736d2b255b4d8b6865149e1b779"
     },
     {
       "path": "docs/release/STABLE_RELEASE_AUDIT.md",
-      "size_bytes": 14040,
-      "sha256": "7600000f5740ff53837784f8ff72455967a04013da76c7c8875dbc86a1183145"
+      "size_bytes": 16111,
+      "sha256": "be59607fff444f0b214400e73959e4653683e36d1f604438747cbf0de5715748"
     },
     {
       "path": "docs/release/STABLE_RELEASE_PLAN.md",
-      "size_bytes": 10239,
-      "sha256": "961f41cb3e7bd676beba4ee887ec8cbf20213d13bdcd993aae410258b6e33ff6"
+      "size_bytes": 11766,
+      "sha256": "83db5c4b5b42fbc68d0006afe5cb698520cc2e17c70e67d97ea8f284f7659142"
     },
     {
       "path": "docs/release/STABLE_RELEASE_READINESS.json",
-      "size_bytes": 33233,
-      "sha256": "f3e4dd1eb92c11544b9e2fd0670713d7a16f70ac90b451f3be67e7b77917b49d"
+      "size_bytes": 36077,
+      "sha256": "8e74cfaf179e48a38836f52677c483f32c3399049ce57c3db5874e479faeb875"
     },
     {
       "path": "gradle.properties",
@@ -282,8 +282,8 @@
     },
     {
       "path": "scripts/check_stable_release_gate.py",
-      "size_bytes": 12564,
-      "sha256": "eaceecfd507cc141a382ac1b7fce24164b909372b7f62dbe605fb3f4f0ddcb65"
+      "size_bytes": 14433,
+      "sha256": "7bc86bd47105e839b1b11b7476f89542dff11b81f7e405ad682bd5658f7e0fb2"
     },
     {
       "path": "scripts/generate_alpha_resources.py",
@@ -322,8 +322,8 @@
     },
     {
       "path": "scripts/test_check_stable_release_gate.py",
-      "size_bytes": 11800,
-      "sha256": "dc6bd8d89386a593807cad26d981084bf94455457b2edb8de7fb54e68168d148"
+      "size_bytes": 21577,
+      "sha256": "13f55bbddd8e211984f0a3f8a93ae67e3bbb7909a4f91cb3736f855200b3a166"
     },
     {
       "path": "scripts/validate_specs.py",
@@ -1169,6 +1169,11 @@
       "path": "tools/ci/candidate_evidence.py",
       "size_bytes": 16385,
       "sha256": "22964437ef5db8f38d8244ac48b8619249465e0288eaf1720ee3dae31d67818f"
+    },
+    {
+      "path": "tools/ci/final_release_bundle.py",
+      "size_bytes": 28497,
+      "sha256": "f25dc8335d70de9cd0ec0e9212e0a6e246c9d133353edc64d477eb1ee56abd80"
     },
     {
       "path": "tools/ci/prepare_production_assets.py",
