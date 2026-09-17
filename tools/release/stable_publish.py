@@ -204,7 +204,9 @@ class StablePublication:
             "manifestSha256": contract.get("sha256"),
             "notesSha256": contract.get("notesSha256"),
         }
-        require(report.get("idempotenceKey") == sha256(canonical_json(identity)),
+        require(report.get("idempotenceKey") == sha256(
+            final_release_bundle.canonical_json(identity)
+        ),
                 "PUBLICATION_KEY_MISMATCH")
         for key in ("runId", "runAttempt", "artifactId"):
             require(type(source.get(key)) is int and source[key] > 0,

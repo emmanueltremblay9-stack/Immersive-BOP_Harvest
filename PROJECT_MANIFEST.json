@@ -1317,8 +1317,8 @@
     },
     {
       "path": "tools/release/stable_publish.py",
-      "size_bytes": 33271,
-      "sha256": "79086dcc254f7a00bf172609d1a45fe9326e13d15b8e14cc56959aec577eb871"
+      "size_bytes": 33314,
+      "sha256": "0dacb395cc25026438777674d51a5bee301fa821fd65960de9ed2b2f00114082"
     },
     {
       "path": "tools/release/test_publish_curseforge.py",
@@ -1342,8 +1342,8 @@
     },
     {
       "path": "tools/release/test_stable_publish.py",
-      "size_bytes": 21224,
-      "sha256": "3a2e27d84c7548056583a07739336feceb2e2172c4a09f61671fd6709e5e78a9"
+      "size_bytes": 22203,
+      "sha256": "e3361a1c1850ffbbe7c34b470a86af5fd6a2e7e07970b9832079c1667f8f358b"
     }
   ]
 }

@@ -243,7 +243,7 @@ class StablePublishTests(unittest.TestCase):
             "historicalProjectRelations": 0,
             "targetRelations": 5,
         }
-        identity = {
+        self.identity = {
             "runId": 123, "runAttempt": 1, "sourceCommit": self.source_sha,
             "sourceTree": self.tree, "artifactId": 456,
             "archiveSha256": self.source["archiveSha256"],
@@ -261,7 +261,9 @@ class StablePublishTests(unittest.TestCase):
             "workflowRun": {"headSha": self.source_sha},
             "authenticatedSource": self.source,
             "candidate": self.candidate, "releaseContract": self.contract,
-            "idempotenceKey": hashlib.sha256(publish.canonical_json(identity)).hexdigest(),
+            "idempotenceKey": hashlib.sha256(
+                publish.final_release_bundle.canonical_json(self.identity)
+            ).hexdigest(),
         }
         metadata = {
             "id": 456, "expired": False,
@@ -284,6 +286,28 @@ class StablePublishTests(unittest.TestCase):
         return self.machine(github).mutate_github(
             self.report, self.root / self.candidate["name"]
         )
+
+    def test_publication_key_uses_shared_producer_canonicalization(self):
+        producer_key = hashlib.sha256(
+            publish.final_release_bundle.canonical_json(self.identity)
+        ).hexdigest()
+        consumer_key = hashlib.sha256(
+            publish.canonical_json(self.identity)
+        ).hexdigest()
+
+        self.assertNotEqual(producer_key, consumer_key)
+        self.assertEqual(producer_key, self.report["idempotenceKey"])
+        validated = self.machine(FakeGitHub(self.source_sha)).validate_source_report(
+            self.report
+        )
+        self.assertEqual(producer_key, validated["publicationKey"])
+
+        wrong = copy.deepcopy(self.report)
+        wrong["idempotenceKey"] = consumer_key
+        with self.assertRaisesRegex(
+            publish.MutationError, "PUBLICATION_KEY_MISMATCH"
+        ):
+            self.machine(FakeGitHub(self.source_sha)).validate_source_report(wrong)
 
     def test_absent_tag_creates_exactly_once(self):
         github = FakeGitHub(self.source_sha)
