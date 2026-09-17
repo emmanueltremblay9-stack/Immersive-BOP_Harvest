@@ -77,13 +77,13 @@
     },
     {
       "path": ".github/workflows/build.yml",
-      "size_bytes": 7360,
-      "sha256": "4110f08e79c76e7920e1bbd8aa323f3fd2054a164b5585e0957ecbaf87ea3aad"
+      "size_bytes": 7502,
+      "sha256": "5cab86e60259bef74ba73c6837e6b022bb3ac30de977ba5c6f4cce0d55c13033"
     },
     {
       "path": ".github/workflows/publish-curseforge.yml",
-      "size_bytes": 9989,
-      "sha256": "1f4f8dd0e9a0e30d0c6757933e113b0da9a048448d7bb6535b88a0e797170c47"
+      "size_bytes": 27491,
+      "sha256": "9b22f4d0cd67d00d4134a052518328fac1a8adab0a8eca6050402dca7dec4825"
     },
     {
       "path": ".gitignore",
@@ -187,8 +187,8 @@
     },
     {
       "path": "docs/CURSEFORGE_RELEASE.md",
-      "size_bytes": 9307,
-      "sha256": "118e191c4f23024dc67fef9bb24444fb6ca7f543d9e59369c2ee634f6f6e116c"
+      "size_bytes": 13597,
+      "sha256": "2ea699587d8f60f73e2eba7bc9612ecf346d4c4de4125ad522af483aa64a900b"
     },
     {
       "path": "docs/LEGAL_REUSE_INVENTORY.md",
@@ -224,6 +224,11 @@
       "path": "docs/SOURCE_AUDIT.md",
       "size_bytes": 1830,
       "sha256": "cbdf9f026acd6439f7494d85a17c3de35b29d25726d0e3b6b072efb167399a9e"
+    },
+    {
+      "path": "docs/release/0.1.1.md",
+      "size_bytes": 1110,
+      "sha256": "8f1ba9eb9161a282bafdbcb2b89fafc68da1fd6cc4e798c013c08fd3aac6e1c8"
     },
     {
       "path": "docs/release/PACKAGED_RUNTIME_QUALIFICATION.md",
@@ -322,8 +327,8 @@
     },
     {
       "path": "scripts/test_check_stable_release_gate.py",
-      "size_bytes": 21577,
-      "sha256": "13f55bbddd8e211984f0a3f8a93ae67e3bbb7909a4f91cb3736f855200b3a166"
+      "size_bytes": 24703,
+      "sha256": "3e69bd0bc57e19e48eb240c3fe89c98574db3a243b13202234305243ceda0263"
     },
     {
       "path": "scripts/validate_specs.py",
@@ -1172,8 +1177,8 @@
     },
     {
       "path": "tools/ci/final_release_bundle.py",
-      "size_bytes": 28497,
-      "sha256": "f25dc8335d70de9cd0ec0e9212e0a6e246c9d133353edc64d477eb1ee56abd80"
+      "size_bytes": 31018,
+      "sha256": "e088f98a9500a516015f4e3229cafafff7a5c3f7b6e67416d98ac98d9bcb657f"
     },
     {
       "path": "tools/ci/prepare_production_assets.py",
@@ -1267,8 +1272,8 @@
     },
     {
       "path": "tools/ci/test_workflow_contract.py",
-      "size_bytes": 3079,
-      "sha256": "094230bd7378a6b6d314e136f636a07c7e01250bc4b89365674a401f2b628d26"
+      "size_bytes": 9937,
+      "sha256": "8f8ff7b8e69d5f72b9b15087a1bcdb5130dc653a4bd67b184d51de3dc2c95ca2"
     },
     {
       "path": "tools/release/LICENSE-MIT.txt",
@@ -1286,34 +1291,59 @@
       "sha256": "0a035f676d135d127abc3fb75f4e337a47af8e2953d3e16b346d2b36cb51b397"
     },
     {
+      "path": "tools/release/curseforge_release_0.1.1.json",
+      "size_bytes": 2785,
+      "sha256": "94fe12f643ed3f306a45258e58facf65f00ec9ee267b1294d5e7634b8227a4a2"
+    },
+    {
       "path": "tools/release/curseforge_release_TEMPLATE.json",
       "size_bytes": 2154,
       "sha256": "d3a967af062506c2add3509b51ab373057e75602e3662c6532d0446ae3d79882"
     },
     {
       "path": "tools/release/curseforge_release_v3.schema.json",
-      "size_bytes": 6111,
-      "sha256": "6dc8047b2d7b9ccad8204e9f20ac1b2904369d99437d00fa5b865c918fa959b8"
+      "size_bytes": 7231,
+      "sha256": "6a2ec32b074b79380a87889209a6bf6db5fcdaeb452500c7adca87141b55e55d"
     },
     {
       "path": "tools/release/publish_curseforge.py",
-      "size_bytes": 79804,
-      "sha256": "d04ffd0fb21065caf9c67136b0808bbc8e34044c2452a23b141c1626a0273c7c"
+      "size_bytes": 88881,
+      "sha256": "1cf49c01952673d91abbe95bf64594e1a75dce36c5dc527eb79b68f141d48fbd"
+    },
+    {
+      "path": "tools/release/stable_autopublish.py",
+      "size_bytes": 23871,
+      "sha256": "3e42e43ab45d3d855c564eb450a2af7f7ba43be58d596f6123273aaf8258c77a"
+    },
+    {
+      "path": "tools/release/stable_publish.py",
+      "size_bytes": 33271,
+      "sha256": "79086dcc254f7a00bf172609d1a45fe9326e13d15b8e14cc56959aec577eb871"
     },
     {
       "path": "tools/release/test_publish_curseforge.py",
-      "size_bytes": 42241,
-      "sha256": "4b443148b9b299e2ea73df5fba9f1c43c21a409ed84f6f879ceda653eec602aa"
+      "size_bytes": 47650,
+      "sha256": "834e4c411d147abf68e9f261a19776623d50a84eaed7fdbad5b42e3317d85952"
     },
     {
       "path": "tools/release/test_publisher_portability.py",
-      "size_bytes": 15300,
-      "sha256": "646fd4ab0d6d14a8ceb6c3dbe0dfc3847e930ac71886d2555089d4c375b9a22b"
+      "size_bytes": 19948,
+      "sha256": "b2a9801d62e2665a6beb0c254aae11aa26e058b0dfa93f4c918af8d2febe1750"
     },
     {
       "path": "tools/release/test_publisher_transition.py",
-      "size_bytes": 5493,
-      "sha256": "76943e6496f6c434ff009f701cd1e41b31d16839285d9033b0664b908fe1c42d"
+      "size_bytes": 7832,
+      "sha256": "8e5ca730195dd353d2d192a3139d58ca547c6ed503d0675ffebec0a5c55d9b3d"
+    },
+    {
+      "path": "tools/release/test_stable_autopublish.py",
+      "size_bytes": 16210,
+      "sha256": "0893143e94e1f270d8faed52480d6785ff20bc00c3b8b4dc25af6c8003b1f8c0"
+    },
+    {
+      "path": "tools/release/test_stable_publish.py",
+      "size_bytes": 21224,
+      "sha256": "3a2e27d84c7548056583a07739336feceb2e2172c4a09f61671fd6709e5e78a9"
     }
   ]
 }

@@ -106,7 +106,9 @@ class FakeState:
         self.asset_authorization = ""
         self.list_page_size = 0
         self.requested_page_indexes: list[int] = []
+        self.previous_file_relations: list[dict] | None = None
         self.project_relations = public_relations()
+        self.target_public_relations: list[dict] | None = None
         self.game_versions = [
             {"id": 33, "gameVersionTypeID": 2, "name": "1.21.1"},
             {"id": 3, "gameVersionTypeID": 1, "name": "1.21.1"},
@@ -285,7 +287,10 @@ class Handler(BaseHTTPRequestHandler):
             self._json({"data": self.state.prior_file()})
             return
         if path == f"{prefix}/{PREVIOUS_FILE_ID}/dependencies":
-            self._json({"data": public_relations()})
+            self._json({
+                "data": (public_relations() if self.state.previous_file_relations is None
+                         else self.state.previous_file_relations)
+            })
             return
         if path.startswith(prefix + "/"):
             tail = path[len(prefix) + 1 :]
@@ -294,7 +299,10 @@ class Handler(BaseHTTPRequestHandler):
                 if file_id in self.state.files or (
                     file_id == NEW_FILE_ID and self.state.publish_visible
                 ):
-                    self._json({"data": public_relations()})
+                    self._json({
+                        "data": (public_relations() if self.state.target_public_relations is None
+                                 else self.state.target_public_relations)
+                    })
                 else:
                     self._json({"error": "not found"}, 404)
                 return
@@ -414,6 +422,32 @@ class PublisherTests(unittest.TestCase):
             curseforge_public_api=self.base_url + "/api/v1",
             curseforge_upload_api=self.base_url,
         )
+
+    def configure_stable_011(self) -> tuple[bytes, str]:
+        stable_version = "0.1.1"
+        stable_name = f"immersive_bop_harvest-{stable_version}.jar"
+        stable_jar = make_jar(stable_version)
+        self.state.jar_bytes = stable_jar
+        self.manifest["release"].update({
+            "version": stable_version,
+            "assetName": stable_name,
+            "assetSize": len(stable_jar),
+            "assetSha256": hashlib.sha256(stable_jar).hexdigest(),
+        })
+        self.manifest["curseforge"]["displayName"] = stable_name
+        return stable_jar, stable_name
+
+    def add_alpha_011_history(self, file_id: int = 9000000) -> None:
+        alpha = self.state.current_file(file_id)
+        alpha["fileName"] = "immersive_bop_harvest-0.1.1-alpha.9.jar"
+        alpha["displayName"] = alpha["fileName"]
+        self.state.files[file_id] = alpha
+
+    def add_stable_011_target(self, file_id: int) -> None:
+        target = self.state.current_file(file_id)
+        target["fileName"] = self.manifest["release"]["assetName"]
+        target["displayName"] = self.manifest["curseforge"]["displayName"]
+        self.state.files[file_id] = target
 
     def run_publisher(
         self,
@@ -658,6 +692,43 @@ class PublisherTests(unittest.TestCase):
         self.assertEqual(existing_id, report["fileId"])
         self.assertEqual([0, 1], self.state.requested_page_indexes)
         self.assertEqual(0, self.state.post_count)
+
+    def test_stable_duplicate_scan_treats_alpha_history_as_absent(self) -> None:
+        self.configure_stable_011()
+        self.add_alpha_011_history()
+        self.assertIsNone(self.publisher()._find_existing_release(self.repo_root))
+
+    def test_stable_duplicate_scan_ignores_alpha_and_reconciles_exact(self) -> None:
+        stable_jar, _stable_name = self.configure_stable_011()
+        alpha_id = 9000000
+        self.add_alpha_011_history(alpha_id)
+        existing_id = 9000001
+        self.add_stable_011_target(existing_id)
+        self.state.downloads[existing_id] = stable_jar
+
+        existing = self.publisher()._find_existing_release(self.repo_root)
+        self.assertEqual(existing_id, existing["fileId"])
+        self.assertNotIn(alpha_id, self.state.downloads)
+
+    def test_stable_duplicate_scan_alpha_plus_divergent_stable_stops(self) -> None:
+        self.configure_stable_011()
+        self.add_alpha_011_history()
+        divergent_id = 9000001
+        self.add_stable_011_target(divergent_id)
+        self.state.downloads[divergent_id] = make_jar("0.1.1-divergent")
+        with self.assertRaises(PublicationError) as raised:
+            self.publisher()._find_existing_release(self.repo_root)
+        self.assertEqual("BLOCKED_BY_REMOTE_ARTIFACT_CONFLICT", raised.exception.status)
+
+    def test_stable_duplicate_scan_multiple_exact_stable_files_stops(self) -> None:
+        stable_jar, _stable_name = self.configure_stable_011()
+        self.add_alpha_011_history()
+        for file_id in (9000001, 9000002):
+            self.add_stable_011_target(file_id)
+            self.state.downloads[file_id] = stable_jar
+        with self.assertRaises(PublicationError) as raised:
+            self.publisher()._find_existing_release(self.repo_root)
+        self.assertEqual("BLOCKED_BY_REMOTE_ARTIFACT_CONFLICT", raised.exception.status)
 
     def test_divergent_duplicate_blocks_publication(self) -> None:
         existing_id = 9000002
@@ -921,6 +992,48 @@ class PublisherTests(unittest.TestCase):
         )
         self.assertEqual(NEW_FILE_ID, report["fileId"])
         self.assertEqual(0, self.state.post_count)
+
+    def test_prior_accepted_checkpoint_auto_resumes_without_post(self) -> None:
+        self.record_persisted_intent_step("99-1")
+        self.state.artifacts.extend([
+            {
+                "id": 7000,
+                "name": f"{ARTIFACT_PREFIX}99-1--intent--abcdef123456",
+                "expired": False,
+            },
+            {
+                "id": 7001,
+                "name": f"{ARTIFACT_PREFIX}99-1--accepted--{NEW_FILE_ID}",
+                "expired": False,
+            },
+        ])
+        self.state.publish_visible = True
+        self.state.project_relations = self.state.project_relations[-1:]
+        report = self.run_publisher(
+            mode="prepare-publish", token="valid-secret",
+            github_token="github-secret", run_key="100-1",
+        )
+        self.assertEqual("RESUMED_PUBLICATION_VERIFIED", report["status"])
+        self.assertEqual(NEW_FILE_ID, report["fileId"])
+        self.assertEqual(0, self.state.post_count)
+
+    def test_submit_checkpoint_then_token_free_resume_uses_one_post(self) -> None:
+        intent, artifact_id = self.prepare_and_persist()
+        accepted = self.run_publisher(
+            mode="submit", token="valid-secret", github_token="github-secret",
+            run_key=intent["runKey"], intent_report=intent,
+            intent_artifact_id=artifact_id,
+        )
+        self.assertEqual("UPLOAD_ACCEPTED", accepted["status"])
+        self.assertEqual(NEW_FILE_ID, accepted["fileId"])
+        self.assertNotIn("publicReadback", accepted)
+        self.assertEqual(1, self.state.post_count)
+        self.state.publish_visible = True
+        self.state.project_relations = self.state.project_relations[-1:]
+        resumed = self.run_publisher(mode="publish", resume_file_id=NEW_FILE_ID)
+        self.assertEqual("RESUMED_PUBLICATION_VERIFIED", resumed["status"])
+        self.assertEqual(NEW_FILE_ID, resumed["fileId"])
+        self.assertEqual(1, self.state.post_count)
 
     def test_unexpected_upload_code_failure_is_outcome_unknown(self) -> None:
         intent, artifact_id = self.prepare_and_persist()

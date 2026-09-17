@@ -188,6 +188,10 @@ class ProvenanceModeTests(unittest.TestCase):
 class FinalBundleTests(unittest.TestCase):
     def setUp(self):
         candidate_raw = self.make_jar("immersive_bop_harvest", "0.1.1")
+        candidate = {
+            "modId": "immersive_bop_harvest", "version": "0.1.1", "license": "All Rights Reserved",
+            "name": "immersive_bop_harvest-0.1.1.jar", "size": len(candidate_raw), "sha256": final.sha(candidate_raw),
+        }
         rows = []
         for index, mod_id in enumerate(("biomesoplenty", "glitchcore", "terrablender", "farmersdelight", "immersiveengineering"), 1):
             rows.append({
@@ -208,6 +212,37 @@ class FinalBundleTests(unittest.TestCase):
             "docs/COMPATIBILITY_MATRIX.md": b"biomesoplenty:test\n",
             "src/main/templates/META-INF/neoforge.mods.toml": b"${mod_version} ${mod_id} ${mod_license}\n",
         }
+        notes = b"# 0.1.1\nNOT_PERFORMED / OWNER_WAIVED\nModrinth publication is forbidden.\n"
+        release_manifest = {
+            "schemaVersion": 3,
+            "repository": {"owner": "test-owner", "name": "test-repo"},
+            "baseline": {
+                "mode": "previousPublicFile", "previousPublicFileId": 1,
+                "releaseType": "alpha", "gameVersionNames": ["Client", "1.21.1", "NeoForge"],
+                "previousFileRelations": [], "projectRelations": [],
+            },
+            "release": {
+                "tag": "v0.1.1", "version": candidate["version"], "modId": candidate["modId"],
+                "assetName": candidate["name"], "assetSize": candidate["size"],
+                "assetSha256": candidate["sha256"], "changelogPath": "docs/release/0.1.1.md",
+                "changelogSha256": final.sha(notes),
+            },
+            "curseforge": {
+                "projectId": 1, "projectSlug": "fixture", "displayName": candidate["name"],
+                "releaseType": "release", "isMarkedForManualRelease": False,
+                "gameVersionNames": ["Client", "Server", "1.21.1", "NeoForge"],
+                "gameVersionLookupNames": ["1.21.1"], "uploadRelations": [],
+                "expectedPublicRelations": [],
+            },
+        }
+        self.sources.update({
+            ".github/workflows/publish-curseforge.yml": b"name: Publish CurseForge\n",
+            "tools/ci/final_release_bundle.py": b"# fixture final bundle gate\n",
+            "tools/release/stable_autopublish.py": b"# fixture stable autopublish gate\n",
+            "tools/release/stable_publish.py": b"# fixture stable publication mutation gate\n",
+            "tools/release/curseforge_release_0.1.1.json": final.canonical_json(release_manifest),
+            "docs/release/0.1.1.md": notes,
+        })
         for name in final.SPEC_FILES:
             value = {"ids": ["biomesoplenty:test"]} if name == "coverage_inventory" else {"rules": [name]}
             self.sources[f"spec/{name}.json"] = final.canonical_json(value)
@@ -221,10 +256,6 @@ class FinalBundleTests(unittest.TestCase):
         self.evidence["receipt.json"] = final.canonical_json({
             "dependencyLockSha256": final.sha(lock_raw),
         })
-        candidate = {
-            "modId": "immersive_bop_harvest", "version": "0.1.1", "license": "All Rights Reserved",
-            "name": "immersive_bop_harvest-0.1.1.jar", "size": len(candidate_raw), "sha256": final.sha(candidate_raw),
-        }
         self.report = {
             "authenticatedExecution": True, "stableReady": False, "status": "AUTHENTICATED_PACKAGED_EXECUTION",
             "runId": 10, "runAttempt": 1, "sourceCommit": "a" * 40, "sourceTree": "b" * 40,
@@ -260,7 +291,11 @@ class FinalBundleTests(unittest.TestCase):
         result = final._validate_integrity(first, self.snapshot)
         self.assertNotIn("authenticatedExecution", result)
         self.assertNotIn("stableReady", result)
-        self.assertIn("PUBLICATION_AUTHORITY_NOT_GRANTED", result["publicationBlockers"])
+        self.assertFalse(result["autoPublishEligible"])
+        self.assertFalse(result["publicationComplete"])
+        self.assertEqual("AUTHORIZED_WHEN_ELIGIBLE", result["publicationAuthority"])
+        self.assertEqual(["RUNTIME_PUBLICATION_PREFLIGHT_REQUIRED"], result["autoPublishBlockers"])
+        self.assertNotIn("MODRINTH", " ".join(result["autoPublishBlockers"]).upper())
 
     def test_public_stable_path_always_authenticates_before_promotion(self):
         raw = final._compose(self.snapshot)
@@ -271,7 +306,27 @@ class FinalBundleTests(unittest.TestCase):
         authenticate.assert_called_once()
         self.assertTrue(result["authenticatedExecution"])
         self.assertTrue(result["stableReady"])
-        self.assertFalse(result["publicationReady"])
+        self.assertFalse(result["autoPublishEligible"])
+        self.assertFalse(result["publicationComplete"])
+        self.assertEqual("AUTHORIZED_WHEN_ELIGIBLE", result["publicationAuthority"])
+        self.assertEqual(["RUNTIME_PUBLICATION_PREFLIGHT_REQUIRED"], result["autoPublishBlockers"])
+        self.assertEqual(
+            "FORBIDDEN_BY_PROJECT_POLICY", result["releasePolicy"]["modrinth"]
+        )
+
+    def test_publication_state_cannot_be_promoted_by_bundle_mutation(self):
+        raw = final._compose(self.snapshot)
+        for field, value in (
+            ("autoPublishEligible", True),
+            ("publicationComplete", True),
+            ("publicationAuthority", "GRANTED"),
+            ("autoPublishBlockers", []),
+            ("publicationPending", []),
+        ):
+            def alter(files, metadata, field=field, value=value):
+                metadata[field] = value
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                final._validate_integrity(self.mutate(raw, alter), self.snapshot)
 
     def test_tampered_final_archive_or_candidate_jar_is_rejected(self):
         raw = final._compose(self.snapshot)
