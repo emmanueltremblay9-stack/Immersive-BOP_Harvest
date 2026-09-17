@@ -27,6 +27,11 @@ on:
         required: false
         type: string
         default: ""
+      receipt_recovery:
+        description: Recover the deterministic receipt for existing CurseForge file 8900758 only
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -425,9 +430,412 @@ jobs:
             --report "$RECEIPT_VERIFY_PATH" \
             "${artifact_args[@]}"
 
+  receipt-recovery:
+    name: Recover deterministic stable publication receipt
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.receipt_recovery }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    env:
+      EXPECTED_BRANCH: codex/s7-receipt-recovery
+      EXPECTED_MAIN: a0d1c81dc0108c9dd062cb0faf67641426bd6218
+      EXPECTED_TREE: 2b0891a836908513fd462cb3996fa0bc7515ed85
+      EXPECTED_PUBLICATION_KEY: d2e24e6b8f8c00190d1f3cddee8cc06296fb43f1dcb0ba006353473bb0c10a4a
+      SOURCE_RUN_ID: "35178395254"
+      ORIGINAL_PUBLICATION_RUN_ID: "35179000121"
+      EXISTING_CURSEFORGE_FILE_ID: "8900758"
+      MANIFEST_PATH: tools/release/curseforge_release_0.1.1.json
+      REQUESTED_TAG: v0.1.1
+
+    steps:
+      - name: Enforce the bounded receipt-recovery dispatch contract
+        shell: bash
+        env:
+          DISPATCH_TAG: ${{ inputs.tag }}
+          DISPATCH_MANIFEST: ${{ inputs.manifest_path }}
+          DISPATCH_DRY_RUN: ${{ inputs.dry_run }}
+          DISPATCH_RESUME_FILE_ID: ${{ inputs.resume_file_id }}
+        run: |
+          [[ "$GITHUB_REF" == "refs/heads/$EXPECTED_BRANCH" ]]
+          [[ "$DISPATCH_TAG" == "$REQUESTED_TAG" ]]
+          [[ "$DISPATCH_MANIFEST" == "$MANIFEST_PATH" ]]
+          [[ "$DISPATCH_DRY_RUN" == "true" ]]
+          [[ "$DISPATCH_RESUME_FILE_ID" == "$EXISTING_CURSEFORGE_FILE_ID" ]]
+          [[ -z "${CURSEFORGE_API_TOKEN:-}" ]]
+
+      - name: Checkout exact qualified main without persisted credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: a0d1c81dc0108c9dd062cb0faf67641426bd6218
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+
+      - name: Initialize receipt-recovery paths
+        shell: bash
+        run: |
+          {
+            echo "SOURCE_REPORT_PATH=$RUNNER_TEMP/stable-source-readiness.json"
+            echo "GITHUB_REPORT_PATH=$RUNNER_TEMP/github-publication-readback.json"
+            echo "RESULT_REPORT_PATH=$RUNNER_TEMP/curseforge-publication-result.json"
+            echo "RECEIPT_PATH=$RUNNER_TEMP/stable-publication-receipt.json"
+            echo "RECEIPT_STATE_PATH=$RUNNER_TEMP/stable-publication-receipt-state.json"
+            echo "RECEIPT_VERIFY_PATH=$RUNNER_TEMP/stable-publication-receipt-verification.json"
+          } >> "$GITHUB_ENV"
+
+      - name: Verify exact main and absence of a concurrent publication write
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import os
+          import subprocess
+          from tools.ci import candidate_evidence
+
+          expected_main = os.environ["EXPECTED_MAIN"]
+          expected_tree = os.environ["EXPECTED_TREE"]
+          current_run_id = int(os.environ["GITHUB_RUN_ID"])
+          if subprocess.check_output(
+              ["git", "rev-parse", "HEAD"], text=True
+          ).strip() != expected_main:
+              raise SystemExit("RECOVERY_CHECKOUT_COMMIT_DRIFT_STOP")
+          if subprocess.check_output(
+              ["git", "rev-parse", "HEAD^{tree}"], text=True
+          ).strip() != expected_tree:
+              raise SystemExit("RECOVERY_CHECKOUT_TREE_DRIFT_STOP")
+          api = candidate_evidence.GitHub()
+          main_ref = api.get("git/ref/heads/main")
+          if main_ref.get("object", {}).get("sha") != expected_main:
+              raise SystemExit("CURRENT_MAIN_DRIFT_STOP")
+          conflicts = []
+          for status in ("queued", "in_progress", "waiting", "requested", "pending"):
+              result = api.get(
+                  "actions/workflows/publish-curseforge.yml/runs"
+                  f"?status={status}&per_page=100"
+              )
+              for run in result.get("workflow_runs", []):
+                  if run.get("id") != current_run_id:
+                      conflicts.append({"id": run.get("id"), "status": run.get("status")})
+          if conflicts:
+              raise SystemExit("CONCURRENT_PUBLICATION_RUN_STOP")
+          print({"main": expected_main, "tree": expected_tree, "conflicts": 0})
+          PY
+
+      - name: Recover the exact authenticated source report from the original run
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import re
+
+          from tools.ci import candidate_evidence
+          from tools.release import stable_autopublish
+
+          expected_main = os.environ["EXPECTED_MAIN"]
+          expected_key = os.environ["EXPECTED_PUBLICATION_KEY"]
+          source_run_id = int(os.environ["SOURCE_RUN_ID"])
+          publication_run_id = int(os.environ["ORIGINAL_PUBLICATION_RUN_ID"])
+          api = candidate_evidence.GitHub()
+          publication_run = api.get(f"actions/runs/{publication_run_id}")
+          expected_run = {
+              "id": publication_run_id,
+              "event": "workflow_run",
+              "status": "completed",
+              "conclusion": "failure",
+              "head_sha": expected_main,
+              "run_attempt": 1,
+              "path": ".github/workflows/publish-curseforge.yml",
+          }
+          for field, expected in expected_run.items():
+              if publication_run.get(field) != expected:
+                  raise SystemExit(f"ORIGINAL_PUBLICATION_RUN_{field.upper()}_DRIFT_STOP")
+          jobs = api.get(f"actions/runs/{publication_run_id}/jobs?per_page=100").get("jobs", [])
+          matches = [
+              job for job in jobs
+              if job.get("name") == "Evaluate authenticated stable auto-publish eligibility"
+              and job.get("status") == "completed"
+              and job.get("conclusion") == "success"
+          ]
+          if len(matches) != 1 or type(matches[0].get("id")) is not int:
+              raise SystemExit("ORIGINAL_ELIGIBILITY_JOB_IDENTITY_STOP")
+          raw_log = api.get(f"actions/jobs/{matches[0]['id']}/logs", binary=True)
+          try:
+              decoded = raw_log.decode("utf-8")
+          except UnicodeError as exc:
+              raise SystemExit("ORIGINAL_ELIGIBILITY_LOG_ENCODING_STOP") from exc
+          lines = [
+              re.sub(r"^\d{4}-\d{2}-\d{2}T[^ ]+Z\s+", "", line)
+              for line in decoded.splitlines()
+          ]
+          candidates = []
+          for start, line in enumerate(lines):
+              if line.strip() != "{":
+                  continue
+              for end in range(start + 1, len(lines)):
+                  if lines[end].strip() != "}":
+                      continue
+                  try:
+                      value = json.loads("\n".join(lines[start:end + 1]))
+                  except json.JSONDecodeError:
+                      continue
+                  if isinstance(value, dict) and value.get("schemaVersion") == 2:
+                      candidates.append(value)
+                      break
+          reports = [
+              value for value in candidates
+              if value.get("status") == "AUTO_PUBLISH_ELIGIBLE"
+              and value.get("idempotenceKey") == expected_key
+              and value.get("workflowRun", {}).get("id") == source_run_id
+              and value.get("workflowRun", {}).get("headSha") == expected_main
+          ]
+          if len(reports) != 1:
+              raise SystemExit("ORIGINAL_ELIGIBILITY_REPORT_AMBIGUOUS_STOP")
+          report = reports[0]
+          if (
+              report.get("verdict") != "PASS"
+              or report.get("sourceReady") is not True
+              or report.get("stableReady") is not True
+              or report.get("autoPublishEligible") is not True
+              or report.get("runtimeGates", {}).get("credentialAvailable") is not True
+              or report.get("publicationComplete") is not False
+          ):
+              raise SystemExit("ORIGINAL_ELIGIBILITY_REPORT_DIVERGENT_STOP")
+          stable_autopublish.write_report(Path(os.environ["SOURCE_REPORT_PATH"]), report)
+          print({
+              "sourceRunId": source_run_id,
+              "publicationRunId": publication_run_id,
+              "eligibilityJobId": matches[0]["id"],
+              "status": report["status"],
+              "publicationKey": report["idempotenceKey"],
+          })
+          PY
+
+      - name: Build the GitHub report through a mutation-forbidden adapter
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+
+          from tools.ci import candidate_evidence
+          from tools.release import stable_publish
+
+          class RecoveryReadOnlyGitHub(stable_publish.GitHubPublicationAdapter):
+              def post_json(self, path, payload):
+                  raise stable_publish.MutationError("RECOVERY_PUBLIC_MUTATION_FORBIDDEN")
+
+              def upload_asset(self, upload_url, name, raw):
+                  raise stable_publish.MutationError("RECOVERY_PUBLIC_MUTATION_FORBIDDEN")
+
+          source_report = stable_publish.read_json(Path(os.environ["SOURCE_REPORT_PATH"]))
+          api = candidate_evidence.GitHub()
+          adapter = RecoveryReadOnlyGitHub(os.environ["GITHUB_TOKEN"])
+          machine = stable_publish.StablePublication(Path(os.environ["GITHUB_WORKSPACE"]), adapter, api)
+          validated = machine.validate_source_report(source_report)
+          source = validated["source"]
+          candidate = validated["candidate"]
+          machine._current_main(source["sourceCommit"])
+          raw = machine.download_candidate(source, candidate)
+          if len(raw) != candidate["size"] or stable_publish.sha256(raw) != candidate["sha256"]:
+              raise SystemExit("CANDIDATE_FRESH_READBACK_DIVERGENT_STOP")
+          state = machine.inspect_github(
+              source["sourceCommit"], validated["notes"], candidate, public=True
+          )
+          stable_publish.require(
+              state.get("state") == "TAG_EXACT"
+              and state.get("releaseState") == "RELEASE_EXACT"
+              and state.get("assetState") == "ASSET_EXACT",
+              "GITHUB_PUBLICATION_INCOMPLETE",
+          )
+          report = {
+              "schemaVersion": 1,
+              "status": "GITHUB_PUBLICATION_VERIFIED",
+              "publicationKey": validated["publicationKey"],
+              "repository": stable_publish.REPOSITORY,
+              "qualifiedCommit": source["sourceCommit"],
+              "qualifiedTree": source["sourceTree"],
+              "tag": stable_publish.TAG,
+              "tagState": state["state"],
+              "resolvedCommit": state["resolvedCommit"],
+              "releaseId": state["releaseId"],
+              "releaseUrl": state["releaseUrl"],
+              "releaseState": state["releaseState"],
+              "assetId": state["assetId"],
+              "assetName": state["assetName"],
+              "assetSize": state["assetSize"],
+              "assetSha256": state["assetSha256"],
+              "assetState": state["assetState"],
+              "operations": [],
+              "publicationComplete": False,
+          }
+          stable_publish.write_report(Path(os.environ["GITHUB_REPORT_PATH"]), report)
+          print({
+              "status": report["status"],
+              "qualifiedCommit": report["qualifiedCommit"],
+              "assetId": report["assetId"],
+              "assetSha256": report["assetSha256"],
+              "operations": report["operations"],
+          })
+          PY
+
+      - name: Resume existing CurseForge file without a token or second POST
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python tools/release/publish_curseforge.py \
+            --publish \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --manifest "$MANIFEST_PATH" \
+            --tag "$REQUESTED_TAG" \
+            --resume-file-id "$EXISTING_CURSEFORGE_FILE_ID" \
+            --report "$RESULT_REPORT_PATH"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          report = json.loads(Path(os.environ["RESULT_REPORT_PATH"]).read_text(encoding="utf-8"))
+          if (
+              report.get("status") != "RESUMED_PUBLICATION_VERIFIED"
+              or report.get("verdict") != "PASS"
+              or report.get("fileId") != int(os.environ["EXISTING_CURSEFORGE_FILE_ID"])
+              or report.get("postRequired") is not False
+              or report.get("publicHashMatch") is not True
+          ):
+              raise SystemExit("CURSEFORGE_TOKENLESS_RESUME_DIVERGENT_STOP")
+          print({
+              "status": report["status"],
+              "fileId": report["fileId"],
+              "postRequired": report["postRequired"],
+              "publicHashMatch": report["publicHashMatch"],
+          })
+          PY
+
+      - name: Build final receipt after fresh public readbacks
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python tools/release/stable_publish.py finalize \
+            --source-report "$SOURCE_REPORT_PATH" \
+            --github-report "$GITHUB_REPORT_PATH" \
+            --curseforge-report "$RESULT_REPORT_PATH" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --receipt "$RECEIPT_PATH" \
+            --receipt-state-report "$RECEIPT_STATE_PATH"
+
+      - name: Read deterministic receipt reconciliation state
+        id: recovery-receipt-state
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          state = json.loads(Path(os.environ["RECEIPT_STATE_PATH"]).read_text(encoding="utf-8"))
+          if state.get("status") not in {"RECEIPT_ABSENT", "RECEIPT_EXACT"}:
+              raise SystemExit("RECEIPT_RECONCILIATION_STATE_INVALID")
+          if state.get("uploadRequired") is not (state["status"] == "RECEIPT_ABSENT"):
+              raise SystemExit("RECEIPT_RECONCILIATION_STATE_DIVERGENT")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as stream:
+              stream.write(f"artifact_name={state['artifactName']}\n")
+              stream.write("upload_required=" + ("true" if state["uploadRequired"] else "false") + "\n")
+          print({
+              "status": state["status"],
+              "artifactName": state["artifactName"],
+              "uploadRequired": state["uploadRequired"],
+          })
+          PY
+
+      - name: Persist deterministic final publication receipt
+        id: recovery-persist-receipt
+        if: ${{ steps.recovery-receipt-state.outputs.upload_required == 'true' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ steps.recovery-receipt-state.outputs.artifact_name }}
+          path: ${{ env.RECEIPT_PATH }}
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Read back the exact persisted receipt and require one active artifact
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          artifact_args=()
+          if [[ "${{ steps.recovery-receipt-state.outputs.upload_required }}" == "true" ]]; then
+            artifact_args+=(--artifact-id "${{ steps.recovery-persist-receipt.outputs.artifact-id }}")
+          fi
+          python tools/release/stable_publish.py verify-receipt \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --receipt "$RECEIPT_PATH" \
+            --report "$RECEIPT_VERIFY_PATH" \
+            "${artifact_args[@]}"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import urllib.parse
+
+          from tools.ci import candidate_evidence
+
+          receipt = json.loads(Path(os.environ["RECEIPT_PATH"]).read_text(encoding="utf-8"))
+          verification = json.loads(
+              Path(os.environ["RECEIPT_VERIFY_PATH"]).read_text(encoding="utf-8")
+          )
+          expected_name = "stable-publication-v0.1.1-" + os.environ["EXPECTED_PUBLICATION_KEY"]
+          if (
+              receipt.get("status") != "PUBLICATION_COMPLETE"
+              or receipt.get("publicationComplete") is not True
+              or receipt.get("publicationKey") != os.environ["EXPECTED_PUBLICATION_KEY"]
+              or receipt.get("qualifiedCommit") != os.environ["EXPECTED_MAIN"]
+              or receipt.get("qualifiedTree") != os.environ["EXPECTED_TREE"]
+              or receipt.get("curseForge", {}).get("fileId")
+                  != int(os.environ["EXISTING_CURSEFORGE_FILE_ID"])
+              or verification.get("status") != "RECEIPT_PERSISTENCE_VERIFIED"
+              or verification.get("artifactName") != expected_name
+          ):
+              raise SystemExit("FINAL_RECEIPT_READBACK_DIVERGENT_STOP")
+          api = candidate_evidence.GitHub()
+          index = api.get(
+              "actions/artifacts?name=" + urllib.parse.quote(expected_name, safe="")
+              + "&per_page=100"
+          )
+          active = [row for row in index.get("artifacts", []) if row.get("expired") is False]
+          if index.get("total_count") != 1 or len(active) != 1:
+              raise SystemExit("FINAL_RECEIPT_ARTIFACT_COUNT_STOP")
+          artifact_id = active[0].get("id")
+          if verification.get("artifactIds") != [artifact_id]:
+              raise SystemExit("FINAL_RECEIPT_ARTIFACT_ID_STOP")
+          print({
+              "status": receipt["status"],
+              "publicationComplete": receipt["publicationComplete"],
+              "artifactName": expected_name,
+              "artifactId": artifact_id,
+              "fileId": receipt["curseForge"]["fileId"],
+          })
+          PY
+
   publish:
     name: Guarded CurseForge publication
-    if: ${{ github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event_name == 'workflow_dispatch' && !inputs.receipt_recovery }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
