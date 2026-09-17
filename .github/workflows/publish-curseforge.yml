@@ -445,6 +445,10 @@ jobs:
       EXPECTED_PUBLICATION_KEY: d2e24e6b8f8c00190d1f3cddee8cc06296fb43f1dcb0ba006353473bb0c10a4a
       SOURCE_RUN_ID: "35178395254"
       ORIGINAL_PUBLICATION_RUN_ID: "35179000121"
+      INTENT_ARTIFACT_ID: "10479528843"
+      INTENT_ARCHIVE_SHA256: a75eb63c5949803a7a0c5b587e9e26e8ffb243090bd97854d31e0a646c64f7f1
+      ACCEPTED_ARTIFACT_ID: "10479454366"
+      ACCEPTED_ARCHIVE_SHA256: d372e63da8725f3270515a384f265ec4d2ccbc77c42ecaaedebddd530982cc49
       EXISTING_CURSEFORGE_FILE_ID: "8900758"
       MANIFEST_PATH: tools/release/curseforge_release_0.1.1.json
       REQUESTED_TAG: v0.1.1
@@ -481,6 +485,7 @@ jobs:
         run: |
           {
             echo "SOURCE_REPORT_PATH=$RUNNER_TEMP/stable-source-readiness.json"
+            echo "RECOVERY_EVENT_PATH=$RUNNER_TEMP/recovery-workflow-run.json"
             echo "GITHUB_REPORT_PATH=$RUNNER_TEMP/github-publication-readback.json"
             echo "RESULT_REPORT_PATH=$RUNNER_TEMP/curseforge-publication-result.json"
             echo "RECEIPT_PATH=$RUNNER_TEMP/stable-publication-receipt.json"
@@ -527,25 +532,29 @@ jobs:
           print({"main": expected_main, "tree": expected_tree, "conflicts": 0})
           PY
 
-      - name: Recover the exact authenticated source report from the original run
+      - name: Rebuild exact source report from persisted original evidence
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python - <<'PY'
+          import hashlib
           import json
           import os
           from pathlib import Path
-          import re
 
           from tools.ci import candidate_evidence
           from tools.release import stable_autopublish
 
           expected_main = os.environ["EXPECTED_MAIN"]
-          expected_key = os.environ["EXPECTED_PUBLICATION_KEY"]
           source_run_id = int(os.environ["SOURCE_RUN_ID"])
           publication_run_id = int(os.environ["ORIGINAL_PUBLICATION_RUN_ID"])
           api = candidate_evidence.GitHub()
+
+          def require(condition, reason):
+              if not condition:
+                  raise SystemExit(reason)
+
           publication_run = api.get(f"actions/runs/{publication_run_id}")
           expected_run = {
               "id": publication_run_id,
@@ -560,62 +569,147 @@ jobs:
               if publication_run.get(field) != expected:
                   raise SystemExit(f"ORIGINAL_PUBLICATION_RUN_{field.upper()}_DRIFT_STOP")
           jobs = api.get(f"actions/runs/{publication_run_id}/jobs?per_page=100").get("jobs", [])
-          matches = [
+          eligibility_jobs = [
               job for job in jobs
               if job.get("name") == "Evaluate authenticated stable auto-publish eligibility"
               and job.get("status") == "completed"
               and job.get("conclusion") == "success"
           ]
-          if len(matches) != 1 or type(matches[0].get("id")) is not int:
-              raise SystemExit("ORIGINAL_ELIGIBILITY_JOB_IDENTITY_STOP")
-          raw_log = api.get(f"actions/jobs/{matches[0]['id']}/logs", binary=True)
-          try:
-              decoded = raw_log.decode("utf-8")
-          except UnicodeError as exc:
-              raise SystemExit("ORIGINAL_ELIGIBILITY_LOG_ENCODING_STOP") from exc
-          lines = [
-              re.sub(r"^\d{4}-\d{2}-\d{2}T[^ ]+Z\s+", "", line)
-              for line in decoded.splitlines()
+          require(len(eligibility_jobs) == 1, "ORIGINAL_ELIGIBILITY_JOB_IDENTITY_STOP")
+          publish_jobs = [
+              job for job in jobs
+              if job.get("name") == "Automatic stable GitHub and CurseForge publication"
+              and job.get("status") == "completed"
+              and job.get("conclusion") == "failure"
           ]
-          candidates = []
-          for start, line in enumerate(lines):
-              if line.strip() != "{":
-                  continue
-              for end in range(start + 1, len(lines)):
-                  if lines[end].strip() != "}":
-                      continue
-                  try:
-                      value = json.loads("\n".join(lines[start:end + 1]))
-                  except json.JSONDecodeError:
-                      continue
-                  if isinstance(value, dict) and value.get("schemaVersion") == 2:
-                      candidates.append(value)
-                      break
-          reports = [
-              value for value in candidates
-              if value.get("status") == "AUTO_PUBLISH_ELIGIBLE"
-              and value.get("idempotenceKey") == expected_key
-              and value.get("workflowRun", {}).get("id") == source_run_id
-              and value.get("workflowRun", {}).get("headSha") == expected_main
-          ]
-          if len(reports) != 1:
-              raise SystemExit("ORIGINAL_ELIGIBILITY_REPORT_AMBIGUOUS_STOP")
-          report = reports[0]
+          require(len(publish_jobs) == 1, "ORIGINAL_PUBLISH_JOB_IDENTITY_STOP")
+          successful_steps = {
+              step.get("name") for step in publish_jobs[0].get("steps", [])
+              if step.get("status") == "completed" and step.get("conclusion") == "success"
+          }
+          for name in (
+              "Re-evaluate exact stable gates immediately before mutation",
+              "Prepare exact CurseForge upload intent without posting",
+              "Persist upload intent before any POST",
+              "Submit automatic exact persisted request once",
+              "Persist accepted CurseForge file ID before polling",
+          ):
+              require(name in successful_steps, "ORIGINAL_PUBLISH_CHECKPOINT_STEPS_STOP")
+
+          def artifact_report(artifact_id, archive_sha256, artifact_name, filename):
+              metadata = api.get(f"actions/artifacts/{artifact_id}")
+              require(
+                  metadata.get("id") == artifact_id
+                  and metadata.get("name") == artifact_name
+                  and metadata.get("expired") is False
+                  and metadata.get("digest") == "sha256:" + archive_sha256
+                  and metadata.get("workflow_run", {}).get("id") == publication_run_id
+                  and metadata.get("workflow_run", {}).get("head_sha") == expected_main,
+                  "ORIGINAL_CHECKPOINT_ARTIFACT_IDENTITY_STOP",
+              )
+              archive = api.get(f"actions/artifacts/{artifact_id}/zip", binary=True)
+              require(
+                  hashlib.sha256(archive).hexdigest() == archive_sha256,
+                  "ORIGINAL_CHECKPOINT_ARCHIVE_HASH_STOP",
+              )
+              files = candidate_evidence.contents(archive)
+              require(set(files) == {filename}, "ORIGINAL_CHECKPOINT_CONTENT_STOP")
+              value = json.loads(
+                  files[filename].decode("utf-8"),
+                  object_pairs_hook=candidate_evidence.unique,
+              )
+              require(isinstance(value, dict), "ORIGINAL_CHECKPOINT_CONTENT_STOP")
+              return value
+
+          intent_id = int(os.environ["INTENT_ARTIFACT_ID"])
+          intent = artifact_report(
+              intent_id,
+              os.environ["INTENT_ARCHIVE_SHA256"],
+              "cfpub-v0.1.1-52161cb817159321--35179000121-1--intent--f621e5ac5ebf",
+              "curseforge-upload-intent.json",
+          )
+          accepted = artifact_report(
+              int(os.environ["ACCEPTED_ARTIFACT_ID"]),
+              os.environ["ACCEPTED_ARCHIVE_SHA256"],
+              "cfpub-v0.1.1-52161cb817159321--35179000121-1--accepted--8900758",
+              "curseforge-publication-result.json",
+          )
+          require(
+              intent.get("status") == "UPLOAD_INTENT_READY"
+              and intent.get("verdict") == "PASS"
+              and intent.get("postRequired") is True
+              and intent.get("runKey") == "35179000121-1"
+              and accepted.get("status") == "UPLOAD_ACCEPTED"
+              and accepted.get("fileId") == int(os.environ["EXISTING_CURSEFORGE_FILE_ID"])
+              and accepted.get("intentArtifactId") == intent_id
+              and accepted.get("intentArtifactName")
+                  == "cfpub-v0.1.1-52161cb817159321--35179000121-1--intent--f621e5ac5ebf"
+              and accepted.get("multipartSha256") == intent.get("multipartSha256")
+              and accepted.get("postRequired") is False,
+              "ORIGINAL_ACCEPTED_CHECKPOINT_DIVERGENT_STOP",
+          )
+
+          source_run = api.get(f"actions/runs/{source_run_id}")
+          expected_source = {
+              "id": source_run_id,
+              "name": "Build and validate",
+              "path": ".github/workflows/build.yml",
+              "event": "push",
+              "head_branch": "main",
+              "status": "completed",
+              "conclusion": "success",
+              "head_sha": expected_main,
+              "run_attempt": 1,
+          }
+          for field, expected in expected_source.items():
+              if source_run.get(field) != expected:
+                  raise SystemExit(f"SOURCE_RUN_{field.upper()}_DRIFT_STOP")
+          require(
+              source_run.get("head_repository", {}).get("full_name")
+                  == stable_autopublish.EXPECTED_REPOSITORY,
+              "SOURCE_RUN_REPOSITORY_DRIFT_STOP",
+          )
+          stable_autopublish.write_report(
+              Path(os.environ["RECOVERY_EVENT_PATH"]),
+              {
+                  "repository": {"full_name": stable_autopublish.EXPECTED_REPOSITORY},
+                  "workflow_run": source_run,
+              },
+          )
+          print({
+              "sourceRunId": source_run_id,
+              "publicationRunId": publication_run_id,
+              "intentArtifactId": intent_id,
+              "acceptedArtifactId": int(os.environ["ACCEPTED_ARTIFACT_ID"]),
+              "acceptedFileId": accepted["fileId"],
+              "credentialEvidence": "ACCEPTED_CHECKPOINT",
+          })
+          PY
+          python tools/release/stable_autopublish.py \
+            --event "$RECOVERY_EVENT_PATH" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --report "$SOURCE_REPORT_PATH" \
+            --credential-available
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          report = json.loads(Path(os.environ["SOURCE_REPORT_PATH"]).read_text(encoding="utf-8"))
           if (
-              report.get("verdict") != "PASS"
+              report.get("status") != "AUTO_PUBLISH_ELIGIBLE"
+              or report.get("verdict") != "PASS"
               or report.get("sourceReady") is not True
               or report.get("stableReady") is not True
               or report.get("autoPublishEligible") is not True
               or report.get("runtimeGates", {}).get("credentialAvailable") is not True
               or report.get("publicationComplete") is not False
+              or report.get("idempotenceKey") != os.environ["EXPECTED_PUBLICATION_KEY"]
           ):
-              raise SystemExit("ORIGINAL_ELIGIBILITY_REPORT_DIVERGENT_STOP")
-          stable_autopublish.write_report(Path(os.environ["SOURCE_REPORT_PATH"]), report)
+              raise SystemExit("RECOVERY_SOURCE_REPORT_DIVERGENT_STOP")
           print({
-              "sourceRunId": source_run_id,
-              "publicationRunId": publication_run_id,
-              "eligibilityJobId": matches[0]["id"],
               "status": report["status"],
+              "sourceRunId": report["workflowRun"]["id"],
               "publicationKey": report["idempotenceKey"],
           })
           PY
