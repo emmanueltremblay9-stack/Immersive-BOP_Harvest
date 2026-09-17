@@ -648,6 +648,24 @@ jobs:
               and accepted.get("postRequired") is False,
               "ORIGINAL_ACCEPTED_CHECKPOINT_DIVERGENT_STOP",
           )
+          baseline = intent.get("curseForgeBaseline", {})
+          historical_relations = tuple(sorted(
+              (row.get("projectId"), row.get("slug"), row.get("type"))
+              for row in baseline.get("previousFileRelations", [])
+              if isinstance(row, dict)
+          ))
+          require(
+              baseline.get("projectIdentity") == {
+                  "projectId": 1609013,
+                  "projectSlug": "immersive-bop-harvest",
+                  "source": "OFFICIAL_FILE_PAGE_AND_FILE_API",
+              }
+              and historical_relations
+                  == tuple(sorted(stable_autopublish.EXPECTED_HISTORICAL_RELATIONS))
+              and baseline.get("projectRelations") == []
+              and baseline.get("projectRelationsCheck") == "MATCHED",
+              "ORIGINAL_PREPUBLICATION_GATES_DIVERGENT_STOP",
+          )
 
           source_run = api.get(f"actions/runs/{source_run_id}")
           expected_source = {
@@ -669,13 +687,77 @@ jobs:
                   == stable_autopublish.EXPECTED_REPOSITORY,
               "SOURCE_RUN_REPOSITORY_DRIFT_STOP",
           )
-          stable_autopublish.write_report(
-              Path(os.environ["RECOVERY_EVENT_PATH"]),
-              {
-                  "repository": {"full_name": stable_autopublish.EXPECTED_REPOSITORY},
-                  "workflow_run": source_run,
-              },
+          event = {
+              "repository": {"full_name": stable_autopublish.EXPECTED_REPOSITORY},
+              "workflow_run": source_run,
+          }
+          stable_autopublish.write_report(Path(os.environ["RECOVERY_EVENT_PATH"]), event)
+          recovery_gates = {
+              "canonicalWorkflow": True,
+              "exactCurrentMain": True,
+              "authenticatedStableGate": True,
+              "candidateIdentity": True,
+              "versionedManifest": True,
+              "releaseNotesHash": True,
+              "credentialAvailable": True,
+              "curseForgeProjectIdentity": True,
+              "historicalFileRelations": True,
+              "historicalProjectRelations": True,
+              "targetRelations": True,
+              "gitTagNonDivergent": True,
+              "githubReleaseNonDivergent": True,
+              "githubAssetNonDivergent": True,
+              "curseForgeArtifactNonDivergent": True,
+              "stableRelease": True,
+              "automaticInvocation": True,
+          }
+          recovery_gates[stable_autopublish.AUTO_PUBLISH_GATE_NAMES[-1]] = True
+          require(
+              set(recovery_gates) == set(stable_autopublish.AUTO_PUBLISH_GATE_NAMES),
+              "RECOVERY_GATE_SET_DRIFT_STOP",
           )
+          report = stable_autopublish.evaluate_source_readiness(
+              event,
+              Path(os.environ["GITHUB_WORKSPACE"]),
+              api=api,
+              credential_available=True,
+              _runtime_gate_evidence=recovery_gates,
+          )
+          require(
+              report.get("status") == "AUTO_PUBLISH_ELIGIBLE"
+              and report.get("verdict") == "PASS"
+              and report.get("sourceReady") is True
+              and report.get("stableReady") is True
+              and report.get("autoPublishEligible") is True
+              and report.get("runtimeGates") == recovery_gates
+              and report.get("publicationComplete") is False
+              and report.get("idempotenceKey") == os.environ["EXPECTED_PUBLICATION_KEY"],
+              "RECOVERY_SOURCE_REPORT_DIVERGENT_STOP",
+          )
+          candidate = report["candidate"]
+          require(
+              intent.get("asset") == {
+                  "name": candidate["name"],
+                  "sha256": candidate["sha256"],
+                  "size": candidate["size"],
+              }
+              and accepted.get("asset") == intent.get("asset"),
+              "ORIGINAL_CHECKPOINT_CANDIDATE_DIVERGENT_STOP",
+          )
+          tag_state = stable_autopublish._github_tag_state(expected_main)
+          release_state, asset_state = stable_autopublish._github_release_state(
+              tag_state=tag_state,
+              candidate={**candidate, "sourceCommit": expected_main},
+              notes=(Path(os.environ["GITHUB_WORKSPACE"])
+                     / stable_autopublish.EXPECTED_NOTES).read_text(encoding="utf-8"),
+          )
+          require(
+              tag_state == "EXACT_RECONCILED"
+              and release_state == "RELEASE_EXACT"
+              and asset_state == "ASSET_EXACT",
+              "RECOVERY_GITHUB_READBACK_DIVERGENT_STOP",
+          )
+          stable_autopublish.write_report(Path(os.environ["SOURCE_REPORT_PATH"]), report)
           print({
               "sourceRunId": source_run_id,
               "publicationRunId": publication_run_id,
@@ -683,33 +765,7 @@ jobs:
               "acceptedArtifactId": int(os.environ["ACCEPTED_ARTIFACT_ID"]),
               "acceptedFileId": accepted["fileId"],
               "credentialEvidence": "ACCEPTED_CHECKPOINT",
-          })
-          PY
-          python tools/release/stable_autopublish.py \
-            --event "$RECOVERY_EVENT_PATH" \
-            --repo-root "$GITHUB_WORKSPACE" \
-            --report "$SOURCE_REPORT_PATH" \
-            --credential-available
-          python - <<'PY'
-          import json
-          import os
-          from pathlib import Path
-
-          report = json.loads(Path(os.environ["SOURCE_REPORT_PATH"]).read_text(encoding="utf-8"))
-          if (
-              report.get("status") != "AUTO_PUBLISH_ELIGIBLE"
-              or report.get("verdict") != "PASS"
-              or report.get("sourceReady") is not True
-              or report.get("stableReady") is not True
-              or report.get("autoPublishEligible") is not True
-              or report.get("runtimeGates", {}).get("credentialAvailable") is not True
-              or report.get("publicationComplete") is not False
-              or report.get("idempotenceKey") != os.environ["EXPECTED_PUBLICATION_KEY"]
-          ):
-              raise SystemExit("RECOVERY_SOURCE_REPORT_DIVERGENT_STOP")
-          print({
               "status": report["status"],
-              "sourceRunId": report["workflowRun"]["id"],
               "publicationKey": report["idempotenceKey"],
           })
           PY
