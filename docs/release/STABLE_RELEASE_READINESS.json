@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "packet": "maintenance-20260905",
-  "baseline": "afc9237294faa5c86d56d8228f64ac4e1bfbb2f1",
-  "version": "0.1.1-alpha.9",
+  "packet": "IBH-S6-FINAL-BUNDLE-STABLE-GATE-01",
+  "baseline": "32347f5bf39c67d9c096de6857a5dda09310fcd4",
+  "version": "0.1.1",
   "four_readiness": {
-    "SOURCE_READY": "BLOCKED",
-    "RUNTIME_READY": "BLOCKED",
-    "ARTIFACT_READY": "BLOCKED",
+    "SOURCE_READY": "PASS",
+    "RUNTIME_READY": "PASS",
+    "ARTIFACT_READY": "PASS",
     "PUBLICATION_READY": "BLOCKED"
   },
-  "scope": "Maintenance implementation only, not a stable candidate",
+  "scope": "Authenticated final stable-candidate bundle; publication remains outside authority",
   "tasks": [
     {
       "id": "S0",
@@ -612,7 +612,7 @@
   "project_endpoint_readback": "403; exact file ID/project verified by file endpoint",
   "secret_presence": "NOT_VERIFIED",
   "control_channel": "This Codex task; separate ChatGPT dispatch NOT_PERFORMED / BLOCKED_BY_MISSING_CODEX_REPORT_CHANNEL",
-  "record_scope": "Historical maintenance packet; current follow-up is current_qualification below",
+  "record_scope": "Historical maintenance and qualification records are retained; final_stable_gate is current",
   "current_qualification": {
     "packet": "qualification-20260905",
     "baseline": "37e6d8225819abdd079ec55e9317b53f5f235f1f",
@@ -848,5 +848,79 @@
     "remaining_runtime_gaps": [
       "S5 CI execution of its own candidate bytes and independent canonical service readback"
     ]
+  },
+  "final_stable_gate": {
+    "packet": "IBH-S6-FINAL-BUNDLE-STABLE-GATE-01",
+    "evaluated_date": "2026-09-16",
+    "status": "PASS-WITH-GAPS",
+    "stableReady": true,
+    "publicationReady": false,
+    "sourceReady": true,
+    "runtimeReady": true,
+    "artifactReady": true,
+    "implementationIntegrationReady": false,
+    "candidate": {
+      "modId": "immersive_bop_harvest",
+      "version": "0.1.1",
+      "license": "All Rights Reserved",
+      "name": "immersive_bop_harvest-0.1.1.jar",
+      "size": 1606577,
+      "sha256": "edcedc52d8b0fc2952bcffb7c54f3737ed144227350a5b46ea71620dd3859394"
+    },
+    "authenticatedProvenance": {
+      "repository": "emmanueltremblay9-stack/Immersive-BOP_Harvest",
+      "workflow": ".github/workflows/build.yml",
+      "event": "push",
+      "branch": "main",
+      "runId": 35061734691,
+      "runAttempt": 1,
+      "sourceCommit": "32347f5bf39c67d9c096de6857a5dda09310fcd4",
+      "sourceTree": "dd7b3f8cc2c449f399b83c9f7a16caab686b8d29",
+      "artifactId": 10432693738,
+      "archiveSha256": "2e5c0453e81b09fe6c53bfd721c11ee226aed56efb21eed94ec55f18dd6b7c66"
+    },
+    "finalBundle": {
+      "path": "build/final-release/immersive_bop_harvest-0.1.1-final-bundle.zip",
+      "size": 8764819,
+      "sha256": "8c67e684ecfcb9a8fc313a5e0ceb0e443547c0141f95d695accc478033673cd0",
+      "schemaVersion": 2,
+      "acceptanceCriteria": 313,
+      "receiptKinds": 6,
+      "openGitHubIssues": 0
+    },
+    "gate": {
+      "checker": "scripts/check_stable_release_gate.py",
+      "composer": "tools/ci/final_release_bundle.py",
+      "targetedTests": 23,
+      "targetedTestsResult": "PASS",
+      "publisherTests": 69,
+      "ciTests": 94,
+      "ciTestSkips": 1,
+      "betaAndStableTests": 30,
+      "specValidation": "PASS",
+      "manifestReadback": "PASS",
+      "diffCheck": "PASS",
+      "gradleInitialAttempt": "BLOCKED_LOCAL_GRADLE_LOOPBACK",
+      "gradleIsolatedSocketRetry": "PASS: compileJava/processResources; test NO-SOURCE; build",
+      "liveGenerationExitCode": 0,
+      "liveValidationExitCode": 0,
+      "liveValidationStatus": "AUTHENTICATED_STABLE_CANDIDATE"
+    },
+    "historicalAlpha9ClientSmoke": "NOT_PERFORMED / OWNER_WAIVED",
+    "publicationBlockers": [
+      "PUBLICATION_AUTHORITY_NOT_GRANTED",
+      "GITHUB_TAG_NOT_PERFORMED",
+      "GITHUB_RELEASE_NOT_PERFORMED",
+      "CURSEFORGE_PUBLICATION_NOT_PERFORMED",
+      "MODRINTH_PUBLICATION_NOT_PERFORMED"
+    ],
+    "integration": {
+      "branchCreation": "NOT_PERFORMED / NOT_AUTHORIZED",
+      "commit": "NOT_PERFORMED / NOT_AUTHORIZED",
+      "push": "NOT_PERFORMED / NOT_AUTHORIZED",
+      "pullRequest": "NOT_PERFORMED / NOT_AUTHORIZED",
+      "merge": "NOT_PERFORMED / NOT_AUTHORIZED",
+      "newExactHeadCI": "NOT_PERFORMED / REQUIRES_AUTHORIZED_INTEGRATION"
+    }
   }
 }

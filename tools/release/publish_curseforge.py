@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import html
 import json
 import os
 from pathlib import Path
@@ -130,6 +131,7 @@ class HttpClient:
         headers: dict[str, str] | None = None,
         body: bytes | None = None,
         retry_safe: bool,
+        allow_redirects: bool = True,
     ) -> bytes:
         merged_headers = {"User-Agent": USER_AGENT}
         if headers:
@@ -145,7 +147,8 @@ class HttpClient:
             try:
                 credentialed = any(k.lower() in {"authorization", "x-api-token"} for k in merged_headers)
                 open_request = (urllib.request.build_opener(NoCredentialRedirect()).open
-                                if credentialed or method == "POST" else urllib.request.urlopen)
+                                if credentialed or method == "POST" or not allow_redirects
+                                else urllib.request.urlopen)
                 with open_request(request, timeout=self.timeout) as response:
                     return response.read()
             except urllib.error.HTTPError as exc:
@@ -203,6 +206,23 @@ class HttpClient:
             retry_safe=True,
         )
         destination.write_bytes(raw)
+
+    def get_text_no_redirect(self, url: str, *, label: str) -> str:
+        raw = self._request(
+            "GET",
+            url,
+            label=label,
+            headers={"Accept": "text/html"},
+            retry_safe=True,
+            allow_redirects=False,
+        )
+        try:
+            return raw.decode("utf-8")
+        except UnicodeDecodeError as exc:
+            raise PublicationError(
+                "INVALID_TEXT_RESPONSE",
+                f"{label} did not return UTF-8 text",
+            ) from exc
 
     def post_json(
         self,
@@ -273,7 +293,7 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
         raise PublicationError("MANIFEST_SCHEMA_UNSUPPORTED", "Expected schemaVersion 1, 2 or 3")
     if schema in {2, 3}:
         if set(manifest) != {"schemaVersion", "repository", "release", "curseforge", "baseline"}:
-            invalid("Schema 2 has missing or unrecognized root fields")
+            invalid("Schema 2/3 has missing or unrecognized root fields")
     for section in ("repository", "release", "curseforge"):
         if not isinstance(manifest.get(section), dict):
             invalid(f"Missing manifest section: {section}")
@@ -286,7 +306,7 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
         }
         for section, fields in expected_fields.items():
             if set(manifest[section]) != fields:
-                invalid(f"Schema 2 has missing or unrecognized {section} fields")
+                invalid(f"Schema 2/3 has missing or unrecognized {section} fields")
     for key, pattern in (("owner", r"[A-Za-z0-9][A-Za-z0-9-]{0,38}"),
                          ("name", r"[A-Za-z0-9_.-]+")):
         if not isinstance(repository.get(key), str) or not re.fullmatch(pattern, repository[key]):
@@ -363,7 +383,10 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
         else:
             fields = {"mode", "previousPublicFileId"}
             if schema == 3:
-                fields |= {"releaseType", "gameVersionNames"}
+                fields |= {
+                    "releaseType", "gameVersionNames",
+                    "previousFileRelations", "projectRelations",
+                }
             if set(baseline) != fields or not is_positive_int(baseline.get("previousPublicFileId")):
                 invalid("previousPublicFile requires an exact versioned baseline and real positive file ID")
             if schema == 3:
@@ -374,6 +397,24 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
                         or not all(isinstance(x, str) and x and all(ord(c) >= 32 for c in x) for x in labels)
                         or len(set(labels)) != len(labels)):
                     invalid("baseline.gameVersionNames must be explicit unique historical labels")
+                for field in ("previousFileRelations", "projectRelations"):
+                    values = baseline[field]
+                    if not isinstance(values, list):
+                        invalid(f"baseline.{field} must be an explicit array, including [] when empty")
+                    seen = set()
+                    for relation in values:
+                        if not isinstance(relation, dict) or set(relation) != {"projectId", "slug", "type"}:
+                            invalid(f"baseline.{field} contains a non-object relation")
+                        if (not is_positive_int(relation.get("projectId"))
+                                or not isinstance(relation.get("slug"), str)
+                                or not re.fullmatch(r"[a-z0-9][a-z0-9-]*", relation["slug"])
+                                or not isinstance(relation.get("type"), str)
+                                or relation["type"] not in public_types):
+                            invalid(f"baseline.{field} contains an invalid relation")
+                        key = (relation["projectId"], relation["slug"], relation["type"])
+                        if key in seen:
+                            invalid(f"baseline.{field} contains a duplicate relation")
+                        seen.add(key)
     return manifest
 
 
@@ -609,10 +650,18 @@ class Publisher:
             raise PublicationError("CURSEFORGE_PUBLIC_DEPENDENCIES_INVALID", "Malformed public relation identity")
         return (relation[project_key], relation["slug"], relation["type"])
 
-    def _validate_expected_relations(self, file_id: int) -> list[dict[str, Any]]:
+    def _validate_expected_relations(
+        self,
+        file_id: int,
+        expected_relations: list[dict[str, Any]] | None = None,
+    ) -> list[dict[str, Any]]:
         actual = sorted(self._relation_key(item, True) for item in self._public_relations(file_id))
         expected = sorted(
-            self._relation_key(item, False) for item in self.cf["expectedPublicRelations"]
+            self._relation_key(item, False)
+            for item in (
+                self.cf["expectedPublicRelations"]
+                if expected_relations is None else expected_relations
+            )
         )
         if actual != expected:
             raise PublicationError(
@@ -624,12 +673,19 @@ class Publisher:
             for project_id, slug, relation_type in actual
         ]
 
-    def _validate_expected_project_relations(self) -> list[dict[str, Any]]:
+    def _validate_expected_project_relations(
+        self,
+        expected_relations: list[dict[str, Any]] | None = None,
+    ) -> list[dict[str, Any]]:
         actual = sorted(
             self._relation_key(item, True) for item in self._public_project_relations()
         )
         expected = sorted(
-            self._relation_key(item, False) for item in self.cf["expectedPublicRelations"]
+            self._relation_key(item, False)
+            for item in (
+                self.cf["expectedPublicRelations"]
+                if expected_relations is None else expected_relations
+            )
         )
         if actual != expected:
             raise PublicationError(
@@ -642,22 +698,97 @@ class Publisher:
             for project_id, slug, relation_type in actual
         ]
 
+    def _validate_project_identity(
+        self, previous_file_id: int | None = None
+    ) -> dict[str, Any]:
+        project_id = self.cf["projectId"]
+        project_slug = self.cf["projectSlug"]
+        try:
+            result = self.http.get_json(
+                f"{self.public_api}/mods/{project_id}",
+                label="CurseForge configured project identity",
+            )
+        except HttpStatusError as exc:
+            if exc.status_code != 403 or previous_file_id is None:
+                raise PublicationError(
+                    "CURSEFORGE_PROJECT_IDENTITY_BLOCKED",
+                    "Configured CurseForge project identity could not be verified",
+                    EXIT_CONFLICT,
+                ) from None
+            page_url = (
+                "https://www.curseforge.com/minecraft/mc-mods/"
+                f"{urllib.parse.quote(project_slug, safe='')}/files/{previous_file_id}"
+            )
+            try:
+                page = self.http.get_text_no_redirect(
+                    page_url,
+                    label="CurseForge official project file identity",
+                )
+            except PublicationError:
+                raise PublicationError(
+                    "CURSEFORGE_PROJECT_IDENTITY_BLOCKED",
+                    "Configured CurseForge project identity fallback was unavailable",
+                    EXIT_CONFLICT,
+                ) from None
+            canonical_urls = []
+            for tag in re.findall(r"<link\b[^>]*>", page, flags=re.IGNORECASE):
+                attributes = {
+                    name.lower(): html.unescape(value)
+                    for name, _quote, value in re.findall(
+                        r"([A-Za-z_:][-A-Za-z0-9_:.]*)\s*=\s*([\"'])(.*?)\2",
+                        tag,
+                        flags=re.DOTALL,
+                    )
+                }
+                if "canonical" in attributes.get("rel", "").lower().split():
+                    canonical_urls.append(attributes.get("href"))
+            visible = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", page)))
+            project_ids = {
+                int(value)
+                for value in re.findall(
+                    r"\bProject\s+ID\s*(?::|#)?\s*(\d+)\b",
+                    visible,
+                    flags=re.IGNORECASE,
+                )
+            }
+            if (canonical_urls != [page_url]
+                    or project_ids != {project_id}):
+                raise PublicationError(
+                    "CURSEFORGE_PROJECT_IDENTITY_MISMATCH",
+                    "Official CurseForge file page did not bind the configured slug and project ID",
+                    EXIT_CONFLICT,
+                )
+            return {
+                "projectId": project_id,
+                "projectSlug": project_slug,
+                "source": "OFFICIAL_FILE_PAGE_AND_FILE_API",
+            }
+        project = result.get("data") if isinstance(result, dict) else None
+        if (not isinstance(project, dict) or type(project.get("id")) is not int
+                or project["id"] != project_id or project.get("slug") != project_slug):
+            raise PublicationError(
+                "CURSEFORGE_PROJECT_IDENTITY_MISMATCH",
+                "Configured project ID/slug was not verified",
+                EXIT_CONFLICT,
+            )
+        return {
+            "projectId": project_id,
+            "projectSlug": project_slug,
+            "source": "PUBLIC_PROJECT_API",
+        }
+
     def _validate_previous_public_baseline(
         self, *, validate_project_relations: bool = True
     ) -> dict[str, Any]:
         baseline_config = self.manifest.get("baseline", {"mode": "previousPublicFile"})
-        if self.manifest["schemaVersion"] in {2, 3}:
-            result = self.http.get_json(f"{self.public_api}/mods/{self.cf['projectId']}",
-                                       label="CurseForge configured project identity")
-            project = result.get("data") if isinstance(result, dict) else None
-            if (not isinstance(project, dict) or type(project.get("id")) is not int
-                    or project["id"] != self.cf["projectId"] or project.get("slug") != self.cf["projectSlug"]):
-                raise PublicationError("CURSEFORGE_PROJECT_IDENTITY_MISMATCH", "Configured project ID/slug was not verified", EXIT_CONFLICT)
         if baseline_config["mode"] == "firstPublication":
+            identity = (self._validate_project_identity()
+                        if self.manifest["schemaVersion"] in {2, 3} else None)
             if validate_project_relations and self._list_public_files():
                 raise PublicationError("FIRST_PUBLICATION_PROJECT_NOT_EMPTY", "firstPublication requires an empty public file inventory", EXIT_CONFLICT)
             return {"mode": "firstPublication", "projectId": self.cf["projectId"],
                     "projectSlug": self.cf["projectSlug"],
+                    "projectIdentity": identity,
                     "projectRelationsCheck": "NOT_APPLICABLE_FIRST_PUBLICATION" if validate_project_relations else "SKIPPED_ACCEPTED_FILE_RESUME",
                     "initialPublicFileCount": 0 if validate_project_relations else None}
         previous_id = (self.cf["previousPublicFileId"] if self.manifest["schemaVersion"] == 1
@@ -665,6 +796,8 @@ class Publisher:
         previous = self._public_file(previous_id)
         if (previous.get("id") != previous_id or previous.get("projectId") != self.cf["projectId"] or previous.get("status") != 4):
             raise PublicationError("CURSEFORGE_BASELINE_IDENTITY_MISMATCH", "Previous public file identity or approval mismatch")
+        identity = (self._validate_project_identity(previous_id)
+                    if self.manifest["schemaVersion"] in {2, 3} else None)
         historical = baseline_config if self.manifest["schemaVersion"] == 3 else self.cf
         if not exact_game_versions(previous.get("gameVersions"), historical["gameVersionNames"]):
             raise PublicationError(
@@ -677,12 +810,27 @@ class Publisher:
                 "CURSEFORGE_BASELINE_RELEASE_TYPE_DRIFTED",
                 "Previous public file release type drifted",
             )
+        historical_file_relations = (
+            baseline_config["previousFileRelations"]
+            if self.manifest["schemaVersion"] == 3
+            else self.cf["expectedPublicRelations"]
+        )
+        historical_project_relations = (
+            baseline_config["projectRelations"]
+            if self.manifest["schemaVersion"] == 3
+            else self.cf["expectedPublicRelations"]
+        )
         baseline = {
             "previousFileId": previous_id,
-            "previousFileRelations": self._validate_expected_relations(previous_id),
+            "projectIdentity": identity,
+            "previousFileRelations": self._validate_expected_relations(
+                previous_id, historical_file_relations
+            ),
         }
         if validate_project_relations:
-            baseline["projectRelations"] = self._validate_expected_project_relations()
+            baseline["projectRelations"] = self._validate_expected_project_relations(
+                historical_project_relations
+            )
             baseline["projectRelationsCheck"] = "MATCHED"
         else:
             baseline["projectRelations"] = None
@@ -806,12 +954,36 @@ class Publisher:
             "sha256": public_sha,
         }
 
+    def readback_public_release(self, file_id: int) -> dict[str, Any]:
+        """Perform a fresh, token-free public readback for one accepted file."""
+        if not is_positive_int(file_id):
+            raise PublicationError(
+                "CURSEFORGE_FILE_ID_INVALID",
+                "CurseForge public readback requires a positive file ID",
+            )
+        with tempfile.TemporaryDirectory(prefix="curseforge-public-readback-") as temporary:
+            return self._validate_public_release(file_id, Path(temporary))
+
     def _find_existing_release(self, work_dir: Path) -> dict[str, Any] | None:
         version = self.release["version"]
+        expected_names = {
+            self.release["assetName"],
+            self.cf["displayName"],
+        }
+        version_pattern = re.compile(
+            rf"(?<![0-9A-Za-z.]){re.escape(version)}(?![0-9A-Za-z.+-])"
+        )
+
+        def names_target_release(name: str) -> bool:
+            if name in expected_names:
+                return True
+            comparable = name[:-4] if name.lower().endswith(".jar") else name
+            return version_pattern.search(comparable) is not None
+
         candidates = []
         for item in self._list_public_files():
             names = (str(item.get("fileName", "")), str(item.get("displayName", "")))
-            if self.release["assetName"] in names or any(version in name for name in names):
+            if any(names_target_release(name) for name in names):
                 candidates.append(item)
         if not candidates:
             return None
@@ -840,6 +1012,13 @@ class Publisher:
                 EXIT_CONFLICT,
             )
         return self._validate_public_release(matching[0], work_dir)
+
+    def preflight_publication_state(self, work_dir: Path) -> dict[str, Any]:
+        """Read back the fail-closed CurseForge baseline and target state without POST."""
+        return {
+            "baseline": self._validate_previous_public_baseline(),
+            "existingRelease": self._find_existing_release(work_dir),
+        }
 
     def _resolve_game_version_ids(self, token: str) -> dict[str, list[int]]:
         try:
@@ -1116,31 +1295,43 @@ class Publisher:
                     "GITHUB_STATE_ARTIFACT_INVALID",
                     "A publication state artifact has an invalid run key",
                 )
-            if phase not in {"intent", "result"}:
+            if phase not in {"intent", "accepted", "result"}:
                 raise PublicationError(
                     "GITHUB_STATE_ARTIFACT_INVALID",
                     "A publication state artifact has an invalid phase",
                 )
-            runs.setdefault(run_key, {"intent": [], "result": []})[phase].append(
+            runs.setdefault(run_key, {"intent": [], "accepted": [], "result": []})[phase].append(
                 (artifact_id, details)
             )
 
         resume_ids: set[int] = set()
         for run_key, phases in runs.items():
             intents = phases["intent"]
+            accepted = phases["accepted"]
             results = phases["result"]
-            if len(intents) > 1 or len(results) > 1:
+            if len(intents) > 1 or len(accepted) > 1 or len(results) > 1:
                 raise PublicationError(
                     "GITHUB_STATE_ARTIFACT_AMBIGUOUS",
                     f"Durable publication state is ambiguous for run {run_key}",
                     EXIT_CONFLICT,
                 )
-            if intents and not results:
+            if intents and not accepted and not results:
                 raise PublicationError(
                     "UPLOAD_OUTCOME_UNKNOWN",
                     f"Run {run_key} has a durable upload intent without a result; refusing another POST",
                     EXIT_CONFLICT,
                 )
+            accepted_file_id: int | None = None
+            if accepted:
+                accepted_details = accepted[0][1]
+                if (len(accepted_details) != 1
+                        or not re.fullmatch(r"[1-9][0-9]*", accepted_details[0])):
+                    raise PublicationError(
+                        "GITHUB_STATE_ARTIFACT_INVALID",
+                        f"Durable accepted-file checkpoint is malformed for run {run_key}",
+                    )
+                accepted_file_id = int(accepted_details[0])
+                resume_ids.add(accepted_file_id)
             if not results:
                 continue
             details = results[0][1]
@@ -1169,10 +1360,16 @@ class Publisher:
                 )
             file_id = int(file_id_text)
             if file_id > 0:
+                if accepted_file_id is not None and accepted_file_id != file_id:
+                    raise PublicationError(
+                        "GITHUB_STATE_MULTIPLE_FILE_IDS",
+                        f"Accepted and final file IDs disagree for run {run_key}",
+                        EXIT_CONFLICT,
+                    )
                 resume_ids.add(file_id)
         for run_key in sorted(persisted_intent_runs):
             phases = runs.get(run_key)
-            if phases is None or not phases["result"]:
+            if phases is None or (not phases["accepted"] and not phases["result"]):
                 raise PublicationError(
                     "UPLOAD_OUTCOME_UNKNOWN",
                     (
@@ -1420,7 +1617,7 @@ class Publisher:
                 "sha256": self.release["assetSha256"],
             },
         }
-        if mode not in {"dry-run", "prepare-publish", "publish"}:
+        if mode not in {"dry-run", "prepare-publish", "submit", "publish"}:
             raise PublicationError("MODE_INVALID", "Unsupported publisher mode")
         try:
             with tempfile.TemporaryDirectory(prefix="curseforge-publisher-") as temporary:
@@ -1591,8 +1788,15 @@ class Publisher:
                 try:
                     file_id = self._upload(curseforge_token, body, content_type)
                     report["fileId"] = file_id
-                    report.update({"status": "UPLOADED_PROCESSING", "verdict": "BLOCKED", "postRequired": False})
+                    report.update({
+                        "status": "UPLOAD_ACCEPTED" if mode == "submit" else "UPLOADED_PROCESSING",
+                        "verdict": "BLOCKED",
+                        "postRequired": False,
+                        "publicationComplete": False,
+                    })
                     write_report(result_path, sanitized_report(report, (curseforge_token, github_token)))
+                    if mode == "submit":
+                        return report
                     observed = self._poll_public(
                         file_id, work_dir, poll_attempts, poll_interval
                     )
@@ -1629,6 +1833,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--prepare-publish",
         action="store_true",
         help="Authenticate and emit a durable upload intent without uploading",
+    )
+    mode.add_argument(
+        "--submit",
+        action="store_true",
+        help="Perform the one authorized POST and stop after recording the accepted file ID",
     )
     mode.add_argument("--publish", action="store_true", help="Upload when authorized")
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
@@ -1682,10 +1891,11 @@ def main(argv: list[str] | None = None) -> int:
                 "RESUME_MODE_INVALID",
                 "--resume-file-id requires --publish",
             )
-        if (args.intent_report is not None or args.intent_artifact_id is not None) and not args.publish:
+        if ((args.intent_report is not None or args.intent_artifact_id is not None)
+                and not (args.publish or args.submit)):
             raise PublicationError(
                 "INTENT_MODE_INVALID",
-                "Intent report and artifact ID arguments require --publish",
+                "Intent report and artifact ID arguments require --submit or --publish",
             )
         intent_report = None
         if args.intent_report is not None:
@@ -1696,7 +1906,7 @@ def main(argv: list[str] | None = None) -> int:
                     "UPLOAD_INTENT_REPORT_INVALID",
                     "The upload intent report is unreadable",
                 ) from exc
-        if (args.publish or args.prepare_publish) and args.resume_file_id is None and args.report is None:
+        if (args.publish or args.submit or args.prepare_publish) and args.resume_file_id is None and args.report is None:
             raise PublicationError("REPORT_PATH_REQUIRED", "Production preparation/publication requires a durable report path")
         publisher = Publisher(repo_root, manifest)
         selected_mode = (
@@ -1704,6 +1914,8 @@ def main(argv: list[str] | None = None) -> int:
             if args.dry_run
             else "prepare-publish"
             if args.prepare_publish
+            else "submit"
+            if args.submit
             else "publish"
         )
         report = publisher.run(

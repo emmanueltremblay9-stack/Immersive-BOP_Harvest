@@ -1,5 +1,39 @@
 # Stable readiness maintenance audit — 2026-09-05
 
+## Current final bundle and authenticated stable gate — 2026-09-16
+
+Fresh service readback authenticated main push run `35061734691`, attempt `1`,
+at commit `32347f5bf39c67d9c096de6857a5dda09310fcd4` and tree
+`dd7b3f8cc2c449f399b83c9f7a16caab686b8d29`. Artifact `10432693738` matched
+archive SHA-256 `2e5c0453e81b09fe6c53bfd721c11ee226aed56efb21eed94ec55f18dd6b7c66`.
+Its candidate JAR is the exact stable `0.1.1` artifact, 1,606,577 bytes,
+SHA-256 `edcedc52d8b0fc2952bcffb7c54f3737ed144227350a5b46ea71620dd3859394`.
+
+The deterministic schema-2 final bundle contains the candidate, exact source
+snapshot, authenticated evidence bytes, isolated-runtime inventory, six receipt
+kinds, and exact per-ID proof coverage of all 313 acceptance IDs. Its size is 8,764,819 bytes
+and its SHA-256 is
+`8c67e684ecfcb9a8fc313a5e0ceb0e443547c0141f95d695accc478033673cd0`.
+Fresh generation and fresh service-bound validation both exited `0` with
+`stableReady=true`. The live open-issue inventory was empty.
+
+`PUBLICATION_READY` remains `BLOCKED`: publication authority was not granted,
+and no tag, GitHub Release, CurseForge publication, or Modrinth publication was
+performed. The old alpha.9 Prism smoke is still
+`NOT_PERFORMED / OWNER_WAIVED`. No branch, commit, push, PR, merge, install,
+gameplay change, dependency change, or version bump occurred. Because the new
+checker is still local, its own exact-head CI is `NOT_PERFORMED` pending a
+separately authorized integration.
+
+Validation in this local release-prep pass: 69 publisher tests passed; 94 CI
+tests passed with one existing Windows symlink-privilege skip; 27 beta/stable
+tests passed; the final combined beta/stable suite passed 30 tests; spec
+validation, manifest readback and `git diff --check` passed.
+The first Gradle invocation hit the documented pre-task loopback failure. With
+the isolated `jdk.net.unixdomain.tmpdir` workaround, compile/resources, `test`
+(`NO-SOURCE`) and `build` all completed successfully. This did not modify Java,
+gameplay, resources, dependencies, version, or the qualified candidate bytes.
+
 ## Current S3-A/S4/S5 follow-up
 
 S3-A PR #4 merged at `ee525b9d9406b030e17d87249219c007f97af47c`.

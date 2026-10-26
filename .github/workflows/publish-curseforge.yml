@@ -1,7 +1,12 @@
 name: Publish CurseForge
-run-name: "CurseForge ${{ inputs.tag }} :: ${{ inputs.dry_run && 'dry-run' || (inputs.resume_file_id != '' && 'resume' || 'publish') }}"
+run-name: "CurseForge ${{ github.event_name == 'workflow_run' && 'v0.1.1' || startsWith(inputs.tag, 'v') && inputs.tag || format('v{0}', inputs.tag) }} :: publish"
 
 on:
+  workflow_run:
+    workflows:
+      - Build and validate
+    types:
+      - completed
   workflow_dispatch:
     inputs:
       tag:
@@ -28,17 +33,407 @@ permissions:
   actions: read
 
 concurrency:
-  group: curseforge-${{ inputs.tag }}
+  group: curseforge-stable-${{ github.event_name == 'workflow_run' && 'v0.1.1' || startsWith(inputs.tag, 'v') && inputs.tag || format('v{0}', inputs.tag) }}
   cancel-in-progress: false
 
 jobs:
+  reject-unqualified-source:
+    name: Reject unqualified upstream source
+    if: >-
+      ${{ github.event_name == 'workflow_run' &&
+          (github.event.workflow_run.name != 'Build and validate' ||
+           github.event.workflow_run.path != '.github/workflows/build.yml' ||
+           github.event.workflow_run.head_repository.full_name != github.repository ||
+           github.event.workflow_run.event != 'push' ||
+           github.event.workflow_run.head_branch != 'main' ||
+           github.event.workflow_run.conclusion != 'success') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Record rejected upstream source
+        shell: bash
+        run: |
+          echo "SOURCE_READINESS_BLOCKED: canonical successful push/main required"
+          exit 1
+
+  source-readiness:
+    name: Evaluate authenticated stable auto-publish eligibility
+    if: >-
+      ${{ github.event_name == 'workflow_run' &&
+          github.event.workflow_run.name == 'Build and validate' &&
+          github.event.workflow_run.path == '.github/workflows/build.yml' &&
+          github.event.workflow_run.head_repository.full_name == github.repository &&
+          github.event.workflow_run.event == 'push' &&
+          github.event.workflow_run.head_branch == 'main' &&
+          github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      auto_publish_eligible: ${{ steps.eligibility.outputs.auto_publish_eligible }}
+    steps:
+      - name: Checkout exact upstream head
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+
+      - name: Check CurseForge credential availability
+        id: credential
+        shell: bash
+        env:
+          CURSEFORGE_API_TOKEN: ${{ secrets.CURSEFORGE_API_TOKEN }}
+        run: |
+          if [[ -n "${CURSEFORGE_API_TOKEN:-}" ]]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Evaluate exact stable runtime gates without mutation
+        id: eligibility
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          export SOURCE_REPORT_PATH="$RUNNER_TEMP/stable-source-readiness.json"
+          credential_flag=()
+          if [[ "${{ steps.credential.outputs.available }}" == "true" ]]; then
+            credential_flag+=(--credential-available)
+          fi
+          set +e
+          python tools/release/stable_autopublish.py \
+            --event "$GITHUB_EVENT_PATH" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --report "$SOURCE_REPORT_PATH" \
+            "${credential_flag[@]}"
+          status=$?
+          set -e
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          report = json.loads(Path(os.environ["SOURCE_REPORT_PATH"]).read_text(encoding="utf-8"))
+          summary = {
+              key: report.get(key)
+              for key in (
+                  "status", "verdict", "sourceReady", "stableReady",
+                  "autoPublishEligible", "publicationComplete",
+                  "publicationAuthority", "autoPublishBlockers",
+              )
+          }
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as stream:
+              stream.write("### Stable auto-publish eligibility\n\n```json\n")
+              stream.write(json.dumps(summary, indent=2, sort_keys=True))
+              stream.write("\n```\n")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as stream:
+              stream.write(
+                  "auto_publish_eligible="
+                  + ("true" if report.get("autoPublishEligible") is True else "false")
+                  + "\n"
+              )
+          PY
+          exit "$status"
+
+  auto-publish:
+    name: Automatic stable GitHub and CurseForge publication
+    needs: source-readiness
+    if: >-
+      ${{ github.event_name == 'workflow_run' &&
+          needs.source-readiness.outputs.auto_publish_eligible == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+      actions: read
+    env:
+      RUN_KEY: ${{ github.run_id }}-${{ github.run_attempt }}
+      MANIFEST_PATH: tools/release/curseforge_release_0.1.1.json
+      REQUESTED_TAG: v0.1.1
+
+    steps:
+      - name: Checkout exact qualified head without persisted credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+
+      - name: Initialize automatic publication paths
+        shell: bash
+        run: |
+          {
+            echo "SOURCE_REPORT_PATH=$RUNNER_TEMP/stable-source-readiness.json"
+            echo "CANDIDATE_PATH=$RUNNER_TEMP/immersive_bop_harvest-0.1.1.jar"
+            echo "GITHUB_REPORT_PATH=$RUNNER_TEMP/github-publication.json"
+            echo "PREPARE_REPORT_PATH=$RUNNER_TEMP/curseforge-upload-intent.json"
+            echo "RESULT_REPORT_PATH=$RUNNER_TEMP/curseforge-publication-result.json"
+            echo "RECEIPT_PATH=$RUNNER_TEMP/stable-publication-receipt.json"
+            echo "RECEIPT_STATE_PATH=$RUNNER_TEMP/stable-publication-receipt-state.json"
+            echo "RECEIPT_VERIFY_PATH=$RUNNER_TEMP/stable-publication-receipt-verification.json"
+          } >> "$GITHUB_ENV"
+
+      - name: Check CurseForge credential availability for exact preflight
+        id: auto-credential
+        shell: bash
+        env:
+          CURSEFORGE_API_TOKEN: ${{ secrets.CURSEFORGE_API_TOKEN }}
+        run: |
+          if [[ -n "${CURSEFORGE_API_TOKEN:-}" ]]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Re-evaluate exact stable gates immediately before mutation
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          credential_flag=()
+          if [[ "${{ steps.auto-credential.outputs.available }}" == "true" ]]; then
+            credential_flag+=(--credential-available)
+          fi
+          python tools/release/stable_autopublish.py \
+            --event "$GITHUB_EVENT_PATH" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --report "$SOURCE_REPORT_PATH" \
+            "${credential_flag[@]}"
+
+      - name: Reconcile or create exact GitHub tag Release and asset
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python tools/release/stable_publish.py github \
+            --source-report "$SOURCE_REPORT_PATH" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --candidate-output "$CANDIDATE_PATH" \
+            --github-report "$GITHUB_REPORT_PATH"
+
+      - name: Prepare exact CurseForge upload intent without posting
+        id: auto-prepare
+        shell: bash
+        env:
+          CURSEFORGE_API_TOKEN: ${{ secrets.CURSEFORGE_API_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python tools/release/publish_curseforge.py \
+            --prepare-publish \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --manifest "$MANIFEST_PATH" \
+            --tag "$REQUESTED_TAG" \
+            --run-key "$RUN_KEY" \
+            --report "$PREPARE_REPORT_PATH"
+          python - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          sys.path.insert(0, "tools/release")
+          from publish_curseforge import state_artifact_prefix
+          path = Path(os.environ["PREPARE_REPORT_PATH"])
+          report = json.loads(path.read_text(encoding="utf-8"))
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as stream:
+              if report.get("status") == "UPLOAD_INTENT_READY" and report.get("postRequired") is True:
+                  name = (f"{state_artifact_prefix(report['tag'])}{report['runKey']}--intent--"
+                          f"{report['multipartSha256'][:12]}")
+                  stream.write("post_required=true\n")
+                  stream.write(f"artifact_name={name}\n")
+              elif report.get("status") in {"ALREADY_PUBLISHED", "RESUMED_PUBLICATION_VERIFIED"}:
+                  path.replace(Path(os.environ["RESULT_REPORT_PATH"]))
+                  stream.write("post_required=false\n")
+              else:
+                  raise SystemExit("unsupported automatic prepare state")
+          PY
+
+      - name: Persist upload intent before any POST
+        id: auto-persist-intent
+        if: ${{ steps.auto-prepare.outputs.post_required == 'true' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ steps.auto-prepare.outputs.artifact_name }}
+          path: ${{ env.PREPARE_REPORT_PATH }}
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Submit automatic exact persisted request once
+        id: auto-submit
+        if: ${{ steps.auto-prepare.outputs.post_required == 'true' && steps.auto-persist-intent.outcome == 'success' }}
+        shell: bash
+        env:
+          CURSEFORGE_API_TOKEN: ${{ secrets.CURSEFORGE_API_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+          INTENT_ARTIFACT_ID: ${{ steps.auto-persist-intent.outputs.artifact-id }}
+        run: |
+          python tools/release/publish_curseforge.py \
+            --submit \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --manifest "$MANIFEST_PATH" \
+            --tag "$REQUESTED_TAG" \
+            --run-key "$RUN_KEY" \
+            --intent-report "$PREPARE_REPORT_PATH" \
+            --intent-artifact-id "$INTENT_ARTIFACT_ID" \
+            --report "$RESULT_REPORT_PATH"
+
+      - name: Derive accepted CurseForge checkpoint metadata
+        id: auto-accepted-metadata
+        if: ${{ steps.auto-prepare.outputs.post_required == 'true' && steps.auto-submit.outcome == 'success' }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          sys.path.insert(0, "tools/release")
+          from publish_curseforge import state_artifact_prefix
+          path = Path(os.environ["RESULT_REPORT_PATH"])
+          report = json.loads(path.read_text(encoding="utf-8"))
+          file_id = report.get("fileId")
+          if report.get("status") != "UPLOAD_ACCEPTED" or not isinstance(file_id, int) or file_id <= 0:
+              raise SystemExit("automatic submit did not return a valid accepted file ID")
+          name = (f"{state_artifact_prefix(str(report.get('tag', 'unknown')))}"
+                  f"{os.environ['RUN_KEY']}--accepted--{file_id}")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as stream:
+              stream.write(f"artifact_name={name}\n")
+              stream.write(f"file_id={file_id}\n")
+          PY
+
+      - name: Persist accepted CurseForge file ID before polling
+        id: auto-persist-accepted
+        if: ${{ steps.auto-accepted-metadata.outputs.artifact_name != '' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ steps.auto-accepted-metadata.outputs.artifact_name }}
+          path: ${{ env.RESULT_REPORT_PATH }}
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Resume accepted file without a token or second POST
+        id: auto-resume
+        if: ${{ steps.auto-prepare.outputs.post_required == 'true' && steps.auto-persist-accepted.outcome == 'success' }}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python tools/release/publish_curseforge.py \
+            --publish \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --manifest "$MANIFEST_PATH" \
+            --tag "$REQUESTED_TAG" \
+            --resume-file-id "${{ steps.auto-accepted-metadata.outputs.file_id }}" \
+            --report "$RESULT_REPORT_PATH"
+
+      - name: Derive automatic result artifact name
+        id: auto-result-metadata
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os, re, sys
+          from pathlib import Path
+          sys.path.insert(0, "tools/release")
+          from publish_curseforge import state_artifact_prefix
+          path = Path(os.environ["RESULT_REPORT_PATH"])
+          if not path.is_file():
+              raise SystemExit(0)
+          report = json.loads(path.read_text(encoding="utf-8"))
+          status = str(report.get("status", "REPORT_INVALID"))
+          if not re.fullmatch(r"[A-Z0-9_]+", status):
+              status = "REPORT_INVALID"
+          file_id = report.get("fileId", 0)
+          if not isinstance(file_id, int) or file_id < 0:
+              file_id = 0
+          name = (f"{state_artifact_prefix(str(report.get('tag', 'unknown')))}"
+                  f"{os.environ['RUN_KEY']}--result--{status}--{file_id}")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as stream:
+              stream.write(f"artifact_name={name}\n")
+          PY
+
+      - name: Persist automatic CurseForge result
+        if: ${{ always() && steps.auto-result-metadata.outputs.artifact_name != '' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ steps.auto-result-metadata.outputs.artifact_name }}
+          path: ${{ env.RESULT_REPORT_PATH }}
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Build final receipt after fresh public readbacks
+        id: auto-finalize
+        if: >-
+          ${{ always() && !cancelled() && steps.auto-prepare.outcome == 'success' &&
+              (steps.auto-prepare.outputs.post_required == 'false' ||
+               steps.auto-resume.outcome == 'success') }}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python tools/release/stable_publish.py finalize \
+            --source-report "$SOURCE_REPORT_PATH" \
+            --github-report "$GITHUB_REPORT_PATH" \
+            --curseforge-report "$RESULT_REPORT_PATH" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --receipt "$RECEIPT_PATH" \
+            --receipt-state-report "$RECEIPT_STATE_PATH"
+
+      - name: Read deterministic receipt reconciliation state
+        id: auto-receipt-state
+        if: ${{ steps.auto-finalize.outcome == 'success' }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          state = json.loads(Path(os.environ["RECEIPT_STATE_PATH"]).read_text(encoding="utf-8"))
+          if state.get("status") not in {"RECEIPT_ABSENT", "RECEIPT_EXACT"}:
+              raise SystemExit("invalid final receipt reconciliation state")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as stream:
+              stream.write(f"artifact_name={state['artifactName']}\n")
+              stream.write("upload_required=" + ("true" if state["uploadRequired"] else "false") + "\n")
+          PY
+
+      - name: Persist deterministic final publication receipt
+        id: auto-persist-receipt
+        if: ${{ steps.auto-receipt-state.outputs.upload_required == 'true' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ steps.auto-receipt-state.outputs.artifact_name }}
+          path: ${{ env.RECEIPT_PATH }}
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Read back exact persisted final receipt
+        if: ${{ steps.auto-receipt-state.outcome == 'success' }}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          artifact_args=()
+          if [[ "${{ steps.auto-receipt-state.outputs.upload_required }}" == "true" ]]; then
+            artifact_args+=(--artifact-id "${{ steps.auto-persist-receipt.outputs.artifact-id }}")
+          fi
+          python tools/release/stable_publish.py verify-receipt \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --receipt "$RECEIPT_PATH" \
+            --report "$RECEIPT_VERIFY_PATH" \
+            "${artifact_args[@]}"
+
   publish:
     name: Guarded CurseForge publication
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
       RUN_KEY: ${{ github.run_id }}-${{ github.run_attempt }}
       MANIFEST_PATH: ${{ inputs.manifest_path }}
+      MANUAL_EXCEPTIONAL_AUTHORITY: NOT_GRANTED
 
     steps:
       - name: Checkout
@@ -83,7 +478,7 @@ jobs:
 
       - name: Prepare exact upload intent without posting
         id: prepare
-        if: ${{ !inputs.dry_run && inputs.resume_file_id == '' }}
+        if: ${{ !inputs.dry_run && inputs.resume_file_id == '' && env.MANUAL_EXCEPTIONAL_AUTHORITY == 'GRANTED' }}
         shell: bash
         env:
           CURSEFORGE_API_TOKEN: ${{ secrets.CURSEFORGE_API_TOKEN }}
@@ -128,7 +523,7 @@ jobs:
 
       - name: Persist upload intent before any POST
         id: persist-intent
-        if: ${{ !inputs.dry_run && inputs.resume_file_id == '' && steps.prepare.outputs.post_required == 'true' }}
+        if: ${{ !inputs.dry_run && inputs.resume_file_id == '' && env.MANUAL_EXCEPTIONAL_AUTHORITY == 'GRANTED' && steps.prepare.outputs.post_required == 'true' }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{ steps.prepare.outputs.artifact_name }}
@@ -138,7 +533,7 @@ jobs:
 
       - name: Submit exact persisted request once
         id: publish
-        if: ${{ !inputs.dry_run && inputs.resume_file_id == '' && steps.prepare.outputs.post_required == 'true' && steps.persist-intent.outcome == 'success' }}
+        if: ${{ !inputs.dry_run && inputs.resume_file_id == '' && env.MANUAL_EXCEPTIONAL_AUTHORITY == 'GRANTED' && steps.prepare.outputs.post_required == 'true' && steps.persist-intent.outcome == 'success' }}
         shell: bash
         env:
           CURSEFORGE_API_TOKEN: ${{ secrets.CURSEFORGE_API_TOKEN }}
@@ -163,7 +558,7 @@ jobs:
 
       - name: Resume an accepted file without a token or second POST
         id: resume
-        if: ${{ !inputs.dry_run && inputs.resume_file_id != '' }}
+        if: ${{ !inputs.dry_run && inputs.resume_file_id != '' && env.MANUAL_EXCEPTIONAL_AUTHORITY == 'GRANTED' }}
         shell: bash
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -183,6 +578,13 @@ jobs:
           set -e
           echo "exit_code=$status" >> "$GITHUB_OUTPUT"
           exit "$status"
+
+      - name: Stop exceptional manual publication without exceptional authority
+        if: ${{ !inputs.dry_run && env.MANUAL_EXCEPTIONAL_AUTHORITY != 'GRANTED' }}
+        shell: bash
+        run: |
+          echo "EXCEPTIONAL_MANUAL_AUTHORITY_REQUIRED"
+          exit 2
 
       - name: Prepare sanitized result artifact metadata
         id: result-metadata

@@ -4,7 +4,7 @@ import json,os,tempfile,unittest,zipfile,hashlib,threading,io
 from concurrent.futures import ThreadPoolExecutor
 from unittest.mock import patch
 from tools.ci.run_packaged_qualification import digest,guarded_directory,validate_chain
-from tools.ci.production_client import allowed,arguments,library
+from tools.ci.production_client import LIBRARY_READ_ATTEMPTS,allowed,arguments,library
 
 class PackagedRuntimeGuards(unittest.TestCase):
     def setUp(self):
@@ -13,7 +13,7 @@ class PackagedRuntimeGuards(unittest.TestCase):
         (self.home/'world').mkdir();(self.home/'world/level.dat').write_bytes(b'synthetic world')
         self.harness=self.root/'harness.jar';self.harness.write_bytes(b'synthetic harness')
         self.candidate=self.root/'candidate.jar'
-        with zipfile.ZipFile(self.candidate,'w') as archive:archive.writestr('META-INF/neoforge.mods.toml','[[mods]]\nmodId="immersive_bop_harvest"\nversion="0.1.1-alpha.10"\n')
+        with zipfile.ZipFile(self.candidate,'w') as archive:archive.writestr('META-INF/neoforge.mods.toml','[[mods]]\nmodId="immersive_bop_harvest"\nversion="0.1.1"\n')
         self.log=self.root/'previous.log';self.log.write_text('synthetic prior log')
         self.previous=self.root/'previous.json'
         self.receipt={'passed':True,'exitCode':0,'timeout':False,'aborted':False,'cwd':str(self.home),'log':str(self.log),'logSha256':digest(self.log),'runtime':{'phaseStatus':'PASS','phase':'baseline-restart','candidateVersion':'0.1.1-alpha.9','nonce':'test-nonce','saveCalled':True,'loadedJarIdentities':[{'modId':'bop_harvest_qa','sha256':digest(self.harness)}],'savedSnapshot':{}}}
@@ -38,7 +38,7 @@ class PackagedRuntimeGuards(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'separate copy'):
             validate_chain('candidate-upgrade',self.previous,self.home,self.candidate,self.harness,record)
     def test_wrong_phase_and_version_rejected(self):
-        for field,value in [('phase','baseline-create'),('candidateVersion','0.1.1-alpha.10')]:
+        for field,value in [('phase','baseline-create'),('candidateVersion','0.1.1')]:
             with self.subTest(field=field):
                 old=self.receipt['runtime'][field];self.receipt['runtime'][field]=value;self.save()
                 with self.assertRaisesRegex(ValueError,'phase/version'):self.check()
@@ -74,6 +74,30 @@ class LauncherRules(unittest.TestCase):
                 futures=[pool.submit(library,root,row) for _ in range(2)]
                 for future in futures:self.assertEqual(future.result(timeout=10).read_bytes(),raw)
             self.assertEqual([p.name for p in (root/'libraries/fixture').iterdir()],['library.jar'])
+    def test_replace_fallback_retries_transient_shared_library_read(self):
+        raw=b'complete pinned library';row={'path':'fixture/library.jar','url':'https://libraries.minecraft.net/fixture.jar','size':len(raw),'sha1':hashlib.sha1(raw).hexdigest()}
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary).resolve();target=root/'libraries/fixture/library.jar'
+            def peer_published(_source,destination):
+                Path(destination).write_bytes(raw)
+                raise PermissionError(13,'transient sharing violation',str(destination))
+            with patch('tools.ci.production_client.urllib.request.urlopen',return_value=io.BytesIO(raw)),patch('tools.ci.production_client.os.replace',side_effect=peer_published),patch.object(Path,'read_bytes',side_effect=[PermissionError(13,'transient sharing violation',str(target)),raw,raw]),patch('tools.ci.production_client.time.sleep') as sleep:
+                self.assertEqual(library(root,row),target)
+            sleep.assert_called_once()
+    def test_permanent_shared_library_permission_error_remains_failure(self):
+        raw=b'complete pinned library';row={'path':'fixture/library.jar','size':len(raw),'sha1':hashlib.sha1(raw).hexdigest()}
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary).resolve();target=root/'libraries/fixture/library.jar';target.parent.mkdir(parents=True);target.write_bytes(raw)
+            with patch.object(Path,'read_bytes',side_effect=PermissionError(13,'permanent sharing violation',str(target))),patch('tools.ci.production_client.time.sleep') as sleep:
+                with self.assertRaises(PermissionError):library(root,row)
+            self.assertEqual(sleep.call_count,LIBRARY_READ_ATTEMPTS-1)
+    def test_permission_retry_does_not_accept_wrong_sha1_shared_library(self):
+        raw=b'complete pinned library';row={'path':'fixture/library.jar','size':len(raw),'sha1':hashlib.sha1(raw).hexdigest()}
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary).resolve();target=root/'libraries/fixture/library.jar';target.parent.mkdir(parents=True);target.write_bytes(raw)
+            with patch.object(Path,'read_bytes',side_effect=[PermissionError(13,'transient sharing violation',str(target)),b'x'*len(raw)]),patch('tools.ci.production_client.time.sleep') as sleep:
+                with self.assertRaisesRegex(ValueError,'Invalid launcher library'):library(root,row)
+            sleep.assert_called_once()
     def test_launcher_library_path_escape_rejected_before_writes(self):
         with tempfile.TemporaryDirectory() as temporary:
             for path in ('../escape.jar','C:/escape.jar','/escape.jar','a\\escape.jar'):

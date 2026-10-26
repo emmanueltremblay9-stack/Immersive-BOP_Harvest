@@ -17,11 +17,13 @@ from tools.ci.candidate_evidence import jar_identity, read_json, require, sha
 from tools.ci import qualification_report
 from tools.ci.prepare_production_runtime import INSTALLER_SHA256, METADATA_SHA256
 from tools.ci.build_qualification_baseline import COMMIT as BASELINE_COMMIT, TREE as BASELINE_TREE
+from tools.ci.prepare_runtime import properties
 
 SERVER_PHASES = ('baseline-create', 'baseline-restart', 'candidate-upgrade', 'candidate-restart', 'multiplayer')
 CLIENT_PHASES = ('client-one', 'client-two')
 PHASES = SERVER_PHASES + CLIENT_PHASES
 MOD = 'immersive_bop_harvest'
+CURRENT_VERSION = properties(Path(__file__).resolve().parents[2] / 'gradle.properties')['mod_version']
 HARNESS = 'bop_harvest_qa'
 DEPENDENCIES = {'biomesoplenty', 'glitchcore', 'terrablender', 'farmersdelight', 'immersiveengineering'}
 BOARD_OUTPUT = {'biomesoplenty:stripped_fir_log': 1, 'farmersdelight:tree_bark': 1}
@@ -64,6 +66,125 @@ def observed(rows):
 
 def expect(checks, label, value):
     require(label in checks and equal(checks[label], value), 'Missing/wrong observation: ' + label)
+
+
+def harvest_observation(value, players):
+    required_players = list(players)
+    expected = {'minecraft:string': 1}
+    require(type(value) is dict and set(value) == {'schemaVersion', 'fixture', 'expectedAggregate', 'qaIdentities', 'baseline', 'events', 'anchoredDropAggregate', 'final'}, 'Malformed harvest observation')
+    require(type(value['schemaVersion']) is int and value['schemaVersion'] == 1 and equal(value['expectedAggregate'], expected), 'Wrong harvest observation schema/expected aggregate')
+    fixture = value['fixture']
+    position = {'x': 8, 'y': 91, 'z': 9}
+    require(type(fixture) is dict and set(fixture) == {'dimension', 'block', 'position', 'observationBounds'}
+            and fixture['dimension'] == 'minecraft:overworld' and fixture['block'] == 'biomesoplenty:webbing' and fixture['position'] == position
+            and type(fixture['position']) is dict and set(fixture['position']) == {'x', 'y', 'z'} and all(type(fixture['position'][key]) is int for key in fixture['position'])
+            and type(fixture['observationBounds']) is dict and set(fixture['observationBounds']) == {'center', 'inflate'}
+            and fixture['observationBounds']['center'] == position and type(fixture['observationBounds']['center']) is dict and set(fixture['observationBounds']['center']) == {'x', 'y', 'z'}
+            and all(type(fixture['observationBounds']['center'][key]) is int for key in fixture['observationBounds']['center'])
+            and type(fixture['observationBounds']['inflate']) is int and fixture['observationBounds']['inflate'] == 7, 'Wrong harvest fixture')
+    identities = value['qaIdentities']
+    require(type(identities) is list and [row.get('player') if type(row) is dict else None for row in identities] == required_players, 'Reordered/missing QA identities')
+    identity = {}
+    for row in identities:
+        require(type(row) is dict and set(row) == {'player', 'uuid'} and type(row['uuid']) is str and str(uuid.UUID(row['uuid'])) == row['uuid'], 'Malformed QA identity')
+        identity[row['player']] = row['uuid']
+
+    def item(value, *, positive_count=False):
+        require(type(value) is str and re.fullmatch(r'[a-z0-9._-]+:[a-z0-9._/-]+', value) is not None, 'Malformed harvest item identifier')
+    def block_position(value):
+        require(type(value) is dict and set(value) == {'x', 'y', 'z'} and all(type(value[key]) is int for key in value), 'Malformed harvest position')
+    def inventory(rows):
+        require(type(rows) is list and len(rows) == 36, 'Wrong harvest inventory slot count')
+        for slot, row in enumerate(rows):
+            require(type(row) is dict and set(row) == {'slot', 'item', 'count', 'damage'} and type(row['slot']) is int and row['slot'] == slot
+                    and type(row['count']) is int and row['count'] >= 0 and type(row['damage']) is int and row['damage'] >= 0, 'Malformed harvest inventory slot')
+            item(row['item'])
+            require((row['item'] == 'minecraft:air') == (row['count'] == 0), 'Malformed harvest air inventory slot')
+    def player_rows(rows):
+        require(type(rows) is list and [row.get('player') if type(row) is dict else None for row in rows] == required_players, 'Reordered/missing harvest player rows')
+        for row in rows:
+            require(type(row) is dict and set(row) == {'player', 'uuid', 'position', 'inventory'} and row['uuid'] == identity[row['player']], 'Changed ready-bound harvest identity')
+            block_position(row['position']); inventory(row['inventory'])
+    def ground(rows):
+        require(type(rows) is list, 'Malformed nearby ItemEntity rows')
+        uuids = []
+        for row in rows:
+            require(type(row) is dict and set(row) == {'uuid', 'item', 'count', 'position'} and type(row['uuid']) is str and str(uuid.UUID(row['uuid'])) == row['uuid']
+                    and type(row['count']) is int and row['count'] > 0, 'Malformed nearby ItemEntity')
+            item(row['item']);block_position(row['position']);uuids.append(row['uuid'])
+        require(uuids == sorted(uuids) and len(uuids) == len(set(uuids)), 'Reordered/duplicate nearby ItemEntities')
+    baseline = value['baseline']
+    require(type(baseline) is dict and set(baseline) == {'tick', 'extraStage', 'players', 'nearbyItemEntities'} and type(baseline['tick']) is int and baseline['tick'] >= 0
+            and type(baseline['extraStage']) is int and baseline['extraStage'] == 4, 'Malformed harvest baseline tick/stage')
+    player_rows(baseline['players']);ground(baseline['nearbyItemEntities'])
+    final = value['final']
+    require(type(final) is dict and set(final) == {'tick', 'extraStage', 'players', 'nearbyItemEntities', 'destinations', 'aggregate'} and type(final['tick']) is int
+            and final['tick'] >= baseline['tick'] and type(final['extraStage']) is int and final['extraStage'] in {5, 6}, 'Malformed harvest final tick/stage')
+    player_rows(final['players']);ground(final['nearbyItemEntities'])
+    events = value['events']
+    require(type(events) is list and bool(events), 'Missing harvest lifecycle events')
+    anchors, joins, pickups = {}, {}, []
+    last_tick = -1
+    for sequence, row in enumerate(events, 1):
+        base = {'sequence', 'tick', 'kind', 'entityUuid', 'item', 'count'}
+        require(type(row) is dict and set(row) in (base, base | {'destination'}) and type(row['sequence']) is int and row['sequence'] == sequence
+                and type(row['tick']) is int and baseline['tick'] <= row['tick'] <= final['tick'] and row['tick'] >= last_tick and type(row['kind']) is str and row['kind'] in {'drop', 'join', 'pickup'}
+                and type(row['entityUuid']) is str and str(uuid.UUID(row['entityUuid'])) == row['entityUuid'] and type(row['count']) is int and row['count'] > 0, 'Malformed/reordered harvest lifecycle event')
+        item(row['item']);last_tick = row['tick']; entity = row['entityUuid']
+        if row['kind'] == 'pickup':
+            destination = row.get('destination')
+            require(set(row) == base | {'destination'} and type(destination) is dict and set(destination) == {'player', 'uuid'}
+                    and destination['player'] in identity and destination['uuid'] == identity[destination['player']], 'Non-QA/malformed harvest pickup destination')
+            pickups.append(row)
+        else:
+            require(set(row) == base, 'Unexpected harvest lifecycle destination')
+        if row['kind'] == 'drop':
+            require(entity not in anchors, 'Duplicate anchored harvest drop');anchors[entity] = row
+        elif row['kind'] == 'join':
+            require(entity in anchors and entity not in joins and row['item'] == anchors[entity]['item'] and row['count'] == anchors[entity]['count'], 'Broken harvest drop/join correlation');joins[entity] = row
+        else:
+            require(entity in joins and row['item'] == anchors[entity]['item'], 'Broken harvest pickup correlation')
+    require(set(anchors) == set(joins), 'Unresolved harvest drop lifecycle')
+    anchored = {}
+    for row in anchors.values(): anchored[row['item']] = anchored.get(row['item'], 0) + row['count']
+    require(equal(value['anchoredDropAggregate'], anchored), 'Changed anchored harvest aggregate')
+    pickup_counts = {}
+    pickup_by_player = {player: {} for player in required_players}
+    for row in pickups: pickup_counts[row['entityUuid']] = pickup_counts.get(row['entityUuid'], 0) + row['count']
+    for row in pickups:
+        destination = row['destination']['player']
+        pickup_by_player[destination][row['item']] = pickup_by_player[destination].get(row['item'], 0) + row['count']
+    final_ground = {row['uuid']: row for row in final['nearbyItemEntities'] if row['uuid'] in anchors}
+    for entity, drop in anchors.items():
+        ground_count = 0
+        if entity in final_ground:
+            require(final_ground[entity]['item'] == drop['item'], 'Changed anchored final-ground item')
+            ground_count = final_ground[entity]['count']
+        require(not (pickup_counts.get(entity, 0) and ground_count), 'Ambiguous anchored harvest terminal destination')
+        require(pickup_counts.get(entity, 0) + ground_count == drop['count'], 'Unresolved/duplicate/oversized anchored harvest output')
+    def inventory_totals(player):
+        totals = {}
+        for row in player['inventory']:
+            if row['count']: totals[row['item']] = totals.get(row['item'], 0) + row['count']
+        return totals
+    baseline_by_player = {row['player']: inventory_totals(row) for row in baseline['players']}
+    for player in final['players']:
+        current = inventory_totals(player)
+        delta = {item: count - baseline_by_player[player['player']].get(item, 0) for item, count in current.items() if count > baseline_by_player[player['player']].get(item, 0)}
+        require(equal(delta, pickup_by_player[player['player']]), 'Pickup destination does not match ready-bound QA inventory delta')
+    baseline_counts, final_counts = {}, {}
+    for source, totals in ((baseline['players'], baseline_counts), (final['players'], final_counts)):
+        for player in source:
+            for row in player['inventory']:
+                if row['count']: totals[row['item']] = totals.get(row['item'], 0) + row['count']
+    aggregate = {key: count - baseline_counts.get(key, 0) for key, count in final_counts.items() if count > baseline_counts.get(key, 0)}
+    for row in final['nearbyItemEntities']: aggregate[row['item']] = aggregate.get(row['item'], 0) + row['count']
+    require(equal(final['aggregate'], aggregate) and equal(aggregate, anchored) and equal(aggregate, expected), 'Mismatched/missing/duplicate harvest output')
+    destinations = []
+    for row in pickups: destinations.append({key: row[key] for key in ('kind', 'entityUuid', 'item', 'count', 'destination')})
+    for row in final['nearbyItemEntities']:
+        if row['uuid'] in anchors: destinations.append({'kind': 'ground', 'entityUuid': row['uuid'], 'item': row['item'], 'count': row['count']})
+    require(equal(final['destinations'], destinations), 'Changed harvest destinations')
 
 
 def positive(value):
@@ -231,7 +352,7 @@ def scoped(runtime, specs):
 def validate(files: dict[str, bytes], specs: dict, candidate: dict) -> dict:
     """Derive bounded capabilities. This function cannot authenticate submitted/local files."""
     require(candidate == {**jar_identity(files['candidate.jar']), 'name': f"immersive_bop_harvest-{candidate['version']}.jar", 'size': len(files['candidate.jar']), 'sha256': sha(files['candidate.jar'])}
-            and candidate['version'] == '0.1.1-alpha.10' and type(candidate['size']) is int, 'Wrong candidate raw-byte identity')
+            and candidate['version'] == CURRENT_VERSION and type(candidate['size']) is int, 'Wrong candidate raw-byte identity')
     dependencies = read_json(files['runtime-dependencies.json'])
     require(dependencies.get('status') == 'PASS' and type(dependencies.get('dependencies')) is list and len(dependencies['dependencies']) == 5, 'Missing exact five dependency identities')
     locked = {row['modId']: row for row in dependencies['dependencies']}
@@ -374,6 +495,7 @@ def _validate_clients(files, receipts, runtimes, all_checks):
         require(interactions.get('verified') is True and type(interactions.get('maxConcurrentPlayers')) is int and interactions['maxConcurrentPlayers'] == len(players)
                 and type(interactions.get('finishedClients')) is int and interactions['finishedClients'] == len(players), 'Missing authoritative completed client observations')
         require(equal(interactions.get('extraChecks'), {'sawmill': True, 'harvest': True}), 'Missing authoritative client IE/harvest completion')
+        harvest_observation(interactions.get('harvestObservation'), list(sorted(players)))
         before = runtimes['candidate-restart' if phase == 'multiplayer' else 'client-one']['savedSnapshot']['formedMachines'][1]
         for label, value in {'additional interactions use observed client-one': True, 'client saw fixture starts idle': True,
                              'real client saw interaction packet': True, 'client installed real sawblade': 'immersiveengineering:sawblade',

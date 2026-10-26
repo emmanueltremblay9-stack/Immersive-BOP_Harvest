@@ -6,6 +6,9 @@ ROOT=Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:sys.path.insert(0,str(ROOT))
 from tools.ci.run_packaged_qualification import stage,digest,guarded_directory
 
+LIBRARY_READ_ATTEMPTS=20
+LIBRARY_READ_RETRY_SECONDS=0.05
+
 def rule_context():
     if platform.machine().lower() not in ('amd64','x86_64'):raise ValueError('Qualification launcher requires x64')
     system={'Windows':'windows','Linux':'linux'}.get(platform.system())
@@ -37,6 +40,14 @@ def arguments(rows,values):
             output.append(value)
     return output
 
+def library_matches(path,row):
+    for attempt in range(LIBRARY_READ_ATTEMPTS):
+        try:raw=path.read_bytes()
+        except PermissionError:
+            if attempt+1==LIBRARY_READ_ATTEMPTS:raise
+            time.sleep(LIBRARY_READ_RETRY_SECONDS)
+            continue
+        return len(raw)==row['size'] and hashlib.sha1(raw).hexdigest()==row['sha1']
 
 def library(launcher,row):
     name=row['path']
@@ -56,10 +67,10 @@ def library(launcher,row):
             except PermissionError:
                 # On Windows a peer can already be reading the completed target.
                 # Accept only the exact bytes that both writers independently verified.
-                if not path.is_file() or path.stat().st_size!=row['size'] or hashlib.sha1(path.read_bytes()).hexdigest()!=row['sha1']:raise
+                if not library_matches(path,row):raise
         finally:
             if temporary.exists():temporary.unlink()
-    if hashlib.sha1(path.read_bytes()).hexdigest()!=row['sha1']:raise ValueError('Invalid launcher library '+str(path))
+    if not library_matches(path,row):raise ValueError('Invalid launcher library '+str(path))
     return path
 
 def command(launcher:Path,home:Path,assets:Path,phase:str):

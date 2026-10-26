@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Validate a candidate bundle read-only; unauthenticated runtime remains blocked.
+"""Validate stable release evidence without allowing local self-attestation.
 
-Local bundle integrity cannot certify execution. CI mode independently reads
-GitHub provenance for the reviewed development capabilities, while still keeping
-stable readiness false. No production write or Minecraft launch is performed.
+Schema 1 remains an integrity-only compatibility path. Schema 2 generation and
+validation require a fresh service-authenticated GitHub readback pinned to the
+exact run, attempt, commit, tree, artifact and archive digest.
 """
 from __future__ import annotations
 
@@ -192,20 +192,50 @@ def validate_bundle(root: Path, bundle: dict) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--bundle", type=Path)
+    parser.add_argument("--output-bundle", type=Path)
     parser.add_argument("--ci-run-id", type=int)
     parser.add_argument("--ci-attempt", type=int)
     parser.add_argument("--expected-commit")
+    parser.add_argument("--expected-tree")
+    parser.add_argument("--expected-artifact-id", type=int)
+    parser.add_argument("--expected-archive-sha256")
     args = parser.parse_args(argv)
     try:
+        identity = {
+            "run_id": args.ci_run_id, "attempt": args.ci_attempt, "commit": args.expected_commit,
+            "tree": args.expected_tree, "artifact_id": args.expected_artifact_id,
+            "archive_sha256": args.expected_archive_sha256,
+        }
+        supplied = {key for key, value in identity.items() if value is not None}
+        if args.output_bundle is not None or (args.bundle is not None and supplied == set(identity)):
+            require(supplied == set(identity), "Final bundle mode requires the complete independently pinned identity")
+            require(not (args.bundle is not None and args.output_bundle is not None),
+                    "Generate or validate a final bundle, not both")
+            if str(ROOT) not in sys.path:
+                sys.path.insert(0, str(ROOT))
+            from tools.ci.final_release_bundle import build_authenticated, sha, validate_authenticated
+            if args.output_bundle is not None:
+                raw = build_authenticated(**identity)
+                args.output_bundle.parent.mkdir(parents=True, exist_ok=True)
+                args.output_bundle.write_bytes(raw)
+                print(json.dumps({
+                    "bundleGenerated": True, "bundleIntegrity": "NOT_YET_REVALIDATED",
+                    "authenticatedExecution": True, "stableReady": False, "publicationReady": False,
+                    "status": "FINAL_BUNDLE_GENERATED", "path": str(args.output_bundle),
+                    "size": len(raw), "sha256": sha(raw),
+                }, indent=2))
+                return 0
+            print(json.dumps(validate_authenticated(args.bundle.read_bytes(), **identity), indent=2))
+            return 0
         if args.ci_run_id is not None:
-            require(args.bundle is None and args.ci_attempt is not None and args.expected_commit is not None,
-                    "CI provenance mode requires run/attempt/expected commit and no local bundle")
+            require(args.bundle is None and args.output_bundle is None and supplied == {"run_id", "attempt", "commit"},
+                    "CI provenance mode requires only run/attempt/expected commit")
             if str(ROOT) not in sys.path:
                 sys.path.insert(0, str(ROOT))
             from tools.ci.candidate_evidence import verify
             print(json.dumps(verify(args.ci_run_id, args.ci_attempt, args.expected_commit), indent=2))
             return 2  # Authenticated capabilities are not a final stable candidate.
-        require(args.bundle is not None and args.ci_attempt is None and args.expected_commit is None,
+        require(args.bundle is not None and args.output_bundle is None and not supplied,
                 "Supply a bundle or the complete independent CI run identity")
         validate_bundle(ROOT, read_json(args.bundle))
     except (OSError, ValueError, KeyError, TypeError, zipfile.BadZipFile, subprocess.SubprocessError) as exc:

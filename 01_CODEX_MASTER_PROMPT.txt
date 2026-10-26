@@ -17,7 +17,8 @@ alpha.9 Prism smoke. Publisher-only changes do not require a new Prism smoke.
 
 The gameplay design below is retained as the established implementation
 contract, not an instruction to recreate or modify working gameplay during
-an automation task. The current version remains 0.1.1-alpha.10.
+an automation task. The current stable candidate version is 0.1.1; alpha.10
+is preserved as historical qualification evidence.
 
 ROLE
 You are the lead NeoForge integration developer responsible for delivering a small, maintainable, server-safe compatibility addon between:

@@ -1,5 +1,34 @@
 # Stable readiness work program
 
+## Current final stable-candidate gate — 2026-09-16
+
+Packet `IBH-S6-FINAL-BUNDLE-STABLE-GATE-01` composes the deterministic schema-2
+final bundle from a fresh authenticated GitHub readback. The exact qualifying
+source is main push run `35061734691`, attempt `1`, commit
+`32347f5bf39c67d9c096de6857a5dda09310fcd4`, tree
+`dd7b3f8cc2c449f399b83c9f7a16caab686b8d29`, artifact `10432693738`, archive
+SHA-256 `2e5c0453e81b09fe6c53bfd721c11ee226aed56efb21eed94ec55f18dd6b7c66`.
+
+The exact `0.1.1` JAR is 1,606,577 bytes with SHA-256
+`edcedc52d8b0fc2952bcffb7c54f3737ed144227350a5b46ea71620dd3859394`.
+The generated final bundle is 8,764,819 bytes with SHA-256
+`8c67e684ecfcb9a8fc313a5e0ceb0e443547c0141f95d695accc478033673cd0`.
+Fresh generation and validation both exited `0`; the result is
+`AUTHENTICATED_STABLE_CANDIDATE`, `stableReady=true`, and
+`publicationReady=false`.
+
+The gate keeps six receipt kinds, exact 313-criterion coverage with an explicit
+per-ID proof map, empty live
+GitHub issue inventory, same-run source/JAR/dependency binding, and explicit
+publication blockers. Local-only schema-1 bundles remain unable to authenticate
+execution. The historical alpha.9 Prism smoke remains
+`NOT_PERFORMED / OWNER_WAIVED`.
+
+This task does not authorize branch creation, commit, push, PR, merge, tag,
+GitHub Release, CurseForge/Modrinth publication, secret/protection changes, or
+Prism installation. Consequently the implementation itself has no new
+exact-head CI yet; that is an integration gap, not a candidate-evidence gap.
+
 ## Current authorization: S3-A -> S4 -> S5
 
 S3-A execution is verified: PR #4 merged as
