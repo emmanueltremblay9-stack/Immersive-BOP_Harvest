@@ -8,10 +8,25 @@ if str(ROOT) not in sys.path: sys.path.insert(0,str(ROOT))
 from tools.ci.prepare_runtime import validate_bytes, validate_lock, properties
 
 CURRENT_VERSION = properties(ROOT / 'gradle.properties')['mod_version']
+DIRECTORY_SCAN_ATTEMPTS = 3
+DIRECTORY_SCAN_RETRY_SECONDS = 0.05
 
 def digest(path): return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def guarded_directory(path: Path):
+    """Require a complete guard pass, retrying transiently vanished entries."""
+    for attempt in range(DIRECTORY_SCAN_ATTEMPTS):
+        try:
+            return _guarded_directory_once(path)
+        except FileNotFoundError:
+            # A peer client can atomically publish a library after rglob has
+            # yielded its temporary name. Restart all checks, including ancestors;
+            # never skip an unchecked entry or accept a persistently unstable tree.
+            if attempt+1==DIRECTORY_SCAN_ATTEMPTS:raise
+            time.sleep(DIRECTORY_SCAN_RETRY_SECONDS)
+
+
+def _guarded_directory_once(path: Path):
     """Reject linked ancestors and descendants before any launcher can write there."""
     for candidate in [path,*path.parents]:
         if candidate.exists() and (candidate.is_symlink() or getattr(candidate.lstat(),'st_file_attributes',0)&stat.FILE_ATTRIBUTE_REPARSE_POINT):

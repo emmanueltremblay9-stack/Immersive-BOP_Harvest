@@ -1367,8 +1367,8 @@
     },
     {
       "path": "tools/ci/run_packaged_qualification.py",
-      "size_bytes": 11899,
-      "sha256": "16ff6f778a789be825bf45d8a325727fea642aed267754970df4727193a860c8"
+      "size_bytes": 12586,
+      "sha256": "d7ed5957336668695ee5419d800160eaeae596ececf94a9114941848f29d683f"
     },
     {
       "path": "tools/ci/run_production_ci.py",
@@ -1392,8 +1392,8 @@
     },
     {
       "path": "tools/ci/test_packaged_runtime.py",
-      "size_bytes": 9342,
-      "sha256": "36a4107a72cb27f624ebe28906d4504f29a4147fbc96b064328d60c804dc807f"
+      "size_bytes": 14835,
+      "sha256": "3a8e3c03adbb520a19a11e16e8928dbf7214b480bfa55cf304c0e7cddffad897"
     },
     {
       "path": "tools/ci/test_prepare_runtime.py",

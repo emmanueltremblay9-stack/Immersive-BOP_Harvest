@@ -1,9 +1,10 @@
 """Safety/identity regressions with synthetic files, never Minecraft execution proof."""
 from pathlib import Path
-import json,os,tempfile,unittest,zipfile,hashlib,threading,io
+import json,os,tempfile,unittest,zipfile,hashlib,threading,io,stat
 from concurrent.futures import ThreadPoolExecutor
+from types import SimpleNamespace
 from unittest.mock import patch
-from tools.ci.run_packaged_qualification import digest,guarded_directory,validate_chain
+from tools.ci.run_packaged_qualification import DIRECTORY_SCAN_ATTEMPTS,digest,guarded_directory,validate_chain
 from tools.ci.production_client import LIBRARY_READ_ATTEMPTS,allowed,arguments,library
 
 class PackagedRuntimeGuards(unittest.TestCase):
@@ -58,6 +59,88 @@ class PackagedRuntimeGuards(unittest.TestCase):
         try:link.symlink_to(outside,target_is_directory=True)
         except OSError as exc:self.skipTest('Host does not permit test symlinks: '+str(exc))
         with self.assertRaisesRegex(ValueError,'Linked'):guarded_directory(self.home)
+
+class DirectoryScanRaces(unittest.TestCase):
+    def test_guard_restarts_after_atomic_library_publication(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary).resolve()
+            directory=root/'libraries/fixture';directory.mkdir(parents=True)
+            pending=directory/'library.jar.0123456789abcdef.tmp'
+            target=directory/'library.jar';raw=b'verified library bytes'
+            pending.write_bytes(raw)
+            original_rglob=Path.rglob;scans=[]
+            def publish_during_scan(path,pattern):
+                snapshot=list(original_rglob(path,pattern));scans.append(snapshot)
+                if len(scans)==1:os.replace(pending,target)
+                yield from snapshot
+            with patch.object(Path,'rglob',publish_during_scan),patch('tools.ci.run_packaged_qualification.time.sleep'):
+                self.assertEqual(guarded_directory(root),root)
+            self.assertEqual(len(scans),2)
+            self.assertIn(pending,scans[0]);self.assertIn(target,scans[1])
+            self.assertEqual(target.read_bytes(),raw)
+            self.assertFalse(pending.exists())
+
+    def test_guard_rejects_symlink_reparse_or_escape_after_retry(self):
+        for kind in ('symlink','reparse','escape'):
+            with self.subTest(kind=kind),tempfile.TemporaryDirectory() as temporary:
+                root=Path(temporary).resolve();pending=root/'library.jar.tmp';target=root/'library.jar'
+                pending.write_bytes(b'verified library bytes')
+                original_rglob=Path.rglob;original_link=Path.is_symlink
+                original_lstat=Path.lstat;original_resolve=Path.resolve;scans=[]
+                def publish_during_scan(path,pattern):
+                    snapshot=list(original_rglob(path,pattern));scans.append(snapshot)
+                    if len(scans)==1:os.replace(pending,target)
+                    yield from snapshot
+                def linked(path):
+                    return kind=='symlink' and path==target or original_link(path)
+                def attributes(path,*args,**kwargs):
+                    result=original_lstat(path,*args,**kwargs)
+                    if kind=='reparse' and path==target:
+                        return SimpleNamespace(st_mode=result.st_mode,st_file_attributes=stat.FILE_ATTRIBUTE_REPARSE_POINT)
+                    return result
+                def resolved(path,*args,**kwargs):
+                    if kind=='escape' and path==target:return root.parent/'outside'
+                    return original_resolve(path,*args,**kwargs)
+                with patch.object(Path,'rglob',publish_during_scan),patch.object(Path,'is_symlink',linked),patch.object(Path,'lstat',attributes),patch.object(Path,'resolve',resolved),patch('tools.ci.run_packaged_qualification.time.sleep') as sleep:
+                    with self.assertRaisesRegex(ValueError,'Linked or escaping'):guarded_directory(root)
+                self.assertEqual(len(scans),2);sleep.assert_called_once()
+
+    def test_guard_rechecks_ancestors_after_retry(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary).resolve();pending=root/'library.jar.tmp';target=root/'library.jar'
+            pending.write_bytes(b'verified library bytes')
+            original_rglob=Path.rglob;original_link=Path.is_symlink;scans=[]
+            def publish_during_scan(path,pattern):
+                snapshot=list(original_rglob(path,pattern));scans.append(snapshot)
+                os.replace(pending,target)
+                yield from snapshot
+            def linked(path):
+                return bool(scans) and path==root or original_link(path)
+            with patch.object(Path,'rglob',publish_during_scan),patch.object(Path,'is_symlink',linked),patch('tools.ci.run_packaged_qualification.time.sleep') as sleep:
+                with self.assertRaisesRegex(ValueError,'Linked/reparse write path'):guarded_directory(root)
+            self.assertEqual(len(scans),1);sleep.assert_called_once()
+
+    def test_guard_rejects_a_persistently_unstable_directory(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary).resolve();pending=root/'library.jar.tmp'
+            original_rglob=Path.rglob;scans=[]
+            def remove_during_scan(path,pattern):
+                pending.write_bytes(b'verified library bytes')
+                snapshot=list(original_rglob(path,pattern));scans.append(snapshot)
+                pending.unlink()
+                yield from snapshot
+            with patch.object(Path,'rglob',remove_during_scan),patch('tools.ci.run_packaged_qualification.time.sleep') as sleep:
+                with self.assertRaises(FileNotFoundError):guarded_directory(root)
+            self.assertEqual(len(scans),DIRECTORY_SCAN_ATTEMPTS)
+            self.assertEqual(sleep.call_count,DIRECTORY_SCAN_ATTEMPTS-1)
+
+    def test_guard_does_not_retry_other_filesystem_errors(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary).resolve()
+            for error in (PermissionError('denied'),NotADirectoryError('not a directory')):
+                with self.subTest(error=type(error).__name__),patch.object(Path,'rglob',side_effect=error),patch('tools.ci.run_packaged_qualification.time.sleep') as sleep:
+                    with self.assertRaises(type(error)):guarded_directory(root)
+                    sleep.assert_not_called()
 
 class LauncherRules(unittest.TestCase):
     def test_concurrent_clients_receive_complete_shared_library(self):
