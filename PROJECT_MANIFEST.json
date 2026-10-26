@@ -71,14 +71,144 @@
   },
   "files": [
     {
+      "path": ".agents/skills/agents-instruction-conflict-audit/SKILL.md",
+      "size_bytes": 2543,
+      "sha256": "181bb51fb00d1b8ce091e96fa2a7c26e32c30bf0935747b60be3700198ead592"
+    },
+    {
+      "path": ".agents/skills/codegraph-first-context/SKILL.md",
+      "size_bytes": 1414,
+      "sha256": "12e44d92143dff6a97a5f15536b275766595946948ff8b94334b655464a1fd21"
+    },
+    {
+      "path": ".agents/skills/codex-final-report-completeness-linter/SKILL.md",
+      "size_bytes": 1320,
+      "sha256": "021980d52dd8dfc41b7259335445e1c4c6006c58175e5d458d0a75d567f09466"
+    },
+    {
+      "path": ".agents/skills/codex-final-report-evidence/SKILL.md",
+      "size_bytes": 3401,
+      "sha256": "c0990943d7d23a162131eed658471bc9367b6b20bd069a5d441e4397e6980289"
+    },
+    {
+      "path": ".agents/skills/config-template-drift-audit/SKILL.md",
+      "size_bytes": 1833,
+      "sha256": "c566ce2683e7c18f6be7aa4a2189c5f7f7a37944ed5388fed97bf2021b3922b7"
+    },
+    {
+      "path": ".agents/skills/github-actions-artifact-retention-audit/SKILL.md",
+      "size_bytes": 3225,
+      "sha256": "f57d4c1f78b4bfdf7f6b45ea0ee034bef119eb7b8bdc703d2928535daff8be83"
+    },
+    {
+      "path": ".agents/skills/github-actions-permission-audit/SKILL.md",
+      "size_bytes": 3678,
+      "sha256": "103dd74405d5846a2b507c84aa0d70e90dab42d6aeb7025184f25213a7fc64cc"
+    },
+    {
+      "path": ".agents/skills/github-actions-secret-scope-audit/SKILL.md",
+      "size_bytes": 3177,
+      "sha256": "10dc34e65dabd826979d190b5de3f37a9507361b48856fba13b022522ccc6628"
+    },
+    {
+      "path": ".agents/skills/github-release-artifact-verifier/SKILL.md",
+      "size_bytes": 3565,
+      "sha256": "6c0e86a6bf2257e9f73fecc6387cebfaf6bbec96b45e050a74ef5b5ca6c8b4d6"
+    },
+    {
+      "path": ".agents/skills/gradle-modrinth-curseforge-release-audit/SKILL.md",
+      "size_bytes": 1670,
+      "sha256": "f0b25fef51971cb709c66106c6e61cc6ab39b655ea891ff98d639b791d4c0cd7"
+    },
+    {
+      "path": ".agents/skills/manual-prompt-scope-guard/SKILL.md",
+      "size_bytes": 3281,
+      "sha256": "60d4460b19932480f0bc9a2fb0dde1bad2793dfb1f80e6b805b62823f5eeb90d"
+    },
+    {
+      "path": ".agents/skills/minecraft-project-scanner/SKILL.md",
+      "size_bytes": 1389,
+      "sha256": "1b5dc64b7513015a974b2255c2f7994ad5bebf27613c9ca672c1b9921299e217"
+    },
+    {
+      "path": ".agents/skills/notion-progress-readback/SKILL.md",
+      "size_bytes": 3309,
+      "sha256": "145c997b1bc47e9f569db146c5818886e038423f00e2d04d23782d82c98b72c3"
+    },
+    {
+      "path": ".codex/skills/agents-instruction-conflict-audit/SKILL.md",
+      "size_bytes": 2543,
+      "sha256": "181bb51fb00d1b8ce091e96fa2a7c26e32c30bf0935747b60be3700198ead592"
+    },
+    {
+      "path": ".codex/skills/codegraph-first-context/SKILL.md",
+      "size_bytes": 1414,
+      "sha256": "12e44d92143dff6a97a5f15536b275766595946948ff8b94334b655464a1fd21"
+    },
+    {
+      "path": ".codex/skills/codex-final-report-completeness-linter/SKILL.md",
+      "size_bytes": 1320,
+      "sha256": "021980d52dd8dfc41b7259335445e1c4c6006c58175e5d458d0a75d567f09466"
+    },
+    {
+      "path": ".codex/skills/codex-final-report-evidence/SKILL.md",
+      "size_bytes": 3401,
+      "sha256": "c0990943d7d23a162131eed658471bc9367b6b20bd069a5d441e4397e6980289"
+    },
+    {
+      "path": ".codex/skills/config-template-drift-audit/SKILL.md",
+      "size_bytes": 1833,
+      "sha256": "c566ce2683e7c18f6be7aa4a2189c5f7f7a37944ed5388fed97bf2021b3922b7"
+    },
+    {
+      "path": ".codex/skills/github-actions-artifact-retention-audit/SKILL.md",
+      "size_bytes": 3225,
+      "sha256": "f57d4c1f78b4bfdf7f6b45ea0ee034bef119eb7b8bdc703d2928535daff8be83"
+    },
+    {
+      "path": ".codex/skills/github-actions-permission-audit/SKILL.md",
+      "size_bytes": 3678,
+      "sha256": "103dd74405d5846a2b507c84aa0d70e90dab42d6aeb7025184f25213a7fc64cc"
+    },
+    {
+      "path": ".codex/skills/github-actions-secret-scope-audit/SKILL.md",
+      "size_bytes": 3177,
+      "sha256": "10dc34e65dabd826979d190b5de3f37a9507361b48856fba13b022522ccc6628"
+    },
+    {
+      "path": ".codex/skills/github-release-artifact-verifier/SKILL.md",
+      "size_bytes": 3565,
+      "sha256": "6c0e86a6bf2257e9f73fecc6387cebfaf6bbec96b45e050a74ef5b5ca6c8b4d6"
+    },
+    {
+      "path": ".codex/skills/gradle-modrinth-curseforge-release-audit/SKILL.md",
+      "size_bytes": 1670,
+      "sha256": "f0b25fef51971cb709c66106c6e61cc6ab39b655ea891ff98d639b791d4c0cd7"
+    },
+    {
+      "path": ".codex/skills/manual-prompt-scope-guard/SKILL.md",
+      "size_bytes": 3281,
+      "sha256": "60d4460b19932480f0bc9a2fb0dde1bad2793dfb1f80e6b805b62823f5eeb90d"
+    },
+    {
+      "path": ".codex/skills/minecraft-project-scanner/SKILL.md",
+      "size_bytes": 1389,
+      "sha256": "1b5dc64b7513015a974b2255c2f7994ad5bebf27613c9ca672c1b9921299e217"
+    },
+    {
+      "path": ".codex/skills/notion-progress-readback/SKILL.md",
+      "size_bytes": 3309,
+      "sha256": "145c997b1bc47e9f569db146c5818886e038423f00e2d04d23782d82c98b72c3"
+    },
+    {
       "path": ".gitattributes",
       "size_bytes": 262,
       "sha256": "1006ae2effe693f07a99474543282828cf8aa6cc4286313802ee7eea9c82502d"
     },
     {
       "path": ".github/workflows/build.yml",
-      "size_bytes": 7360,
-      "sha256": "4110f08e79c76e7920e1bbd8aa323f3fd2054a164b5585e0957ecbaf87ea3aad"
+      "size_bytes": 7600,
+      "sha256": "baf09fa5189cab208c95d11599da01a8939c3571153f8ff5aca5308df7bfc1af"
     },
     {
       "path": ".github/workflows/publish-curseforge.yml",
@@ -251,6 +381,21 @@
       "sha256": "f3e4dd1eb92c11544b9e2fd0670713d7a16f70ac90b451f3be67e7b77917b49d"
     },
     {
+      "path": "docs/skills/AGENTS.md",
+      "size_bytes": 831,
+      "sha256": "b4e3de6b7687b8f2254210e9e1373e55fded669096cc840c50178095fdb16be1"
+    },
+    {
+      "path": "docs/skills/MANIFEST.md",
+      "size_bytes": 2480,
+      "sha256": "7af737cc04d58b1736178805c3ef8948e342b5efba533502908f33aa84a868f1"
+    },
+    {
+      "path": "docs/skills/README.md",
+      "size_bytes": 2332,
+      "sha256": "256f46554c568c5ee1a76c25f018004c6c108917c43574a3092599895ff380c4"
+    },
+    {
       "path": "gradle.properties",
       "size_bytes": 775,
       "sha256": "dd6d0bd30f6428744e270ecc584c0500c320f50cf2afb174284ff1e22c0eaa40"
@@ -324,6 +469,11 @@
       "path": "scripts/test_check_stable_release_gate.py",
       "size_bytes": 11800,
       "sha256": "dc6bd8d89386a593807cad26d981084bf94455457b2edb8de7fb54e68168d148"
+    },
+    {
+      "path": "scripts/validate_skillpack.py",
+      "size_bytes": 6059,
+      "sha256": "e97f702d5b935bfd74c5e16c3e6ce6949183d49ad1de5541a4376d050a6ba113"
     },
     {
       "path": "scripts/validate_specs.py",
