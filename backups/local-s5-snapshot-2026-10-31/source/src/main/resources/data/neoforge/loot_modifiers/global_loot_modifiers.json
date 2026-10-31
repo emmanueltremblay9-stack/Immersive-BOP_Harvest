@@ -1,0 +1,24 @@
+{
+  "replace": false,
+  "entries": [
+    "immersive_bop_harvest:direct_harvest/high_grass",
+    "immersive_bop_harvest:direct_harvest/high_grass_plant",
+    "immersive_bop_harvest:direct_harvest/dune_grass",
+    "immersive_bop_harvest:direct_harvest/desert_grass",
+    "immersive_bop_harvest:direct_harvest/dead_grass",
+    "immersive_bop_harvest:direct_harvest/sea_oats",
+    "immersive_bop_harvest:direct_harvest/reed",
+    "immersive_bop_harvest:direct_harvest/barley",
+    "immersive_bop_harvest:direct_harvest/bush",
+    "immersive_bop_harvest:direct_harvest/tundra_shrub",
+    "immersive_bop_harvest:direct_harvest/bramble_leaves",
+    "immersive_bop_harvest:direct_harvest/glowworm_silk",
+    "immersive_bop_harvest:direct_harvest/glowworm_silk_strand",
+    "immersive_bop_harvest:direct_harvest/hanging_cobweb",
+    "immersive_bop_harvest:direct_harvest/hanging_cobweb_strand",
+    "immersive_bop_harvest:direct_harvest/webbing",
+    "immersive_bop_harvest:direct_harvest/flesh_tendons",
+    "immersive_bop_harvest:direct_harvest/flesh_tendons_strand",
+    "immersive_bop_harvest:direct_harvest/hair"
+  ]
+}

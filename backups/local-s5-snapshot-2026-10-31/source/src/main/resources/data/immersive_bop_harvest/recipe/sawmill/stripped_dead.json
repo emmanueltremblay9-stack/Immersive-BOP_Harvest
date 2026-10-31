@@ -1,0 +1,22 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 800,
+  "input": [
+    {
+      "item": "biomesoplenty:stripped_dead_log"
+    },
+    {
+      "item": "biomesoplenty:stripped_dead_wood"
+    }
+  ],
+  "result": {
+    "count": 6,
+    "id": "biomesoplenty:dead_planks"
+  },
+  "secondaryOutputs": [
+    {
+      "tag": "c:dusts/wood"
+    }
+  ],
+  "strippingSecondaries": []
+}

@@ -1,0 +1,51 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "condition": "minecraft:random_chance",
+      "chance": 0.25
+    },
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "biomesoplenty:blocks/bramble_leaves"
+    },
+    {
+      "condition": "minecraft:match_tool",
+      "predicate": {
+        "items": "#c:tools/knife"
+      }
+    },
+    {
+      "condition": "minecraft:inverted",
+      "term": {
+        "condition": "minecraft:match_tool",
+        "predicate": {
+          "items": "#biomesoplenty:shears"
+        }
+      }
+    },
+    {
+      "condition": "minecraft:inverted",
+      "term": {
+        "condition": "minecraft:match_tool",
+        "predicate": {
+          "predicates": {
+            "minecraft:enchantments": [
+              {
+                "enchantments": "minecraft:silk_touch",
+                "levels": {
+                  "min": 1
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "condition": "minecraft:block_state_property",
+      "block": "biomesoplenty:bramble_leaves"
+    }
+  ],
+  "table": "immersive_bop_harvest:direct_harvest/bramble_leaves"
+}

@@ -1,0 +1,5 @@
+# Partial BOP local snapshot archive
+
+This branch adds 167 local files whose bytes differed from the captured base and passed the review, plus five related helper scripts. Files identical to the base are inherited and are not duplicated. Files containing local machine paths are excluded from the added archive content, including a changed README revision, the local project manifest, and one helper script.
+
+Base: main at 135a9787d93b4f59197ccc2cc6a48b7be9e5b077. The local snapshot had no Git metadata in its root or the two checked parent directories, so this archive does not claim the original local Git ancestry. Files present only in the base remain unchanged. This is a partial preservation archive, not a source release, validation result, or full tree mirror.
